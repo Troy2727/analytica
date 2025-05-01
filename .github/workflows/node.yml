@@ -105,6 +105,13 @@ jobs:
         testConnection();
         "
 
+    - name: Create .env file for build
+      run: |
+        echo "NEXT_PUBLIC_SUPABASE_URL=https://jhjpvnlukpjrxfijcgud.supabase.co" > .env
+        echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoanB2bmx1a3BqcnhmaWpjZ3VkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU3MTcyMzMsImV4cCI6MjA2MTI5MzIzM30.XrvVKW7_rNW_MJ8BGUCzLRUn5sYyaEHOPScJFuBwEqQ" >> .env
+        echo "GOOGLE_PAGESPEED_API_KEY=AIzaSyDHp95vCnikprqhrY60GWHyo7_ZKOC2S" >> .env
+        cat .env
+
     - name: Build
       run: npm run build
 
