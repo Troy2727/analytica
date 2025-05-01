@@ -41,7 +41,7 @@ const Testimonial: React.FC<TestimonialCardProps> = ({
         <blockquote className="text-[#e7e9ea] text-[1.1rem]">
           {testimonial}
         </blockquote>
-        <Link href="https://www.producthunt.com/posts/getanalyzr"><Button className="h-8 mt-5 w-full font-bold text-[#6bc9fb] bg-transparent border border-[#425364] rounded-full hover:bg-[#28394d]">Read more on Product Hunt</Button></Link>
+        <Link href="https://www.producthunt.com/posts/analytica"><Button className="h-8 mt-5 w-full font-bold text-[#6bc9fb] bg-transparent border border-[#425364] rounded-full hover:bg-[#28394d]">Read more on Product Hunt</Button></Link>
       </CardContent>
     </Card>
   )

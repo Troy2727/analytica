@@ -7,16 +7,16 @@ import { Copy } from "lucide-react";
 
 export default function Code({ language }: { language: string }) {
   const { toast } = useToast();
-  
+
   const javascriptCode = `const axios = require('axios');
-  
+
 const API_KEY = "YOUR_API_KEY";
-const url = "https://getanalyzr.vercel.app/api/events";
+const url = "https://analytica.vercel.app/api/events";
 const headers = {
     "Content-Type": "application/json",
     "Authorization": \`Bearer \${API_KEY}\`
 };
-  
+
 const eventData = {
     name: "",        // required - event name
     domain: "",      // required - your website domain
@@ -30,7 +30,7 @@ const eventData = {
       }
     ]
 };
-  
+
 const sendRequest = async () => {
     try {
       const response = await axios.post(url, eventData, { headers });
@@ -39,18 +39,18 @@ const sendRequest = async () => {
       console.error("Error:", error.response ? error.response.data : error.message);
     }
 };
-  
+
 sendRequest();`;
 
   const pythonCode = `import requests
-  
+
 API_KEY = "YOUR_API_KEY"
-url = "https://getanalyzr.vercel.app/api/events"
+url = "https://analytica.vercel.app/api/events"
 headers = {
     "Content-Type": "application/json",
     "Authorization": f"Bearer {API_KEY}"
 }
-  
+
 event_data = {
     "name": "",        # required - event name
     "domain": "",      # required - your website domain
@@ -64,7 +64,7 @@ event_data = {
       }
     ]
 }
-  
+
 def send_request():
     try:
         response = requests.post(url, json=event_data, headers=headers)
@@ -72,7 +72,7 @@ def send_request():
         print("Event sent successfully", response.json())
     except requests.exceptions.RequestException as error:
         print("Error:", error)
-  
+
 send_request()`;
 
   const copyCode = () => {

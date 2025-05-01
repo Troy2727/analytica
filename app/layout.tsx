@@ -26,11 +26,11 @@ export const metadata: Metadata = {
   ],
   authors: [
     {
-      name: "Arjun",
-      url: "https://github.com/arjuncodess",
+      name: "Alex",
+      url: "https://github.com/alexcodess",
     },
   ],
-  creator: "Arjun",
+  creator: "Alex",
   publisher: "Analytica",
   openGraph: {
     type: "website",
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     title: "Analytica - Real-time Analytics for Modern Applications",
     description:
       "Privacy-focused website analytics and event tracking tool for developers",
-    creator: "@arjuncodess",
+    creator: "@alexcodess",
     images: ["/og.png"],
   },
   icons: {

@@ -38,9 +38,9 @@ export default function SiteCustomEvents({
           <p className="text-neutral-100 text-lg font-semibold">No custom events recorded yet</p>
           <p className="text-neutral-400 mt-2">
             Custom events will appear here once they are tracked. Learn how to implement custom events in our{" "}
-            <a 
-              href="https://github.com/ArjunCodess/analyzr#readme" 
-              target="_blank" 
+            <a
+              href="https://github.com/AlexCodess/analytica#readme"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-blue-400 hover:text-blue-300 underline"
             >
@@ -61,9 +61,9 @@ export default function SiteCustomEvents({
           </CardTitle>
           <p className="text-sm text-neutral-400">
             Learn more in our{" "}
-            <a 
-              href="https://github.com/ArjunCodess/analyzr#readme" 
-              target="_blank" 
+            <a
+              href="https://github.com/AlexCodess/analytica#readme"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-blue-400 hover:text-blue-300 underline"
             >

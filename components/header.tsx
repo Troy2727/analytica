@@ -7,6 +7,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { UserNav } from "@/components/ui/user-nav";
 import useUser from "@/hooks/useUser";
 import { useEffect } from "react";
+import { GradientText } from "@/components/ui/gradient-text";
 
 export default function Header() {
   const router = useRouter();
@@ -42,7 +43,9 @@ export default function Header() {
               />
             </Link>
             <Link href="/" className="text-xl md:text-2xl font-bold">
-              Analytica
+              <GradientText>
+                Analytica
+              </GradientText>
             </Link>
           </div>
           <div className="flex items-center md:space-x-4">

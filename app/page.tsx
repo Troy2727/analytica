@@ -28,7 +28,7 @@ export default function Home() {
       code: `<script
   defer
   data-domain="YOUR_DOMAIN"
-  src="https://getanalyzr.vercel.app/tracking-script.js"
+  src="https://analytica.vercel.app/tracking-script.js"
 >
 </script>`,
     },
@@ -39,7 +39,7 @@ export default function Home() {
       code: `<Script
   defer
   data-domain="YOUR_DOMAIN"
-  src="https://getanalyzr.vercel.app/tracking-script.js"
+  src="https://analytica.vercel.app/tracking-script.js"
 />`,
     },
   ];
@@ -50,14 +50,14 @@ export default function Home() {
       language: "javascript",
       filename: "events.js",
       code: `const axios = require('axios');
-  
+
 const API_KEY = "YOUR_API_KEY";
-const url = "https://getanalyzr.vercel.app/api/events";
+const url = "https://analytica.vercel.app/api/events";
 const headers = {
     "Content-Type": "application/json",
     "Authorization": \`Bearer \${API_KEY}\`
 };
-  
+
 const eventData = {
     name: "",        // required - event name
     domain: "",      // required - your website domain
@@ -71,7 +71,7 @@ const eventData = {
       }
     ]
 };
-  
+
 const sendRequest = async () => {
     try {
       const response = await axios.post(url, eventData, { headers });
@@ -80,7 +80,7 @@ const sendRequest = async () => {
       console.error("Error:", error.response ? error.response.data : error.message);
     }
 };
-  
+
 sendRequest();`,
     },
     {
@@ -88,14 +88,14 @@ sendRequest();`,
       language: "python",
       filename: "events.py",
       code: `import requests
-  
+
 API_KEY = "YOUR_API_KEY"
-url = "https://getanalyzr.vercel.app/api/events"
+url = "https://analytica.vercel.app/api/events"
 headers = {
     "Content-Type": "application/json",
     "Authorization": f"Bearer {API_KEY}"
 }
-  
+
 event_data = {
     "name": "",        # required - event name
     "domain": "",      # required - your website domain
@@ -109,7 +109,7 @@ event_data = {
       }
     ]
 }
-  
+
 def send_request():
     try:
         response = requests.post(url, json=event_data, headers=headers)
@@ -117,7 +117,7 @@ def send_request():
         print("Event sent successfully", response.json())
     except requests.exceptions.RequestException as error:
         print("Error:", error)
-  
+
 send_request()`,
     },
   ];
@@ -132,12 +132,12 @@ send_request()`,
             <BlurFade delay={0.1}>
               <Link
                 target="_blank"
-                href="https://www.producthunt.com/posts/getanalyzr?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-getanalyzr"
+                href="https://www.producthunt.com/posts/analytica?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-analytica"
                 className="flex justify-center"
               >
                 <Image
                   src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=586803&theme=dark"
-                  alt="GetAnalyzr - Real-time analytics for modern applications | Product Hunt"
+                  alt="Analytica - Real-time analytics for modern applications | Product Hunt"
                   className="w-[180px] h-[40px] md:w-[250px] md:h-[54px]"
                   width={250}
                   height={54}
@@ -180,7 +180,7 @@ send_request()`,
                   <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#93C5FD_0%,#1D4ED8_50%,#93C5FD_100%)]" />
                   <div className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-neutral-950 text-xs font-medium text-neutral-50 backdrop-blur-3xl">
                     <Link
-                      href="https://github.com/ArjunCodess/analyzr#readme"
+                      href="https://github.com/AlexCodess/analytica#readme"
                       className="inline-flex rounded-full text-center items-center justify-center bg-neutral-900 text-neutral-300 border-neutral-800 border hover:bg-neutral-900/80 transition-colors py-3 px-10 md:text-base"
                     >
                       View Documentation
@@ -193,7 +193,7 @@ send_request()`,
 
           <BlurFade delay={0.5} yOffset={20}>
             <div className="mt-20 mx-10">
-              <Safari url="https://getanalyzr.vercel.app">
+              <Safari url="https://analytica.vercel.app">
                 <Image
                   alt="Hero Image"
                   src="/hero.png"
@@ -263,7 +263,7 @@ send_request()`,
                 What our users say
               </h3>
               <p className="mt-3 text-gray-200">
-                Join thousands of developers who trust Analyzr for their
+                Join thousands of developers who trust Analytica for their
                 analytics needs. See what our users have to say about their
                 experience with our platform.
               </p>
@@ -345,8 +345,8 @@ send_request()`,
                   <AnimatedList delay={800}>
                     <DiscordMessage
                       avatarSrc="/logo.png"
-                      avatarAlt="Analyzr Avatar"
-                      username="Analyzr"
+                      avatarAlt="Analytica Avatar"
+                      username="Analytica"
                       timestamp="Today at 5:20 PM"
                       title="New Event: Production Database Error"
                       description="A critical error has been detected in the production environment that requires immediate attention."
@@ -377,8 +377,8 @@ send_request()`,
                     />
                     <DiscordMessage
                       avatarSrc="/logo.png"
-                      avatarAlt="Analyzr Avatar"
-                      username="Analyzr"
+                      avatarAlt="Analytica Avatar"
+                      username="Analytica"
                       timestamp="Today at 5:38 PM"
                       title="New Event: Performance Alert"
                       description="Performance degradation detected in application endpoints. This may affect user experience."
@@ -478,7 +478,7 @@ send_request()`,
                 </h3>
                 <p className="mt-3 text-gray-200">
                   Get answers to frequently asked questions about our analytics
-                  platform. Learn how Analyzr can help you track and understand
+                  platform. Learn how Analytica can help you track and understand
                   your website&apos;s performance while keeping your data
                   secure.
                 </p>
@@ -494,7 +494,7 @@ send_request()`,
 
             <Accordion type="single" collapsible className="mt-16 space-y-4">
               <AccordionItem value="item-1">
-                <AccordionTrigger>Is Analyzr really free?</AccordionTrigger>
+                <AccordionTrigger>Is Analytica really free?</AccordionTrigger>
                 <AccordionContent>
                   Yes! We&apos;re 100% free and open source. There are no hidden
                   fees or premium features. You can even self-host it if you
@@ -529,7 +529,7 @@ send_request()`,
                   Can I use this with any website?
                 </AccordionTrigger>
                 <AccordionContent>
-                  Yes! Analyzr works with Next.js, React, Vue, plain HTML, and
+                  Yes! Analytica works with Next.js, React, Vue, plain HTML, and
                   more. Our analytics solution is designed to be
                   framework-agnostic.
                 </AccordionContent>
@@ -537,11 +537,11 @@ send_request()`,
 
               <AccordionItem value="item-5">
                 <AccordionTrigger>
-                  What&apos;s the difference between Analyzr and other analytics
+                  What&apos;s the difference between Analytica and other analytics
                   tools?
                 </AccordionTrigger>
                 <AccordionContent>
-                  Analyzr stands out by offering free custom event tracking
+                  Analytica stands out by offering free custom event tracking
                   (which others charge for), built-in Discord notifications, and
                   a privacy-focused approach. There&apos;s no complex setup
                   needed, and being completely open source means you have full

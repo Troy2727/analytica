@@ -62,7 +62,7 @@ export default function SiteSettings({ website }: SiteSettingsProps) {
         .select("*")
         .eq("website_id", website)
         .returns<CustomEvent[]>();
-      
+
       if (eventsRes.data && eventsRes.data.length > 0) {
         const formattedData = eventsRes.data.map((event) => ({
           id: event.id,
@@ -86,8 +86,8 @@ export default function SiteSettings({ website }: SiteSettingsProps) {
   const convertToCSV = <T extends Record<string, unknown>>(data: T[]) => {
     if (!data.length) return '';
     const headers = Object.keys(data[0]).join(',');
-    const rows = data.map(row => 
-      Object.values(row).map(value => 
+    const rows = data.map(row =>
+      Object.values(row).map(value =>
         typeof value === 'string' ? `"${value}"` : value
       ).join(',')
     );
@@ -133,9 +133,9 @@ export default function SiteSettings({ website }: SiteSettingsProps) {
           </CardTitle>
           <CardDescription className="text-neutral-400 mt-2">
             For detailed setup instructions and advanced usage, check our{" "}
-            <a 
-              href="https://github.com/ArjunCodess/analyzr#readme" 
-              target="_blank" 
+            <a
+              href="https://github.com/AlexCodess/analytica#readme"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-blue-400 hover:text-blue-300 underline"
             >

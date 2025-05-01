@@ -1,15 +1,17 @@
 import Link from "next/link";
 import { Globe, Github, Instagram, Twitter } from "lucide-react";
-import { TextHoverEffect } from "@/components/ui/text-hover-effect";
+import { LargeGradientText } from "@/components/ui/large-gradient-text";
 
 export default function Footer() {
   return (
     <footer className="flex flex-col items-center justify-center py-12 px-4 space-y-8 border-t border-neutral-800">
-      <TextHoverEffect text="analytica." />
+      <div className="mb-4">
+        <LargeGradientText text="analytica" />
+      </div>
 
       <nav className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-neutral-500">
         <Link
-          href="https://github.com/ArjunCodess/analyzr#readme"
+          href="https://github.com/AlexCodess/analytica#readme"
           className="hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
         >
           Documentation
@@ -39,7 +41,7 @@ export default function Footer() {
           <span className="sr-only">Website</span>
         </Link>
         <Link
-          href="https://github.com/arjuncodess"
+          href="https://github.com/alexcodess"
           className="text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
           target="_blank"
           rel="noopener noreferrer"
@@ -48,7 +50,7 @@ export default function Footer() {
           <span className="sr-only">GitHub</span>
         </Link>
         <Link
-          href="https://instagram.com/arjuncodess"
+          href="https://instagram.com/alexcodess"
           className="text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
           target="_blank"
           rel="noopener noreferrer"
@@ -57,7 +59,7 @@ export default function Footer() {
           <span className="sr-only">Instagram</span>
         </Link>
         <Link
-          href="https://x.com/arjuncodess"
+          href="https://x.com/alexcodess"
           className="text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
           target="_blank"
           rel="noopener noreferrer"

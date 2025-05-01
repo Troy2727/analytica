@@ -187,7 +187,7 @@ export default function SettingsPage() {
                 Documentation
               </CardTitle>
               <CardDescription className="text-neutral-400">
-                Get started with our comprehensive documentation. Learn about all features, 
+                Get started with our comprehensive documentation. Learn about all features,
                 integrations, and best practices.
               </CardDescription>
             </CardHeader>
@@ -195,9 +195,9 @@ export default function SettingsPage() {
               <div className="space-y-4">
                 <p className="text-sm text-neutral-400">
                   Visit our{" "}
-                  <a 
-                    href="https://github.com/ArjunCodess/analyzr#readme" 
-                    target="_blank" 
+                  <a
+                    href="https://github.com/AlexCodess/analytica#readme"
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-400 hover:text-blue-300 underline"
                   >

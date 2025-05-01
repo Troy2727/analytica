@@ -122,7 +122,7 @@ export const TESTIMONIALS = [
     name: "Camin McCluskey",
     role: "Co-Founder & CTO @Stackfix",
     testimonial:
-      `Congrats on the launch and wow what a superb onboarding experience. I needed something super quick to setup ahead of my PH launch and couldn't be bothered with the usual pain of GA or Segment. I found this literally 60s ago and I'm up and running with analytics. Fantastic job @arjuncodess! Also really cool that you've blogged about how you built it, looking forward to diving into that as well`,
+      `Congrats on the launch and wow what a superb onboarding experience. I needed something super quick to setup ahead of my PH launch and couldn't be bothered with the usual pain of GA or Segment. I found this literally 60s ago and I'm up and running with analytics. Fantastic job @alexcodess! Also really cool that you've blogged about how you built it, looking forward to diving into that as well`,
     avatarSrc:
       "https://ph-avatars.imgix.net/2602606/bcf13036-8a9b-4c32-ba86-60308e59242f.jpeg?auto=compress&codec=mozjpeg&cs=strip&auto=format&w=36&h=36&fit=crop&dpr=2",
   },
@@ -138,7 +138,7 @@ export const TESTIMONIALS = [
     name: "ZanBuildz",
     role: "AI enthusiast and SaaS builder",
     testimonial:
-      "Really useful product and a great initiative! hats off to the maker @arjuncodess",
+      "Really useful product and a great initiative! hats off to the maker @alexcodess",
     avatarSrc:
       "https://ph-avatars.imgix.net/7861658/original.jpeg?auto=compress&codec=mozjpeg&cs=strip&auto=format&w=36&h=36&fit=crop&dpr=2",
   },
@@ -146,7 +146,7 @@ export const TESTIMONIALS = [
     name: "Huzaifa Shoukat",
     role: "CEO @Accento AI",
     testimonial:
-      "Congrats on the launch! GetAnalyzr looks like a game-changer for devs.",
+      "Congrats on the launch! Analytica looks like a game-changer for devs.",
     avatarSrc:
       "https://ph-avatars.imgix.net/6221718/1dae9053-aebc-4762-b5d9-db8777ab10b2.png?auto=compress&codec=mozjpeg&cs=strip&auto=format&w=36&h=36&fit=crop&dpr=2",
   },
@@ -154,7 +154,7 @@ export const TESTIMONIALS = [
     name: "Yusuf ZQ",
     role: "Founder & CEO of WordWeave",
     testimonial:
-      "cool work, Arjun!",
+      "cool work, Alex!",
     avatarSrc:
       "https://ph-avatars.imgix.net/7822537/e4aebbf0-84b3-424c-b073-48a4bd4cfbb1.jpeg?auto=compress&codec=mozjpeg&cs=strip&auto=format&w=36&h=36&fit=crop&dpr=2",
   },

@@ -37,7 +37,7 @@ export default function SignIn() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: `https://getanalyzr.vercel.app/dashboard`,
+          redirectTo: `https://analytica-dummy.vercel.app/dashboard`,
         },
       });
 
@@ -95,8 +95,8 @@ export default function SignIn() {
       }
 
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error 
-        ? error.message 
+      const errorMessage = error instanceof Error
+        ? error.message
         : "An error occurred. Please try again.";
       setError(errorMessage);
       console.error("Email auth error:", error);
@@ -115,15 +115,15 @@ export default function SignIn() {
             {isSignUp ? 'Create an account' : 'Welcome back'}
           </CardTitle>
           <p className="text-muted-foreground text-sm">
-            {isSignUp 
+            {isSignUp
               ? 'Enter your email below to create your account'
               : 'Enter your email below to sign in to your account'}
           </p>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-2 gap-4">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="w-full bg-card hover:bg-accent"
               onClick={() => signInWithProvider('github')}
               disabled={isLoading !== null}
@@ -147,8 +147,8 @@ export default function SignIn() {
               )}
               GitHub
             </Button>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="w-full bg-card hover:bg-accent"
               onClick={() => signInWithProvider('google')}
               disabled={isLoading !== null}
@@ -220,7 +220,7 @@ export default function SignIn() {
                 className="bg-card border-border text-card-foreground placeholder:text-muted-foreground"
               />
             </div>
-            <Button 
+            <Button
               type="submit"
               className="w-full"
               disabled={isLoading !== null}
@@ -245,9 +245,9 @@ export default function SignIn() {
             onClick={() => setIsSignUp(!isSignUp)}
             className="w-full text-sm text-muted-foreground hover:text-card-foreground"
           >
-            {isSignUp 
-              ? "Already analyzing? Sign in." 
-              : "New to Analyzr? Start for free forever."}
+            {isSignUp
+              ? "Already analyzing? Sign in."
+              : "New to Analytica? Start for free forever."}
           </Button>
         </CardContent>
       </Card>

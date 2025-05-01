@@ -11,7 +11,7 @@
   const params = new URLSearchParams(queryString);
   var source = params.get("utm") || params.get("ref");
 
-  var endpoint = "https://getanalyzr.vercel.app/api/track";
+  var endpoint = "https://analytica.vercel.app/api/track";
 
   async function getUserLocation() {
     try {

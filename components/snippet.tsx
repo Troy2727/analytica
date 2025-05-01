@@ -17,14 +17,14 @@ export default function Snippet() {
   const react_snippet = `<script
   defer
   data-domain="${website}"
-  src="https://getanalyzr.vercel.app/tracking-script.js"
+  src="https://analytica.vercel.app/tracking-script.js"
 >
 </script>`;
 
   const next_snippet = `<Script
   defer
   data-domain="${website}"
-  src="https://getanalyzr.vercel.app/tracking-script.js"
+  src="https://analytica.vercel.app/tracking-script.js"
 />`;
 
   const copySnippet = (snippet: string) => {
@@ -41,13 +41,13 @@ export default function Snippet() {
       <CardContent className="pt-6">
         <Tabs defaultValue="JavaScript/React.js" className="w-full">
           <TabsList className="w-full grid grid-cols-2 bg-neutral-800/50">
-            <TabsTrigger 
+            <TabsTrigger
               value="JavaScript/React.js"
               className="data-[state=active]:bg-neutral-700 data-[state=active]:text-neutral-100 text-neutral-400"
             >
               JavaScript / React.js
             </TabsTrigger>
-            <TabsTrigger 
+            <TabsTrigger
               value="Next.js"
               className="data-[state=active]:bg-neutral-700 data-[state=active]:text-neutral-100 text-neutral-400"
             >
