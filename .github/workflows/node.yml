@@ -69,17 +69,24 @@ jobs:
     - name: ESLint TypeScript
       run: npx eslint "**/*.{ts,tsx}" --max-warnings=0 || echo "ESLint warnings found but continuing"
 
+    - name: Create .env file for build
+      run: |
+        echo "NEXT_PUBLIC_SUPABASE_URL=https://jhjpvnlukpjrxfijcgud.supabase.co" > .env
+        echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoanB2bmx1a3BqcnhmaWpjZ3VkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU3MTcyMzMsImV4cCI6MjA2MTI5MzIzM30.XrvVKW7_rNW_MJ8BGUCzLRUn5sYyaEHOPScJFuBwEqQ" >> .env
+        echo "GOOGLE_PAGESPEED_API_KEY=AIzaSyDHp95vCnikprqhrY60GWHyo7_ZKOC2S" >> .env
+        cat .env
+
     - name: Check Supabase connection
       run: |
+        if [ -z "$NEXT_PUBLIC_SUPABASE_URL" ] || [ -z "$NEXT_PUBLIC_SUPABASE_ANON_KEY" ]; then
+          echo "Supabase credentials are missing! Failing the build."
+          exit 1
+        fi
+
         node -e "
         const { createClient } = require('@supabase/supabase-js');
 
         async function testConnection() {
-          if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-            console.log('Supabase credentials not provided, skipping connection test');
-            return;
-          }
-
           const supabase = createClient(
             process.env.NEXT_PUBLIC_SUPABASE_URL,
             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -92,25 +99,18 @@ jobs:
 
             if (error) {
               console.error('Error connecting to Supabase:', error);
-              console.log('Continuing with build despite Supabase connection error');
+              process.exit(1);
             } else {
               console.log('Successfully connected to Supabase!');
             }
           } catch (err) {
             console.error('Unexpected error:', err);
-            console.log('Continuing with build despite Supabase connection error');
+            process.exit(1);
           }
         }
 
         testConnection();
         "
-
-    - name: Create .env file for build
-      run: |
-        echo "NEXT_PUBLIC_SUPABASE_URL=https://jhjpvnlukpjrxfijcgud.supabase.co" > .env
-        echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoanB2bmx1a3BqcnhmaWpjZ3VkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU3MTcyMzMsImV4cCI6MjA2MTI5MzIzM30.XrvVKW7_rNW_MJ8BGUCzLRUn5sYyaEHOPScJFuBwEqQ" >> .env
-        echo "GOOGLE_PAGESPEED_API_KEY=AIzaSyDHp95vCnikprqhrY60GWHyo7_ZKOC2S" >> .env
-        cat .env
 
     - name: Build
       run: npm run build
