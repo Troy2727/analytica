@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import type { PluginAPI } from "tailwindcss/types/config";
 import flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette";
 import tailwindcssAnimate from "tailwindcss-animate";
 
@@ -81,10 +82,7 @@ const config: Config = {
   },
   plugins: [
     tailwindcssAnimate,
-    function({ addBase, theme }: { 
-      addBase: (base: any) => void; 
-      theme: (path: string) => Record<string, string>; 
-    }) {
+    function({ addBase, theme }: PluginAPI) {
       const allColors = flattenColorPalette(theme("colors"));
       const newVars = Object.fromEntries(
         Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
