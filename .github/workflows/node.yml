@@ -31,9 +31,9 @@ jobs:
         node-version: [18.x, 20.x]  # Test with Node.js 18 and 20
 
     env:
-      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
-      GOOGLE_PAGESPEED_API_KEY: ${{ secrets.GOOGLE_PAGESPEED_API_KEY }}
+      NEXT_PUBLIC_SUPABASE_URL: https://jhjpvnlukpjrxfijcgud.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoanB2bmx1a3BqcnhmaWpjZ3VkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU3MTcyMzMsImV4cCI6MjA2MTI5MzIzM30.XrvVKW7_rNW_MJ8BGUCzLRUn5sYyaEHOPScJFuBwEqQ
+      GOOGLE_PAGESPEED_API_KEY: AIzaSyDHp95vCnikprqhrY60GWHyo7_ZKOC2S
       SUPABASE_USER_ID: ${{ secrets.SUPABASE_USER_ID }}
 
     steps:
@@ -71,10 +71,21 @@ jobs:
 
     - name: Create .env file for build
       run: |
-        echo "NEXT_PUBLIC_SUPABASE_URL=https://jhjpvnlukpjrxfijcgud.supabase.co" > .env
-        echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoanB2bmx1a3BqcnhmaWpjZ3VkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU3MTcyMzMsImV4cCI6MjA2MTI5MzIzM30.XrvVKW7_rNW_MJ8BGUCzLRUn5sYyaEHOPScJFuBwEqQ" >> .env
-        echo "GOOGLE_PAGESPEED_API_KEY=AIzaSyDHp95vCnikprqhrY60GWHyo7_ZKOC2S" >> .env
-        cat .env
+        # Create .env file
+        echo "NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL" > .env
+        echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY" >> .env
+        echo "GOOGLE_PAGESPEED_API_KEY=$GOOGLE_PAGESPEED_API_KEY" >> .env
+
+        # Verify environment variables are set
+        echo "Verifying environment variables..."
+        echo "NEXT_PUBLIC_SUPABASE_URL: $NEXT_PUBLIC_SUPABASE_URL"
+        echo "NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:0:10}..." # Only show first 10 chars for security
+        echo "GOOGLE_PAGESPEED_API_KEY: ${GOOGLE_PAGESPEED_API_KEY:0:10}..." # Only show first 10 chars for security
+
+        # Export variables to ensure they're available to all steps
+        echo "NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL" >> $GITHUB_ENV
+        echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY" >> $GITHUB_ENV
+        echo "GOOGLE_PAGESPEED_API_KEY=$GOOGLE_PAGESPEED_API_KEY" >> $GITHUB_ENV
 
     - name: Check Supabase connection
       run: |
