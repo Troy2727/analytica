@@ -10,7 +10,7 @@ import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Analyzr - Real-time Analytics for Modern Applications",
+  title: "Analytica - Real-time Analytics for Modern Applications",
   description:
     "Privacy-focused website analytics and event tracking tool for developers. Monitor user journeys, capture custom events, and get real-time insights with customizable tracking and Discord notifications.",
   keywords: [
@@ -31,27 +31,27 @@ export const metadata: Metadata = {
     },
   ],
   creator: "Arjun",
-  publisher: "Analyzr",
+  publisher: "Analytica",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://getanalyzr.vercel.app",
-    title: "Analyzr - Real-time Analytics for Modern Applications",
+    url: "https://analytica.vercel.app",
+    title: "Analytica - Real-time Analytics for Modern Applications",
     description:
       "Privacy-focused website analytics and event tracking tool for developers. Monitor user journeys, capture custom events, and get real-time insights.",
-    siteName: "Analyzr",
+    siteName: "Analytica",
     images: [
       {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "Analyzr - Real-time Analytics",
+        alt: "Analytica - Real-time Analytics",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Analyzr - Real-time Analytics for Modern Applications",
+    title: "Analytica - Real-time Analytics for Modern Applications",
     description:
       "Privacy-focused website analytics and event tracking tool for developers",
     creator: "@arjuncodess",
@@ -80,8 +80,8 @@ export default function RootLayout({
 
         <Script
           defer
-          data-domain="getanalyzr.vercel.app"
-          src="https://getanalyzr.vercel.app/tracking-script.js"
+          data-domain="analytica.vercel.app"
+          src="https://analytica.vercel.app/tracking-script.js"
         />
       </body>
     </html>

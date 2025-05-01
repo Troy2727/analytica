@@ -5,7 +5,7 @@ import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 export default function Footer() {
   return (
     <footer className="flex flex-col items-center justify-center py-12 px-4 space-y-8 border-t border-neutral-800">
-      <TextHoverEffect text="analyzr." />
+      <TextHoverEffect text="analytica." />
 
       <nav className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-neutral-500">
         <Link
@@ -30,7 +30,7 @@ export default function Footer() {
 
       <div className="flex items-center space-x-6">
         <Link
-          href="https://getanalyzr.vercel.app"
+          href="https://analytica.vercel.app"
           className="text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
           target="_blank"
           rel="noopener noreferrer"
@@ -68,7 +68,7 @@ export default function Footer() {
       </div>
 
       <p className="text-sm text-neutral-500">
-        © 2024 Analyzr. Complete analytics and monitoring for modern applications.
+        © 2024 Analytica. Complete analytics and monitoring for modern applications.
       </p>
     </footer>
   );

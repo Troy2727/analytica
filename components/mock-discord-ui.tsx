@@ -74,12 +74,12 @@ export const MockDiscordUI = ({ children }: PropsWithChildren) => {
             <div className="flex items-center px-2 py-1.5 rounded bg-[#393c43] text-white cursor-pointer">
               <Image
                 src="/logo.png"
-                alt="Analyzr Avatar"
+                alt="Analytica Avatar"
                 width={24}
                 height={24}
                 className="object-cover rounded-full mr-3 lg:size-8"
               />
-              <span className="font-normal lg:font-medium text-xs lg:text-sm">Analyzr</span>
+              <span className="font-normal lg:font-medium text-xs lg:text-sm">Analytica</span>
             </div>
 
             <div className="my-1 space-y-px">
@@ -123,7 +123,7 @@ export const MockDiscordUI = ({ children }: PropsWithChildren) => {
             <div className="relative">
               <Image
                 src="/logo.png"
-                alt="Analyzr Avatar"
+                alt="Analytica Avatar"
                 width={32}
                 height={32}
                 className="object-cover rounded-full mr-3 lg:size-10"
@@ -131,7 +131,7 @@ export const MockDiscordUI = ({ children }: PropsWithChildren) => {
               <div className="absolute bottom-0 right-3 size-2.5 lg:size-3 bg-green-500 rounded-full border-2 border-[#36393f]" />
             </div>
 
-            <p className="font-normal lg:font-semibold text-sm lg:text-base text-white">Analyzr</p>
+            <p className="font-normal lg:font-semibold text-sm lg:text-base text-white">Analytica</p>
           </div>
 
           <div className="ml-auto flex items-center space-x-3 lg:space-x-4 text-[#b9bbbe]">
@@ -157,7 +157,7 @@ export const MockDiscordUI = ({ children }: PropsWithChildren) => {
             <input
               readOnly
               type="text"
-              placeholder="Message @Analyzr"
+              placeholder="Message @Analytica"
               className="flex-1 bg-transparent py-2.5 px-1 text-xs lg:text-sm text-white placeholder-[#72767d] focus:outline-none cursor-not-allowed"
             />
             <div className="flex items-center space-x-3 mx-3 text-[#b9bbbe]">

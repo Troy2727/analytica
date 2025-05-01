@@ -1,6 +1,6 @@
 <div align="center">
 
-# Analyzr 📊
+# Analytica 📊
 
 ![OG](./public/og.png)
 
@@ -15,7 +15,7 @@
 ---
 
 ### TL;DR 🚀
-Analyzr is a free and open-source analytics tool that requires just one line of code to set up.
+Analytica is a free and open-source analytics tool that requires just one line of code to set up.
 
 It comes with built-in Discord notifications and works seamlessly with any website, giving you all the analytics data you need to make informed decisions.
 
@@ -37,11 +37,11 @@ It comes with built-in Discord notifications and works seamlessly with any websi
 
 Hey there! 👋
 
-Thanks for checking out Analyzr. It's a free tool that manages your website analytics and performance and offers many other features.
+Thanks for checking out Analytica. It's a free tool that manages your website analytics and performance and offers many other features.
 
 This project is an alternative to premium analytics services like Vercel Analytics.
 
-With Analyzr, you can monitor everything from visitor activity to site performance without paying for it.
+With Analytica, you can monitor everything from visitor activity to site performance without paying for it.
 
 And the best part? It's **open-source** and **free for everyone**.
 
@@ -49,7 +49,7 @@ And the best part? It's **open-source** and **free for everyone**.
 
 ### 💡 Why Did We Build This?
 
-Analyzr doesn't charge you for tracking custom events or monitoring performance, unlike other analytics tools.
+Analytica doesn't charge you for tracking custom events or monitoring performance, unlike other analytics tools.
 
 You get all of this and more, totally free.
 
@@ -69,25 +69,25 @@ Anyone who wants simple analytics without paying $$$.
 
 ### 🚀 What Can It Do?
 
-Here are some of the core features of Analyzr:
+Here are some of the core features of Analytica:
 
 - **Real-Time Tracking:** See what's happening on your website as it happens.
 
 - **Custom Event Tracking:** Track specific actions your visitors take (for example, clicks on certain buttons).
-  
+
   Here's how to track custom events:
 
   Using JavaScript/Node.js:
   ```javascript
   const axios = require('axios');
-  
+
   const API_KEY = "YOUR_API_KEY";
-  const url = "https://getanalyzr.vercel.app/api/events";
+  const url = "https://analytica.vercel.app/api/events";
   const headers = {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${API_KEY}`
   };
-  
+
   const eventData = {
       name: "",        // required - event name
       domain: "",      // required - your website domain
@@ -96,12 +96,12 @@ Here are some of the core features of Analyzr:
       fields: [       // optional - additional fields for Discord notification
         {
           name: "Field Name",
-          value: "Field Value", 
+          value: "Field Value",
           inline: true // optional - display fields in same line
         }
       ]
   };
-  
+
   const sendRequest = async () => {
       try {
         const response = await axios.post(url, eventData, { headers });
@@ -110,21 +110,21 @@ Here are some of the core features of Analyzr:
         console.error("Error:", error.response ? error.response.data : error.message);
       }
   };
-  
+
   sendRequest();
   ```
 
   Using Python:
   ```python
   import requests
-  
+
   API_KEY = "YOUR_API_KEY"
-  url = "https://getanalyzr.vercel.app/api/events"
+  url = "https://analytica.vercel.app/api/events"
   headers = {
       "Content-Type": "application/json",
       "Authorization": f"Bearer {API_KEY}"
   }
-  
+
   event_data = {
       "name": "",        # required - event name
       "domain": "",      # required - your website domain
@@ -138,7 +138,7 @@ Here are some of the core features of Analyzr:
         }
       ]
   }
-  
+
   def send_request():
       try:
           response = requests.post(url, json=event_data, headers=headers)
@@ -146,7 +146,7 @@ Here are some of the core features of Analyzr:
           print("Event sent successfully", response.json())
       except requests.exceptions.RequestException as error:
           print("Error:", error)
-  
+
   send_request()
   ```
 
@@ -166,7 +166,7 @@ Here are some of the core features of Analyzr:
 
 ![Diagram](./public/diagram.png)
 
-Here's exactly how Analyzr works, with no secrets:
+Here's exactly how Analytica works, with no secrets:
 
 First, you add our tracking script to your website - it's just a simple piece of code that counts when people visit your pages and what they click on.
 
@@ -197,8 +197,8 @@ Setting up Discord notifications is easy:
    - Right-click your profile or username
    - Click "Copy User ID"
 
-3. **Add it to Analyzr**
-   - Go to /settings in your Analyzr dashboard
+3. **Add it to Analytica**
+   - Go to /settings in your Analytica dashboard
    - Paste your Discord User ID
    - Save the changes
 
@@ -239,13 +239,13 @@ Once set up, you'll get real-time notifications for:
 It's super easy to get started:
 
 1. **Add the Tracking Script (and other stuff if needed)**
-   
+
    For Vanilla/React apps:
    ```html
    <script
      defer
      data-domain="your-website.com"
-     src="https://getanalyzr.vercel.app/tracking-script.js"
+     src="https://analytica.vercel.app/tracking-script.js"
    >
    </script>
    ```
@@ -255,7 +255,7 @@ It's super easy to get started:
    <Script
      defer
      data-domain="your-website.com"
-     src="https://getanalyzr.vercel.app/tracking-script.js"
+     src="https://analytica.vercel.app/tracking-script.js"
    />
    ```
 
@@ -271,9 +271,9 @@ After you are done, start seeing real analytics on your dashboard.
 
 ### 🌟 Quick Links
 
-- **Try it out:** [getanalyzr.vercel.app](https://getanalyzr.vercel.app)
-- **Get the code:** [GitHub](https://github.com/arjuncodess/analyzr)
-- **Launch:** [Product Hunt](https://www.producthunt.com/posts/getanalyzr)
+- **Try it out:** [analytica.vercel.app](https://analytica.vercel.app)
+- **Get the code:** [GitHub](https://github.com/arjuncodess/analytica)
+- **Launch:** [Product Hunt](https://www.producthunt.com/posts/analytica)
 
 ---
 
@@ -284,13 +284,13 @@ Got questions? Ideas? Just want to say hi.
 - Drop an issue on GitHub
 - DM me on Discord or X (@ArjunCodess)
 
-We love hearing from users! 
+We love hearing from users!
 
 ---
 
 ### 🎉 Thanks!
 
-Thanks for checking out Analyzr! We hope it makes your life a bit easier.
+Thanks for checking out Analytica! We hope it makes your life a bit easier.
 
 Happy tracking! 📊
 
@@ -300,7 +300,7 @@ P.S. If you like it, maybe give us a star on GitHub and an upvote on Product Hun
 
 ### ❓ Frequently Asked Questions
 
-1. **Is Analyzr really free?**
+1. **Is Analytica really free?**
    - Yes! We're 100% free and open source
    - No hidden fees or premium features
    - You can even self-host it if you want
@@ -324,7 +324,7 @@ P.S. If you like it, maybe give us a star on GitHub and an upvote on Product Hun
      - Plain HTML
      - etc.
 
-5. **What's the difference between Analyzr and other analytics tools?**
+5. **What's the difference between Analytica and other analytics tools?**
    - Free custom event tracking (others charge for this)
    - Built-in Discord notifications
    - No complex setup needed
