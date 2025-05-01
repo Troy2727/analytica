@@ -79,21 +79,22 @@ const config: Config = {
       },
     },
   },
-  plugins: [tailwindcssAnimate, addVariablesForColors],
+  plugins: [
+    tailwindcssAnimate,
+    function({ addBase, theme }: { 
+      addBase: (base: any) => void; 
+      theme: (path: string) => Record<string, string>; 
+    }) {
+      const allColors = flattenColorPalette(theme("colors"));
+      const newVars = Object.fromEntries(
+        Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+      );
+     
+      addBase({
+        ":root": newVars,
+      });
+    }
+  ],
 };
-
-function addVariablesForColors({ addBase, theme }: {
-  addBase: (base: object) => void;
-  theme: (path: string) => Record<string, string>;
-}) {
-  const allColors = flattenColorPalette(theme("colors"));
-  const newVars = Object.fromEntries(
-    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
-  );
-
-  addBase({
-    ":root": newVars,
-  });
-}
 
 export default config;
