@@ -58,7 +58,7 @@ jobs:
           ${{ runner.os }}-
 
     - name: Install dependencies
-      run: npm ci
+      run: npm ci --legacy-peer-deps
 
     - name: TypeScript Check
       run: npx tsc --noEmit
@@ -73,23 +73,23 @@ jobs:
       run: |
         node -e "
         const { createClient } = require('@supabase/supabase-js');
-        
+
         async function testConnection() {
           if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
             console.log('Supabase credentials not provided, skipping connection test');
             return;
           }
-          
+
           const supabase = createClient(
             process.env.NEXT_PUBLIC_SUPABASE_URL,
             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
           );
-          
+
           try {
             const { data, error } = await supabase
               .from('page_views')
               .select('count', { count: 'exact', head: true });
-              
+
             if (error) {
               console.error('Error connecting to Supabase:', error);
               console.log('Continuing with build despite Supabase connection error');
@@ -101,7 +101,7 @@ jobs:
             console.log('Continuing with build despite Supabase connection error');
           }
         }
-        
+
         testConnection();
         "
 
@@ -123,32 +123,32 @@ jobs:
   #   needs: build
   #   if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
   #   runs-on: ubuntu-latest
-  #   
+  #
   #   steps:
   #   - uses: actions/checkout@v4
-  #   
+  #
   #   - name: Use Node.js 20.x
   #     uses: actions/setup-node@v4
   #     with:
   #       node-version: 20.x
   #       cache: 'npm'
-  #   
+  #
   #   - name: Download build artifacts
   #     uses: actions/download-artifact@v4
   #     with:
   #       name: next-build-20.x
   #       path: .next/
-  #   
+  #
   #   - name: Install dependencies
-  #     run: npm ci
-  #   
+  #     run: npm ci --legacy-peer-deps
+  #
   #   - name: Deploy to Vercel (Preview)
   #     if: github.event_name == 'pull_request'
   #     run: |
   #       echo "Would deploy to Vercel preview environment"
   #       # Add actual Vercel deployment command here if needed
   #       # npx vercel --token ${VERCEL_TOKEN} --confirm
-  #   
+  #
   #   - name: Deploy to Vercel (Production)
   #     if: github.event_name == 'push'
   #     run: |
