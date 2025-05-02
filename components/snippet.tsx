@@ -76,6 +76,7 @@ export default function Snippet() {
                   padding: '1rem',
                   borderRadius: '0.375rem',
                   border: '1px solid rgb(38, 38, 38)',
+                  overflowX: 'auto' as const,
                 }}
               >
                 {react_snippet}
@@ -105,6 +106,7 @@ export default function Snippet() {
                   padding: '1rem',
                   borderRadius: '0.375rem',
                   border: '1px solid rgb(38, 38, 38)',
+                  overflowX: 'auto' as const,
                 }}
               >
                 {next_snippet}

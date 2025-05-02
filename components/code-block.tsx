@@ -55,7 +55,8 @@ export default function CodeBlock({
     // Override background to be transparent
     backgroundColor: "transparent",
     margin: 0,
-    padding: 0
+    padding: 0,
+    overflowX: "auto" as const
   }
 
   return (
@@ -108,6 +109,7 @@ export default function CodeBlock({
                   background: "transparent",
                   fontSize: "0.875rem",
                   lineHeight: "1.5rem",
+                  overflowX: "auto" as const,
                 }}
               >
                 {setupFiles[activeSetupFile].code}
@@ -173,6 +175,7 @@ export default function CodeBlock({
                   background: "transparent",
                   fontSize: "0.875rem",
                   lineHeight: "1.5rem",
+                  overflowX: "auto" as const,
                 }}
               >
                 {eventFiles[activeEventFile].code}

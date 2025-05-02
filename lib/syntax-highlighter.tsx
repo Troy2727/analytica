@@ -11,7 +11,7 @@ export const oneDark = {
   fontFamily: 'monospace',
   fontSize: '0.875rem',
   lineHeight: '1.5rem',
-  overflowX: 'auto',
+  overflowX: 'auto' as const,
 };
 
 // Define types for the syntax highlighter
