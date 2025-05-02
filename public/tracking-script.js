@@ -1,0 +1,199 @@
+(function () {
+  "use strict";
+
+  var location = window.location;
+  var document = window.document;
+  var navigator = window.navigator;
+
+  var scriptElement = document.currentScript;
+  var dataDomain = scriptElement.getAttribute("data-domain");
+  let queryString = location.search;
+  const params = new URLSearchParams(queryString);
+  var source = params.get("utm") || params.get("ref");
+
+  var endpoint = "https://analytica.vercel.app/api/track";
+
+  async function getUserLocation() {
+    try {
+      const response = await fetch('https://ipapi.co/json/');
+      if (!response.ok) {
+        throw new Error('Failed to fetch location data');
+      }
+      const data = await response.json();
+      return {
+        city: data.city || 'Unknown',
+        region: data.region || 'Unknown',
+        country: data.country_name || 'Unknown',
+      };
+    } catch (error) {
+      console.error('Error fetching location:', error);
+      return {
+        city: 'Unknown',
+        region: 'Unknown',
+        country: 'Unknown',
+      };
+    }
+  }
+
+  function getOperatingSystem() {
+    var userAgent = navigator.userAgent;
+    var os = "Unknown";
+
+    if (userAgent.indexOf("Windows") !== -1) os = "Windows";
+    if (userAgent.indexOf("Mac OS") !== -1) os = "MacOS";
+    if (userAgent.indexOf("Linux") !== -1) os = "Linux";
+    if (userAgent.indexOf("Android") !== -1) os = "Android";
+    if (userAgent.indexOf("iPhone") !== -1 || userAgent.indexOf("iPad") !== -1) os = "iOS";
+
+    return os;
+  }
+
+  function generateSessionId() {
+    // Use crypto.getRandomValues for cryptographically secure random values
+    var array = new Uint8Array(16);
+    window.crypto.getRandomValues(array);
+    // Convert to hex string
+    var hexString = Array.from(array)
+      .map(function(byte) {
+        return ('0' + byte.toString(16)).slice(-2);
+      })
+      .join('');
+    return "session-" + hexString.substring(0, 16);
+  }
+
+  function initializeSession() {
+    var sessionId = localStorage.getItem("session_id");
+    var expirationTimestamp = localStorage.getItem(
+      "session_expiration_timestamp"
+    );
+
+    if (!sessionId || !expirationTimestamp) {
+      sessionId = generateSessionId();
+      expirationTimestamp = Date.now() + 10 * 60 * 1000; // 10 minutes
+      localStorage.setItem("session_id", sessionId);
+      localStorage.setItem("session_expiration_timestamp", expirationTimestamp);
+      trackSessionStart();
+    }
+
+    return {
+      sessionId: sessionId,
+      expirationTimestamp: parseInt(expirationTimestamp),
+    };
+  }
+
+  function isSessionExpired(expirationTimestamp) {
+    return Date.now() >= expirationTimestamp;
+  }
+
+  function checkSessionStatus() {
+    var session = initializeSession();
+    if (isSessionExpired(session.expirationTimestamp)) {
+      localStorage.removeItem("session_id");
+      localStorage.removeItem("session_expiration_timestamp");
+      trackSessionEnd();
+      initializeSession();
+    }
+  }
+
+  checkSessionStatus();
+
+  function getDeviceType() {
+    const ua = navigator.userAgent;
+    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+      return "tablet";
+    }
+    if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
+      return "mobile";
+    }
+    // Check if it's a laptop by screen size
+    if (window.screen.width <= 1366 && window.screen.height <= 768) {
+      return "laptop";
+    }
+    return "desktop";
+  }
+
+  function getBrowserInfo() {
+    const ua = navigator.userAgent;
+    let browserName = "Unknown";
+
+    if (ua.indexOf("Chrome") > -1) browserName = "Chrome";
+    else if (ua.indexOf("Safari") > -1) browserName = "Safari";
+    else if (ua.indexOf("Firefox") > -1) browserName = "Firefox";
+    else if (ua.indexOf("Edge") > -1) browserName = "Edge";
+    else if (ua.indexOf("Opera") > -1) browserName = "Opera";
+
+    return { browserName };
+  }
+
+  async function trigger(eventName, options) {
+    try {
+      const locationData = await getUserLocation();
+      const operatingSystem = getOperatingSystem();
+      const deviceType = getDeviceType();
+      const { browserName } = getBrowserInfo();
+
+      var payload = {
+        event: eventName,
+        url: location.href,
+        domain: dataDomain,
+        source,
+        city: locationData.city,
+        region: locationData.region,
+        country: locationData.country,
+        operatingSystem,
+        deviceType,
+        browserName,
+      };
+
+      sendRequest(payload, options);
+    } catch (error) {
+      console.error('Error in trigger:', error);
+    }
+  }
+
+  function sendRequest(payload, options) {
+    var request = new XMLHttpRequest();
+    request.open("POST", endpoint, true);
+    request.setRequestHeader("Content-Type", "application/json");
+
+    request.onreadystatechange = function () {
+      if (request.readyState === 4 && options && options.callback) {
+        options.callback();
+      }
+    };
+
+    request.send(JSON.stringify(payload));
+  }
+
+  var queue = (window.your_tracking && window.your_tracking.q) || [];
+  window.your_tracking = trigger;
+  for (var i = 0; i < queue.length; i++) {
+    trigger.apply(this, queue[i]);
+  }
+
+  function trackPageView() {
+    trigger("pageview");
+  }
+  function trackSessionStart() {
+    trigger("session_start");
+  }
+  function trackSessionEnd() {
+    trigger("session_end");
+  }
+
+  trackPageView();
+  var initialPathname = window.location.pathname;
+
+  window.addEventListener("popstate", trackPageView);
+
+  window.addEventListener("hashchange", trackPageView);
+
+  document.addEventListener("click", function () {
+    setTimeout(() => {
+      if (window.location.pathname !== initialPathname) {
+        trackPageView();
+        initialPathname = window.location.pathname;
+      }
+    }, 3000);
+  });
+})();
