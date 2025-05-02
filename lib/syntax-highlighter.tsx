@@ -14,16 +14,20 @@ export const oneDark = {
   overflowX: 'auto',
 };
 
+// Define types for the syntax highlighter
+type StyleObject = React.CSSProperties;
+
 // Define a simple syntax highlighter component
 export const SyntaxHighlighter: React.FC<{
   language?: string;
-  style?: any;
+  style?: StyleObject;
   children: string;
   showLineNumbers?: boolean;
   wrapLines?: boolean;
-  lineNumberStyle?: any;
-  customStyle?: any;
+  lineNumberStyle?: StyleObject;
+  customStyle?: StyleObject;
 }> = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   language,
   style = oneDark,
   children,
@@ -33,9 +37,9 @@ export const SyntaxHighlighter: React.FC<{
   // Format the code by adding line numbers if needed
   const formatCode = () => {
     if (!children) return '';
-    
+
     const lines = children.split('\n');
-    
+
     if (showLineNumbers) {
       return lines.map((line, i) => (
         <div key={i} className="syntax-line">
@@ -46,7 +50,7 @@ export const SyntaxHighlighter: React.FC<{
         </div>
       ));
     }
-    
+
     return children;
   };
 
