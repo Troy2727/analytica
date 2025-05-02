@@ -32,6 +32,7 @@ export function groupPageViews(pageViews: PageView[]): GroupedView[] {
       const url = new URL(urlToParse);
       // Remove leading slash to match original behavior
       path = url.pathname.replace(/^\//, "");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       // Fallback to simple string manipulation if URL parsing fails
       path = page.split('/').slice(page.includes('://') ? 3 : 1).join('/');
