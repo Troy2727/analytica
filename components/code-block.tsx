@@ -45,22 +45,17 @@ export default function CodeBlock({
 
   const customStyle = {
     ...oneDark,
-    'pre[class*="language-"]': {
-      ...oneDark['pre[class*="language-"]'],
-      background: "transparent",
-      margin: 0,
-      padding: 0,
-    },
-    'code[class*="language-"]': {
-      ...oneDark['code[class*="language-"]'],
-      background: "transparent",
-    },
+    // Add syntax highlighting styles
     keyword: { color: "#EC4899" },
     property: { color: "#93C5FD" },
     string: { color: "#93C5FD" },
     number: { color: "#e5e7eb" },
     punctuation: { color: "#9CA3AF" },
     function: { color: "#93C5FD" },
+    // Override background to be transparent
+    backgroundColor: "transparent",
+    margin: 0,
+    padding: 0
   }
 
   return (
