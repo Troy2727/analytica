@@ -1,5 +1,5 @@
 (function () {
-  ("use strict");
+  "use strict";
 
   var location = window.location;
   var document = window.document;
@@ -49,7 +49,16 @@
   }
 
   function generateSessionId() {
-    return "session-" + Math.random().toString(36).substr(2, 9);
+    // Use crypto.getRandomValues for cryptographically secure random values
+    var array = new Uint8Array(16);
+    window.crypto.getRandomValues(array);
+    // Convert to hex string
+    var hexString = Array.from(array)
+      .map(function(byte) {
+        return ('0' + byte.toString(16)).slice(-2);
+      })
+      .join('');
+    return "session-" + hexString.substring(0, 16);
   }
 
   function initializeSession() {

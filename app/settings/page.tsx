@@ -32,9 +32,13 @@ export default function SettingsPage() {
     setLoading(true);
     if (loading || !user) return;
 
-    const randomString =
-      Math.random().toString(36).substring(2, 300) +
-      Math.random().toString(36).substring(2, 300);
+    // Use crypto.getRandomValues for cryptographically secure random values
+    const buffer = new Uint8Array(32); // 256 bits of randomness
+    crypto.getRandomValues(buffer);
+    // Convert to base64 and remove non-alphanumeric characters
+    const randomString = btoa(String.fromCharCode.apply(null, [...buffer]))
+      .replace(/[+/=]/g, '')
+      .substring(0, 40);
 
     const { data } = await supabase
       .from("users")
@@ -134,9 +138,13 @@ export default function SettingsPage() {
     setLoading(true);
     if (loading || !user) return;
 
-    const randomString =
-      Math.random().toString(36).substring(2, 300) +
-      Math.random().toString(36).substring(2, 300);
+    // Use crypto.getRandomValues for cryptographically secure random values
+    const buffer = new Uint8Array(32); // 256 bits of randomness
+    crypto.getRandomValues(buffer);
+    // Convert to base64 and remove non-alphanumeric characters
+    const randomString = btoa(String.fromCharCode.apply(null, [...buffer]))
+      .replace(/[+/=]/g, '')
+      .substring(0, 40);
 
     try {
       const { data, error } = await supabase

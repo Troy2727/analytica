@@ -24,7 +24,19 @@ export function groupPageViews(pageViews: PageView[]): GroupedView[] {
   const groupedPageViews: Record<string, number> = {};
 
   pageViews.forEach(({ page }) => {
-    const path = page.replace(/^(?:\/\/|[^/]+)*\//, "");
+    // Use URL API to safely parse the URL and extract the pathname
+    let path = "";
+    try {
+      // Add protocol if missing to make URL parsing work
+      const urlToParse = page.startsWith('http') ? page : `https://${page}`;
+      const url = new URL(urlToParse);
+      // Remove leading slash to match original behavior
+      path = url.pathname.replace(/^\//, "");
+    } catch (e) {
+      // Fallback to simple string manipulation if URL parsing fails
+      path = page.split('/').slice(page.includes('://') ? 3 : 1).join('/');
+    }
+
     groupedPageViews[path] = (groupedPageViews[path] || 0) + 1;
   });
 
@@ -47,13 +59,13 @@ export function groupPageSources(visits: Visit[]): GroupedSource[] {
 
 export function formatTimeStamp(date: string): string {
   const timestamp = new Date(date);
-  
+
   // Array of month names
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
-  
+
   // Get the day with ordinal suffix (1st, 2nd, 3rd, etc.)
   const day = timestamp.getDate();
   const ordinal = (day: number): string => {
@@ -344,7 +356,7 @@ export const getCategory = (score: number) => {
 
 export const getRecommendations = (metrics: PerformanceMetrics) => {
   const recommendations = [];
-  
+
   if (metrics.performance < 90) {
     recommendations.push({
       title: "Speed Optimization",

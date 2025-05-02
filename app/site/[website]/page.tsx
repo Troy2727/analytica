@@ -147,7 +147,7 @@ export default function AnalyticsPage() {
     return null;
   }
 
-  if (pageViews?.length === 0 && !loading) {
+  if (pageViews?.length === 0) {
     return <NoPageViewsState website={website as string} />;
   }
 

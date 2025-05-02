@@ -81,7 +81,7 @@ const DetailedMetricCard = ({
 }) => {
   const formatMetricValue = (value: string | number | null, format: string) => {
     if (value === null) return 'N/A';
-    
+
     const numericValue = typeof value === "string" ? parseFloat(value) : value;
     switch (format) {
       case "time":
@@ -150,7 +150,7 @@ function PerformanceScoreCard({ metrics }: { metrics: PerformanceMetrics }) {
             Overall Score
           </h3>
           <p className="text-xs sm:text-sm md:text-base text-neutral-400 max-w-[280px]">
-            {category.isGood 
+            {category.isGood
               ? "Your website is performing well across all key metrics"
               : "There's room for improvement in your website's performance"}
           </p>
@@ -259,7 +259,7 @@ export default function Performance({
     }
   };
 
-  if (!metrics || metrics == null) {
+  if (!metrics) {
     return (
       <Card className="bg-[#0A0A0A] border border-[#1F1F1F] text-neutral-100">
         <CardHeader className="border-b border-neutral-800">
