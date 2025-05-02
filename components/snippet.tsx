@@ -7,8 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Copy } from "lucide-react";
 import { Button } from "./ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { SyntaxHighlighter, oneDark } from '@/lib/syntax-highlighter';
 
 export default function Snippet() {
   const { website } = useParams();
