@@ -109,6 +109,7 @@ send_request()`;
           padding: '1rem',
           borderRadius: '0.375rem',
           border: '1px solid rgb(38, 38, 38)',
+          overflowX: 'auto' as const,
         }}
       >
         {language === "javascript" ? javascriptCode : pythonCode}
