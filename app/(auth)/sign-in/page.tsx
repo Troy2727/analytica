@@ -34,17 +34,19 @@ export default function SignIn() {
       setIsLoading(provider);
       setError(null);
 
+      // Let Supabase handle the redirect automatically
+      console.log(`Signing in with ${provider}`);
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
-        options: {
-          redirectTo: `https://analytica-dummy.vercel.app/dashboard`,
-        },
+        // No redirectTo option - let Supabase use its default callback
       });
 
       if (error) throw error;
-    } catch (error) {
-      setError("An error occurred during sign in. Please try again.");
-      console.error("Sign in error:", error);
+    } catch (error: any) {
+      const errorMessage = error?.message || "An error occurred during sign in. Please try again.";
+      setError(errorMessage);
+      console.error(`Sign in with ${provider} error:`, error);
     } finally {
       setIsLoading(null);
     }
@@ -62,12 +64,16 @@ export default function SignIn() {
 
       let result;
       if (isSignUp) {
+        console.log(`Signing up with email: ${email}`);
+
         result = await supabase.auth.signUp({
           email,
           password,
+          // Let Supabase handle the redirect automatically
         });
 
         if (result.error) {
+          console.error("Sign up error:", result.error);
           if (result.error.message.includes('already registered')) {
             setError("This email is already registered. Please sign in instead.");
             setIsSignUp(false);
@@ -81,12 +87,15 @@ export default function SignIn() {
           return;
         }
       } else {
+        console.log(`Signing in with email: ${email}`);
+
         result = await supabase.auth.signInWithPassword({
           email,
           password,
         });
 
         if (result.error) {
+          console.error("Sign in error:", result.error);
           if (result.error.message.includes('Invalid login credentials')) {
             throw new Error("Invalid email or password. Please try again.");
           }
