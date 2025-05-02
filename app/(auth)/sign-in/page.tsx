@@ -43,8 +43,10 @@ export default function SignIn() {
       });
 
       if (error) throw error;
-    } catch (error: any) {
-      const errorMessage = error?.message || "An error occurred during sign in. Please try again.";
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error
+        ? error.message
+        : "An error occurred during sign in. Please try again.";
       setError(errorMessage);
       console.error(`Sign in with ${provider} error:`, error);
     } finally {
