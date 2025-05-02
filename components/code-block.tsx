@@ -1,8 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism"
+import { SyntaxHighlighter, oneDark } from "@/lib/syntax-highlighter"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useToast } from "@/hooks/use-toast"
