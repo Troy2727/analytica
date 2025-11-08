@@ -48,7 +48,7 @@ export default function SignIn() {
         ? error.message
         : "An error occurred during sign in. Please try again.";
       setError(errorMessage);
-      console.error(`Sign in with ${provider} error:`, error);
+      console.error(`Sign in with ${provider} error:`, error instanceof Error ? error : errorMessage);
     } finally {
       setIsLoading(null);
     }
@@ -110,7 +110,7 @@ export default function SignIn() {
         ? error.message
         : "An error occurred. Please try again.";
       setError(errorMessage);
-      console.error("Email auth error:", error);
+      console.error("Email auth error:", error instanceof Error ? error : errorMessage);
     } finally {
       setIsLoading(null);
     }
