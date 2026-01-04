@@ -6,6 +6,8 @@ import { getCorsHeaders } from "@/lib/cors";
 import { DiscordClient } from "@/lib/discord-client";
 import { UserData } from "@/types";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const { data, error } = await supabase.from("events").select("*");
@@ -92,7 +94,7 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      if (userData.discord_id) {
+      if (userData.discord_id && process.env.DISCORD_BOT_TOKEN) {
         try {
           const discord = new DiscordClient(process.env.DISCORD_BOT_TOKEN);
           const dmChannel = await discord.createDM(userData.discord_id);
