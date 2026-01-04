@@ -31,8 +31,8 @@ jobs:
         node-version: [18.x, 20.x]  # Test with Node.js 18 and 20
 
     env:
-      NEXT_PUBLIC_SUPABASE_URL: https://jhjpvnlukpjrxfijcgud.supabase.co
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpoanB2bmx1a3BqcnhmaWpjZ3VkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU3MTcyMzMsImV4cCI6MjA2MTI5MzIzM30.XrvVKW7_rNW_MJ8BGUCzLRUn5sYyaEHOPScJFuBwEqQ
+      NEXT_PUBLIC_SUPABASE_URL: https://vbvfqtkfvcwfcedobzab.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: sb_publishable_Qmsdq6ydCfcCHVZXUMAwcg_qzSmNmM2
       GOOGLE_PAGESPEED_API_KEY: AIzaSyDHp95vCnikprqhrY60GWHyo7_ZKOC2S
       SUPABASE_USER_ID: ${{ secrets.SUPABASE_USER_ID }}
 
