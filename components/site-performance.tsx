@@ -230,9 +230,10 @@ export default function Performance({
         const data = await fetchPageSpeedMetrics(websiteId);
         setMetrics(data);
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-        setError(`[Performance] Failed to load initial metrics: ${errorMessage}`);
-        console.error('[Performance] Error loading initial metrics:', err);
+        const errorString = err instanceof Error ? err.message : String(err);
+        const sanitized = errorString.replace(/[\r\n]/g, "");
+        setError(`[Performance] Failed to load initial metrics: ${sanitized}`);
+        console.error('[Performance] Error loading initial metrics:', sanitized);
       }
     };
 
@@ -251,9 +252,10 @@ export default function Performance({
       const newMetrics = await getPageSpeedMetrics(websiteId, websiteUrl);
       setMetrics(newMetrics);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-      setError(`[Performance] Failed to fetch metrics: ${errorMessage}`);
-      console.error('[Performance] Error refreshing metrics:', err);
+      const errorString = err instanceof Error ? err.message : String(err);
+      const sanitized = errorString.replace(/[\r\n]/g, "");
+      setError(`[Performance] Failed to fetch metrics: ${sanitized}`);
+      console.error('[Performance] Error refreshing metrics:', sanitized);
     } finally {
       setLoading(false);
     }
