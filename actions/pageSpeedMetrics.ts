@@ -49,7 +49,9 @@ export async function fetchPageSpeedMetrics(websiteId: string): Promise<Performa
       speedIndex: data.speedIndex || 0,
     };
   } catch (error) {
-    console.error('[fetchPageSpeedMetrics] Error:', error);
+    const errorString = error instanceof Error ? error.message : String(error);
+    const sanitized = errorString.replace(/[\r\n]/g, "");
+    console.error('[fetchPageSpeedMetrics] Error:', sanitized);
     throw error;
   }
 }
@@ -117,13 +119,17 @@ export async function getPageSpeedMetrics(websiteId: string, url: string): Promi
       .eq('name', cleanWebsiteId);
 
     if (updateError) {
-      console.error('Error updating metrics in database:', updateError);
+      const errorString = updateError instanceof Error ? updateError.message : String(updateError);
+      const sanitized = errorString.replace(/[\r\n]/g, "");
+      console.error('Error updating metrics in database:', sanitized);
       return null;
     }
 
     return metrics;
   } catch (error) {
-    console.error('Error in getPageSpeedMetrics:', error);
+    const errorString = error instanceof Error ? error.message : String(error);
+    const sanitized = errorString.replace(/[\r\n]/g, "");
+    console.error('Error in getPageSpeedMetrics:', sanitized);
     return null;
   }
 }
