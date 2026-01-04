@@ -232,7 +232,9 @@ export default function Performance({
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
         setError(`[Performance] Failed to load initial metrics: ${errorMessage}`);
-        console.error('[Performance] Error loading initial metrics:', err);
+        const rawErrorString = err instanceof Error ? err.message : String(err);
+        const sanitizedErrorString = rawErrorString.replace(/[\r\n]/g, "");
+        console.error('[Performance] Error loading initial metrics:', sanitizedErrorString);
       }
     };
 
@@ -253,7 +255,9 @@ export default function Performance({
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       setError(`[Performance] Failed to fetch metrics: ${errorMessage}`);
-      console.error('[Performance] Error refreshing metrics:', err);
+      const rawErrorString = err instanceof Error ? err.message : String(err);
+      const sanitizedErrorString = rawErrorString.replace(/[\r\n]/g, "");
+      console.error('[Performance] Error refreshing metrics:', sanitizedErrorString);
     } finally {
       setLoading(false);
     }
