@@ -16,8 +16,35 @@ jobs:
     steps:
     - name: Ping Supabase
       run: |
-        curl -X GET "$NEXT_PUBLIC_SUPABASE_URL/rest/v1/" \
-          -H "apikey: $NEXT_PUBLIC_SUPABASE_ANON_KEY" \
-          -H "Authorization: Bearer $NEXT_PUBLIC_SUPABASE_ANON_KEY"
+        echo "Pinging Supabase at $NEXT_PUBLIC_SUPABASE_URL"
 
-        echo "✅ Pinged Supabase at $(date)"
+        response=$(curl -s -w "\n%{http_code}" -X GET "$NEXT_PUBLIC_SUPABASE_URL/rest/v1/" \
+          -H "apikey: $NEXT_PUBLIC_SUPABASE_ANON_KEY" \
+          -H "Authorization: Bearer $NEXT_PUBLIC_SUPABASE_ANON_KEY" || echo "000")
+
+        http_code=$(echo "$response" | tail -n 1)
+        body=$(echo "$response" | sed '$d')
+
+        echo "HTTP Status: $http_code"
+        echo "Response: $body"
+
+        if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 500 ]; then
+          echo "✅ Pinged Supabase successfully at $(date)"
+          exit 0
+        else
+          echo "⚠️ Supabase may be paused (status: $http_code)"
+          echo "Attempting health check..."
+
+          health_response=$(curl -s -w "\n%{http_code}" "$NEXT_PUBLIC_SUPABASE_URL/rest/v1/health" \
+            -H "apikey: $NEXT_PUBLIC_SUPABASE_ANON_KEY" || echo "000")
+
+          health_code=$(echo "$health_response" | tail -n 1)
+          echo "Health check status: $health_code"
+
+          if [ "$health_code" -ge 200 ] && [ "$health_code" -lt 500 ]; then
+            echo "✅ Health check succeeded"
+            exit 0
+          fi
+
+          exit 1
+        fi
