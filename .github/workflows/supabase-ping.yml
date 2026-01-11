@@ -1,0 +1,23 @@
+name: Keep Supabase Active
+
+on:
+  schedule:
+    - cron: '0 12 * * 1'  # Every Monday at noon UTC
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://vbvfqtkfvcwfcedobzab.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: sb_publishable_Qmsdq6ydCfcCHVZXUMAwcg_qzSmNmM2
+
+    steps:
+    - name: Ping Supabase
+      run: |
+        curl -X GET "$NEXT_PUBLIC_SUPABASE_URL/rest/v1/" \
+          -H "apikey: $NEXT_PUBLIC_SUPABASE_ANON_KEY" \
+          -H "Authorization: Bearer $NEXT_PUBLIC_SUPABASE_ANON_KEY"
+
+        echo "✅ Pinged Supabase at $(date)"
