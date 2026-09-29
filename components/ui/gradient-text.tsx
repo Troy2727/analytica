@@ -10,7 +10,7 @@ export function GradientText({ children, className = '' }: GradientTextProps) {
     <span 
       className={className}
       style={{
-        background: 'linear-gradient(90deg, #00ffff, #2d8fff, #9333ff, #ff00ff)',
+        background: 'linear-gradient(90deg, #60a5fa, #34d399)',
         WebkitBackgroundClip: 'text',
         backgroundClip: 'text',
         color: 'transparent',

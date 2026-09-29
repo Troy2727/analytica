@@ -119,8 +119,8 @@ export default function SignIn() {
   if (loading || user) return null;
 
   return (
-    <div className="min-h-screen flex items-center justify-center dark bg-neutral-900/50">
-      <Card className="w-full max-w-md bg-card border-border">
+    <div className="min-h-screen flex items-center justify-center dark">
+      <Card className="w-full max-w-md rounded-2xl border-blue-400/20 bg-gradient-to-br from-blue-900/20 to-black shadow-2xl shadow-blue-950/50 backdrop-blur-xl">
         <CardHeader className="space-y-2 text-center">
           <CardTitle className="text-2xl">
             {isSignUp ? 'Create an account' : 'Welcome back'}
@@ -135,7 +135,7 @@ export default function SignIn() {
           <div className="grid grid-cols-2 gap-4">
             <Button
               variant="outline"
-              className="w-full bg-card hover:bg-accent"
+              className="w-full rounded-xl border-blue-400/20 bg-gradient-to-br from-blue-900/20 to-black/40 text-blue-100 hover:border-blue-400/30 hover:bg-blue-900/30"
               onClick={() => signInWithProvider('github')}
               disabled={isLoading !== null}
             >
@@ -160,7 +160,7 @@ export default function SignIn() {
             </Button>
             <Button
               variant="outline"
-              className="w-full bg-card hover:bg-accent"
+              className="w-full rounded-xl border-blue-400/20 bg-gradient-to-br from-blue-900/20 to-black/40 text-blue-100 hover:border-blue-400/30 hover:bg-blue-900/30"
               onClick={() => signInWithProvider('google')}
               disabled={isLoading !== null}
             >
@@ -195,13 +195,10 @@ export default function SignIn() {
               Google
             </Button>
           </div>
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-border" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">OR CONTINUE WITH</span>
-            </div>
+          <div className="flex items-center gap-3 text-xs uppercase text-muted-foreground">
+            <div className="h-px flex-1 bg-blue-400/20" />
+            <span>OR CONTINUE WITH</span>
+            <div className="h-px flex-1 bg-blue-400/20" />
           </div>
           <form onSubmit={handleEmailAuth} className="space-y-4">
             <div className="space-y-2">
@@ -215,7 +212,7 @@ export default function SignIn() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isLoading !== null}
-                className="bg-card border-border text-card-foreground placeholder:text-muted-foreground"
+                className="rounded-xl border-blue-400/20 bg-black/30 text-card-foreground placeholder:text-muted-foreground focus-visible:ring-blue-400"
               />
             </div>
             <div className="space-y-2">
@@ -228,12 +225,12 @@ export default function SignIn() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isLoading !== null}
-                className="bg-card border-border text-card-foreground placeholder:text-muted-foreground"
+                className="rounded-xl border-blue-400/20 bg-black/30 text-card-foreground placeholder:text-muted-foreground focus-visible:ring-blue-400"
               />
             </div>
             <Button
               type="submit"
-              className="w-full"
+              className="w-full rounded-xl bg-gradient-to-r from-blue-400 to-emerald-400 text-white shadow-lg shadow-blue-900/30 hover:opacity-90"
               disabled={isLoading !== null}
             >
               {isLoading === 'email' ? (

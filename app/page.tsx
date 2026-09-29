@@ -1,12 +1,11 @@
 import React from "react";
-import { ChevronRight } from "lucide-react";
+import { Activity, BellRing, ChevronRight, Gift, Zap } from "lucide-react";
 import Link from "next/link";
 import { BlurFade } from "@/components/ui/blur-fade";
-import { FEATURES, TESTIMONIALS, TWEETS } from "@/lib/constants";
+import { FEATURES } from "@/lib/constants";
 import { MockDiscordUI } from "@/components/mock-discord-ui";
 import { AnimatedList } from "@/components/ui/animated-list";
 import { DiscordMessage } from "@/components/discord-message";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Safari from "@/components/ui/safari";
 import {
@@ -16,8 +15,58 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import CodeBlock from "@/components/code-block";
-import { Tweet } from "react-tweet";
-import Testimonial from "@/components/testimonial";
+
+// Hero highlight cards. Class strings are written out in full so Tailwind can find them.
+const HIGHLIGHTS = [
+  {
+    icon: Activity,
+    tag: "Real-time",
+    value: "Live",
+    label: "Page views as they happen",
+    card: "from-blue-900/20 border-blue-500/20 hover:border-blue-400/40",
+    iconBox: "bg-blue-500/15 text-blue-300",
+    tagBox: "bg-blue-500/20 text-blue-300",
+    labelText: "text-blue-200/80",
+  },
+  {
+    icon: BellRing,
+    tag: "Alerts",
+    value: "Instant",
+    label: "Events sent to Discord",
+    card: "from-emerald-900/20 border-emerald-500/20 hover:border-emerald-400/40",
+    iconBox: "bg-emerald-500/15 text-emerald-300",
+    tagBox: "bg-emerald-500/20 text-emerald-300",
+    labelText: "text-emerald-200/80",
+  },
+  {
+    icon: Zap,
+    tag: "Script",
+    value: "< 6KB",
+    label: "Won't slow your site down",
+    card: "from-purple-900/20 border-purple-500/20 hover:border-purple-400/40",
+    iconBox: "bg-purple-500/15 text-purple-300",
+    tagBox: "bg-purple-500/20 text-purple-300",
+    labelText: "text-purple-200/80",
+  },
+  {
+    icon: Gift,
+    tag: "Open source",
+    value: "$0",
+    label: "Free forever",
+    card: "from-amber-900/20 border-amber-500/20 hover:border-amber-400/40",
+    iconBox: "bg-amber-500/15 text-amber-300",
+    tagBox: "bg-amber-500/20 text-amber-300",
+    labelText: "text-amber-200/80",
+  },
+];
+
+// One tint per feature card; the middle two span two columns for the bento layout.
+const FEATURE_TINTS = [
+  { card: "from-blue-900/20 border-blue-400/20 hover:border-blue-400/40", icon: "bg-blue-500/15 text-blue-300", span: "" },
+  { card: "from-emerald-900/20 border-emerald-400/20 hover:border-emerald-400/40", icon: "bg-emerald-500/15 text-emerald-300", span: "lg:col-span-2" },
+  { card: "from-purple-900/20 border-purple-400/20 hover:border-purple-400/40", icon: "bg-purple-500/15 text-purple-300", span: "lg:col-span-2" },
+  { card: "from-amber-900/20 border-amber-400/20 hover:border-amber-400/40", icon: "bg-amber-500/15 text-amber-300", span: "" },
+];
 
 export default function Home() {
   const setupSnippets = [
@@ -28,7 +77,7 @@ export default function Home() {
       code: `<script
   defer
   data-domain="YOUR_DOMAIN"
-  src="https://analytica.vercel.app/tracking-script.js"
+  src="https://analytica-phi.vercel.app/tracking-script.js"
 >
 </script>`,
     },
@@ -39,7 +88,7 @@ export default function Home() {
       code: `<Script
   defer
   data-domain="YOUR_DOMAIN"
-  src="https://analytica.vercel.app/tracking-script.js"
+  src="https://analytica-phi.vercel.app/tracking-script.js"
 />`,
     },
   ];
@@ -52,7 +101,7 @@ export default function Home() {
       code: `const axios = require('axios');
 
 const API_KEY = "YOUR_API_KEY";
-const url = "https://analytica.vercel.app/api/events";
+const url = "https://analytica-phi.vercel.app/api/events";
 const headers = {
     "Content-Type": "application/json",
     "Authorization": \`Bearer \${API_KEY}\`
@@ -90,7 +139,7 @@ sendRequest();`,
       code: `import requests
 
 API_KEY = "YOUR_API_KEY"
-url = "https://analytica.vercel.app/api/events"
+url = "https://analytica-phi.vercel.app/api/events"
 headers = {
     "Content-Type": "application/json",
     "Authorization": f"Bearer {API_KEY}"
@@ -123,40 +172,29 @@ send_request()`,
   ];
 
   return (
-    <main className="flex flex-col divide-y divide-neutral-800">
-      <div className="absolute left-1/2 -translate-x-1/2 h-[80vh] w-[80vw] bg-[radial-gradient(ellipse_50%_80%_at_50%_-20%,rgba(37,99,235,0.3),rgba(255,255,255,0))]"></div>
-
-      <section className="relative max-w-full mx-auto md:pb-8">
-        <div className="max-w-screen-xl mx-auto px-4 pb-14 pt-20 gap-12 text-neutral-600 md:px-8">
-          <div className="space-y-8 max-w-5xl leading-0 lg:leading-5 mx-auto text-center">
+    <main className="flex flex-col divide-y divide-white/10">
+      <section className="relative px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto grid max-w-7xl items-center gap-12 pb-16 pt-20 sm:pt-24 lg:grid-cols-5 lg:pt-28">
+          <div className="lg:col-span-3">
             <BlurFade delay={0.1}>
-              <Link
-                target="_blank"
-                href="https://www.producthunt.com/posts/analytica?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-analytica"
-                className="flex justify-center"
-              >
-                <Image
-                  src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=586803&theme=dark"
-                  alt="Analytica - Real-time analytics for modern applications | Product Hunt"
-                  className="w-[180px] h-[40px] md:w-[250px] md:h-[54px]"
-                  width={250}
-                  height={54}
-                  unoptimized
-                />
-              </Link>
+              <span className="inline-flex items-center gap-2 rounded-xl border border-blue-400/20 bg-blue-400/10 px-3 py-2 text-sm text-blue-200">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                Open source &amp; free forever
+              </span>
             </BlurFade>
 
             <BlurFade delay={0.2}>
-              <h2 className="text-4xl tracking-tighter bg-clip-text bg-[linear-gradient(180deg,_#FFF_0%,_rgba(255,_255,_255,_0.00)_202.08%)] text-transparent mx-auto md:text-6xl">
-                Know Your Users.{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-cyan-200">
-                  Grow Your SaaS.
+              <h1 className="mt-8 font-display text-4xl font-light tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl">
+                Every visit.
+                <br className="hidden sm:block" /> Every event.{" "}
+                <span className="bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+                  Live.
                 </span>
-              </h2>
+              </h1>
             </BlurFade>
 
             <BlurFade delay={0.3}>
-              <p className="max-w-2xl mx-auto text-neutral-300">
+              <p className="mt-8 max-w-2xl text-lg text-gray-300 sm:text-xl">
                 Monitor every aspect of your application in real-time. Track
                 user journeys, capture events, and make data-driven decisions
                 with our comprehensive analytics platform.
@@ -164,172 +202,128 @@ send_request()`,
             </BlurFade>
 
             <BlurFade delay={0.4}>
-              <div className="items-center justify-center space-x-3 space-y-3 sm:flex sm:space-y-0">
-                <span className="relative inline-block overflow-hidden rounded-full p-[1.5px]">
-                  <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#93C5FD_0%,#1D4ED8_50%,#93C5FD_100%)]" />
-                  <div className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-neutral-950 text-xs font-medium text-neutral-50 backdrop-blur-3xl">
-                    <Link
-                      href="/dashboard"
-                      className="relative inline-flex rounded-full text-center group items-center w-full justify-center bg-gradient-to-tr from-neutral-300/5 via-blue-400/20 to-transparent text-white hover:bg-transparent/90 transition-colors sm:w-auto py-3 px-10 md:text-base"
-                    >
-                      Get Started
-                    </Link>
-                  </div>
-                </span>
-                <span className="relative inline-block overflow-hidden rounded-full p-[0.75px]">
-                  <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#93C5FD_0%,#1D4ED8_50%,#93C5FD_100%)]" />
-                  <div className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-neutral-950 text-xs font-medium text-neutral-50 backdrop-blur-3xl">
-                    <Link
-                      href="https://github.com/AlexCodess/analytica#readme"
-                      className="inline-flex rounded-full text-center items-center justify-center bg-neutral-900 text-neutral-300 border-neutral-800 border hover:bg-neutral-900/80 transition-colors py-3 px-10 md:text-base"
-                    >
-                      View Documentation
-                    </Link>
-                  </div>
-                </span>
+              <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                <Link
+                  href="/dashboard"
+                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-400 to-emerald-400 px-8 py-4 font-medium text-white shadow-lg shadow-blue-900/30 transition hover:-translate-y-0.5"
+                >
+                  Get Started
+                  <ChevronRight className="h-5 w-5" />
+                </Link>
+                <Link
+                  href="https://github.com/Troy2727/analytica#readme"
+                  className="inline-flex items-center rounded-xl border border-white/15 bg-white/5 px-8 py-4 font-medium text-gray-100 transition hover:border-white/20 hover:bg-white/10"
+                >
+                  View Documentation
+                </Link>
               </div>
             </BlurFade>
           </div>
 
-          <BlurFade delay={0.5} yOffset={20}>
-            <div className="mt-20 mx-10">
-              <Safari url="https://analytica.vercel.app">
+          <BlurFade delay={0.35} className="lg:col-span-2">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-6">
+              {HIGHLIGHTS.map((h) => {
+                const Icon = h.icon;
+                return (
+                  <div
+                    key={h.value}
+                    className={`rounded-2xl border bg-gradient-to-br to-black p-6 backdrop-blur-xl transition-all duration-300 ${h.card}`}
+                  >
+                    <div className="mb-4 flex items-center justify-between">
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${h.iconBox}`}>
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <span className={`rounded-lg px-2.5 py-1 text-xs font-medium ${h.tagBox}`}>
+                        {h.tag}
+                      </span>
+                    </div>
+                    <p className="mb-1 font-display text-2xl font-light text-white lg:text-3xl">
+                      {h.value}
+                    </p>
+                    <p className={`text-sm ${h.labelText}`}>{h.label}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </BlurFade>
+        </div>
+
+        <BlurFade delay={0.5} yOffset={20}>
+          <div className="mx-auto max-w-6xl pb-16">
+            <div className="overflow-hidden rounded-2xl border border-blue-400/20 shadow-2xl shadow-blue-950/50">
+              <Safari url="https://analytica-phi.vercel.app">
                 <Image
-                  alt="Hero Image"
-                  src="/hero.png"
+                  alt="Analytica dashboard"
+                  src="/hero-dashboard-v4.jpg"
                   width={2000}
                   height={1000}
                 />
               </Safari>
             </div>
-          </BlurFade>
-        </div>
+          </div>
+        </BlurFade>
       </section>
 
       <BlurFade delay={0.7}>
         <section className="py-14 md:py-20 relative">
-          <div className="max-w-screen-xl mx-auto px-4 text-gray-400 md:px-8">
-            <div className="relative max-w-2xl mx-auto sm:text-center">
-              <div className="relative">
-                <h3 className="text-gray-200 text-3xl font-normal tracking-tighter md:text-5xl sm:text-4xl">
-                  Built for modern applications
-                </h3>
-                <p className="mt-3 text-gray-200">
-                  Powerful event tracking and analytics that scales with your
-                  application. Deploy in minutes and start monitoring your key
-                  metrics instantly.
-                </p>
-              </div>
-              <div
-                className="absolute inset-0 max-w-xs mx-auto h-44 blur-[118px]"
-                style={{
-                  background:
-                    "linear-gradient(152.92deg, rgba(37, 99, 235, 0.2) 4.54%, rgba(59, 130, 246, 0.26) 34.2%, rgba(37, 99, 235, 0.1) 77.55%)",
-                }}
-              ></div>
+          <div className="max-w-7xl mx-auto px-4 text-gray-400 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto sm:text-center">
+              <h2 className="font-display text-4xl font-light tracking-tight text-white sm:text-5xl">
+                Built for{" "}
+                <span className="bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+                  modern applications
+                </span>
+              </h2>
+              <p className="mt-6 text-xl font-light text-gray-300">
+                Powerful event tracking and analytics that scales with your
+                application. Deploy in minutes and start monitoring your key
+                metrics instantly.
+              </p>
             </div>
-            <div className="relative mt-12">
-              <ul className="grid gap-8 grid-cols-1 sm:grid-cols-2 max-w-6xl mx-auto">
-                {FEATURES.map((item, idx) => (
-                  <BlurFade
-                    key={idx}
-                    delay={0.8 + idx * 0.1}
-                    className="h-full"
-                  >
-                    <li className="bg-[#0A0A0A] border border-[#1F1F1F] rounded-2xl p-6 space-y-4 h-full flex flex-col">
-                      <div className="bg-[#1A1A1A] rounded-xl p-3 w-fit">
-                        {item.icon}
-                      </div>
-                      <h4 className="text-white text-xl font-medium">
-                        {item.title}
-                      </h4>
-                      <p className="text-[#888888] text-sm flex-grow">
-                        {item.desc}
-                      </p>
-                    </li>
-                  </BlurFade>
-                ))}
+            <div className="relative mt-16">
+              <ul className="grid grid-cols-1 gap-6 lg:grid-cols-3 xl:gap-8">
+                {FEATURES.map((item, idx) => {
+                  const tint = FEATURE_TINTS[idx % FEATURE_TINTS.length];
+                  return (
+                    <BlurFade
+                      key={idx}
+                      delay={0.8 + idx * 0.1}
+                      className={`h-full ${tint.span}`}
+                    >
+                      <li
+                        className={`flex h-full flex-col space-y-4 rounded-2xl border bg-gradient-to-br to-black p-8 backdrop-blur-xl transition-all duration-300 ${tint.card}`}
+                      >
+                        <div className={`w-fit rounded-xl p-3 ${tint.icon}`}>
+                          {item.icon}
+                        </div>
+                        <h4 className="text-xl font-semibold text-white">
+                          {item.title}
+                        </h4>
+                        <p className="flex-grow font-light text-gray-300">
+                          {item.desc}
+                        </p>
+                      </li>
+                    </BlurFade>
+                  );
+                })}
               </ul>
             </div>
           </div>
         </section>
       </BlurFade>
 
-      <section className="py-14 md:py-20 relative">
-        <div className="max-w-screen-xl mx-auto px-4 text-gray-400 md:px-8">
-          <div className="relative max-w-2xl mx-auto sm:text-center">
-            <div className="relative">
-              <h3 className="text-gray-200 text-3xl font-normal tracking-tighter md:text-5xl sm:text-4xl">
-                What our users say
-              </h3>
-              <p className="mt-3 text-gray-200">
-                Join thousands of developers who trust Analytica for their
-                analytics needs. See what our users have to say about their
-                experience with our platform.
-              </p>
-            </div>
-            <div
-              className="absolute inset-0 max-w-xs mx-auto h-44 blur-[118px]"
-              style={{
-                background:
-                  "linear-gradient(152.92deg, rgba(37, 99, 235, 0.2) 4.54%, rgba(59, 130, 246, 0.26) 34.2%, rgba(37, 99, 235, 0.1) 77.55%)",
-              }}
-            ></div>
-          </div>
-          <div className="relative mt-12">
-            <ul className="columns-1 sm:columns-2 max-w-[70rem] mx-auto dark">
-              {TWEETS.map((tweet, idx) => {
-                const tweetId = tweet.split("/").pop();
-                return (
-                  <BlurFade
-                    key={idx}
-                    delay={0.8 + idx * 0.1}
-                    className="flex justify-center items-start"
-                  >
-                    <div className="w-full">
-                      <Tweet
-                        id={tweetId}
-                        apiUrl="https://api.twitter.com/2/tweets"
-                      />
-                    </div>
-                  </BlurFade>
-                );
-              })}
-              {TESTIMONIALS.map((item, idx) => (
-                <BlurFade
-                  key={idx}
-                  delay={0.8 + idx * 0.1}
-                  className="flex justify-center items-start"
-                >
-                  <div className="w-full">
-                    <Testimonial name={item.name} role={item.role} testimonial={item.testimonial} avatarSrc={item.avatarSrc} />
-                  </div>
-                </BlurFade>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
       <section className="py-14 relative">
-        <BlurFade delay={0.8}>
-          <div
-            className="absolute inset-0 max-w-xs mx-auto h-44 blur-[118px]"
-            style={{
-              background:
-                "linear-gradient(152.92deg, rgba(37, 99, 235, 0.2) 4.54%, rgba(59, 130, 246, 0.26) 34.2%, rgba(37, 99, 235, 0.1) 77.55%)",
-            }}
-          />
-        </BlurFade>
-
         <div className="px-4 text-gray-400 md:px-8">
-          <div className="relative max-w-2xl mx-auto sm:text-center mb-12">
+          <div className="relative max-w-3xl mx-auto sm:text-center mb-12">
             <BlurFade delay={1}>
               <div className="relative z-10">
-                <h3 className="text-gray-200 mt-4 text-3xl font-normal tracking-tighter md:text-5xl sm:text-4xl">
-                  Real-time event monitoring
-                </h3>
-                <p className="mt-3 text-gray-200">
+                <h2 className="mt-4 font-display text-4xl font-light tracking-tight text-white sm:text-5xl">
+                  <span className="bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+                    Real-time
+                  </span>{" "}
+                  event monitoring
+                </h2>
+                <p className="mt-6 text-xl font-light text-gray-300">
                   Get instant Discord notifications for critical events,
                   conversion milestones, and user activities. Stay on top of
                   your application&apos;s performance 24/7.
@@ -340,11 +334,11 @@ send_request()`,
 
           <BlurFade delay={1.2}>
             <div className="h-full max-w-[1200px] mx-auto">
-              <div className="rounded-xl bg-[#313338] p-4 ring-1 ring-inset ring-[#2B2D31] lg:rounded-2xl lg:p-6">
+              <div className="rounded-2xl border border-blue-400/20 bg-gradient-to-br from-blue-900/20 to-black p-4 shadow-2xl shadow-blue-950/50 backdrop-blur-xl lg:p-6">
                 <MockDiscordUI>
                   <AnimatedList delay={800}>
                     <DiscordMessage
-                      avatarSrc="/logo.png"
+                      avatarSrc="/logo-mark-v3.png"
                       avatarAlt="Analytica Avatar"
                       username="Analytica"
                       timestamp="Today at 5:20 PM"
@@ -376,7 +370,7 @@ send_request()`,
                       ]}
                     />
                     <DiscordMessage
-                      avatarSrc="/logo.png"
+                      avatarSrc="/logo-mark-v3.png"
                       avatarAlt="Analytica Avatar"
                       username="Analytica"
                       timestamp="Today at 5:38 PM"
@@ -414,15 +408,16 @@ send_request()`,
 
       <section className="py-14 relative">
         <div className="max-w-5xl mx-auto px-4 text-gray-400 md:px-8">
-          <div className="relative max-w-2xl mx-auto sm:text-center mb-12">
+          <div className="relative max-w-3xl mx-auto sm:text-center mb-12">
             <div className="relative z-10">
-              <h3 className="text-gray-200 mt-4 text-3xl font-normal tracking-tighter md:text-5xl sm:text-4xl">
+              <h2 className="mt-4 font-display text-4xl font-light tracking-tight text-white sm:text-5xl">
                 Copy. Paste. Deploy.
-              </h3>
-              <h3 className="text-gray-200 mt-2 mb-4 text-3xl font-normal tracking-tighter md:text-5xl sm:text-4xl">
-                Simple as that.
-              </h3>
-              <p className="mt-3 text-gray-200">
+                <br />
+                <span className="bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+                  Simple as that.
+                </span>
+              </h2>
+              <p className="mt-6 text-xl font-light text-gray-300">
                 Get started quickly with ready-to-use code examples. Copy, paste
                 and customize to integrate event tracking in minutes.
               </p>
@@ -440,29 +435,26 @@ send_request()`,
       <section className="px-4 py-28 relative overflow-hidden">
         <div className="relative max-w-4xl mx-auto space-y-6 md:space-y-8">
           <div className="space-y-4 md:space-y-6">
-            <h1 className="text-left sm:text-center tracking-tight font-bold text-transparent bg-clip-text bg-[linear-gradient(180deg,_#FFF_0%,_rgba(255,_255,_255,_0.00)_202.08%)] lg:leading-[1.15] text-4xl sm:text-5xl md:text-6xl">
-              Analytics that work for <br /> you and your team
-            </h1>
-            <div className="text-[0.84rem] text-zinc-400 text-left sm:text-center md:text-lg max-w-2xl md:mx-auto">
+            <h2 className="text-left sm:text-center font-display font-light tracking-tight text-white lg:leading-[1.15] text-4xl sm:text-5xl md:text-6xl">
+              Analytics that work for <br />
+              <span className="bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+                you and your team
+              </span>
+            </h2>
+            <div className="text-[0.84rem] font-light text-gray-300 text-left sm:text-center md:text-lg max-w-2xl md:mx-auto">
               Track user behavior, monitor performance metrics, and receive
               real-time notifications across all your platforms. Get the
               insights you need to optimize your application and drive growth.
             </div>
-            <div
-              className="absolute inset-0 max-w-xs h-44 blur-[118px] -z-50"
-              style={{
-                background:
-                  "linear-gradient(152.92deg, rgba(37, 99, 235, 0.3) 4.54%, rgba(59, 130, 246, 0.4) 34.2%, rgba(37, 99, 235, 0.2) 77.55%)",
-              }}
-            />
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mt-8 sm:justify-center">
-            <Link href="/dashboard">
-              <Button className="border border-neutral-800 hover:bg-neutral-800">
-                Start for FREE Forever
-                <ChevronRight className="w-4 h-4 ml-2" />
-              </Button>
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-400 to-emerald-400 px-8 py-4 font-medium text-white shadow-lg shadow-blue-900/30 transition hover:-translate-y-0.5"
+            >
+              Start for FREE Forever
+              <ChevronRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
@@ -473,23 +465,19 @@ send_request()`,
           <div className="mx-auto max-w-3xl space-y-12">
             <div className="relative max-w-2xl mx-auto sm:text-center">
               <div className="relative">
-                <h3 className="text-gray-200 text-3xl font-normal tracking-tighter md:text-5xl sm:text-4xl">
-                  Frequently Asked Questions
-                </h3>
-                <p className="mt-3 text-gray-200">
+                <h2 className="font-display text-4xl font-light tracking-tight text-white sm:text-5xl">
+                  Frequently asked{" "}
+                  <span className="bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
+                    questions
+                  </span>
+                </h2>
+                <p className="mt-6 text-xl font-light text-gray-300">
                   Get answers to frequently asked questions about our analytics
                   platform. Learn how Analytica can help you track and understand
                   your website&apos;s performance while keeping your data
                   secure.
                 </p>
               </div>
-              <div
-                className="absolute inset-0 max-w-xs mx-auto h-44 blur-[118px] -z-10"
-                style={{
-                  background:
-                    "linear-gradient(152.92deg, rgba(37, 99, 235, 0.2) 4.54%, rgba(59, 130, 246, 0.26) 34.2%, rgba(37, 99, 235, 0.1) 77.55%)",
-                }}
-              ></div>
             </div>
 
             <Accordion type="single" collapsible className="mt-16 space-y-4">

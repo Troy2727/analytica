@@ -22,11 +22,11 @@ interface AnalyticsChartProps {
 const chartConfig = {
   visits: {
     label: "Visitors",
-    color: "#3b82f6",
+    color: "#60a5fa",
   },
   pageViews: {
     label: "Page Views",
-    color: "#2979ff",
+    color: "#34d399",
   },
 } satisfies ChartConfig;
 
@@ -205,7 +205,7 @@ export default function AnalyticsChart({
   }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-neutral-900 border border-neutral-800 p-3 rounded-lg shadow-lg">
+        <div className="bg-navy-900 border border-navy-800 p-3 rounded-lg shadow-lg">
           <p className="text-neutral-300 mb-2">
             {(label?.includes('AM') || label?.includes('PM')) 
               ? label 
@@ -229,7 +229,7 @@ export default function AnalyticsChart({
   };
 
   return (
-    <Card className="border-neutral-800 bg-[#0a0a0a] backdrop-blur-sm">
+    <Card className="border-navy-800 bg-gradient-to-br from-blue-900/20 to-black backdrop-blur-sm">
       <CardHeader>
         <CardTitle className="text-neutral-300 text-base md:text-lg lg:text-xl flex flex-row justify-between">
           Analytics Graph
@@ -295,16 +295,16 @@ export default function AnalyticsChart({
           onValueChange={setActiveTab}
           className="w-full px-6 pt-4 pb-6"
         >
-          <TabsList className="grid w-full grid-cols-2 bg-neutral-900/30 border border-neutral-900 p-1 backdrop-blur-sm">
+          <TabsList className="grid w-full grid-cols-2 bg-navy-900/30 border border-navy-900 p-1 backdrop-blur-sm">
             <TabsTrigger
               value="pageViews"
-              className="data-[state=active]:bg-neutral-800 data-[state=active]:text-white"
+              className="data-[state=active]:bg-navy-800 data-[state=active]:text-white"
             >
               Page Views
             </TabsTrigger>
             <TabsTrigger
               value="visitors"
-              className="data-[state=active]:bg-neutral-800 data-[state=active]:text-white"
+              className="data-[state=active]:bg-navy-800 data-[state=active]:text-white"
             >
               Visitors
             </TabsTrigger>

@@ -3,7 +3,7 @@ import React from "react";
 
 export default function Loading({ text }: { text: string }) {
   return (
-    <div className="min-h-screen flex bg-neutral-900/10 p-4 sm:p-6 lg:p-8 items-center justify-center">
+    <div className="min-h-screen flex bg-navy-900/10 p-4 sm:p-6 lg:p-8 items-center justify-center">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col items-center justify-center space-y-4">
           <div className="flex items-center space-x-3">

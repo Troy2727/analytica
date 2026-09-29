@@ -12,12 +12,22 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        display: ["var(--font-display)", "system-ui", "sans-serif"],
+      },
       colors: {
         "discord-background": "#36393f",
         "discord-brand-color": "#5865f2",
         "discord-gray": "#36393f",
         "discord-text": "#dcddde",
         "discord-timestamp": "#72767d",
+        // Sampled from the PayFlow reference card: surfaces, dividers and strong borders.
+        navy: {
+          700: "#243364",
+          800: "#1c2657",
+          900: "#0b1636",
+          950: "#050a24",
+        },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -67,8 +77,29 @@ const config: Config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "aurora-1": "aurora-1 22s ease-in-out infinite",
+        "aurora-2": "aurora-2 26s ease-in-out infinite",
+        "aurora-3": "aurora-3 30s ease-in-out infinite",
+        wave: "wave 18s linear infinite",
+        "wave-slow": "wave 30s linear infinite reverse",
       },
       keyframes: {
+        "aurora-1": {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
+          "50%": { transform: "translate(8%, 6%) scale(1.1)" },
+        },
+        "aurora-2": {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
+          "50%": { transform: "translate(-10%, -4%) scale(1.15)" },
+        },
+        "aurora-3": {
+          "0%, 100%": { transform: "translate(0, 0) scale(1.05)" },
+          "50%": { transform: "translate(6%, -8%) scale(0.95)" },
+        },
+        wave: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
+        },
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },

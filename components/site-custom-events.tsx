@@ -33,13 +33,13 @@ export default function SiteCustomEvents({
 
   if (!groupedCustomEvents || Object.keys(groupedCustomEvents).length === 0) {
     return (
-      <Card className="border-neutral-800 bg-[#0a0a0a] shadow-lg">
+      <Card className="border-navy-800 bg-gradient-to-br from-blue-900/20 to-black shadow-lg">
         <CardContent className="p-12 text-center">
           <p className="text-neutral-100 text-lg font-semibold">No custom events recorded yet</p>
           <p className="text-neutral-400 mt-2">
             Custom events will appear here once they are tracked. Learn how to implement custom events in our{" "}
             <a
-              href="https://github.com/AlexCodess/analytica#readme"
+              href="https://github.com/Troy2727/analytica#readme"
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-400 hover:text-blue-300 underline"
@@ -54,7 +54,7 @@ export default function SiteCustomEvents({
 
   return (
     <div className="space-y-6">
-      <Card className="border-neutral-800 bg-[#0a0a0a] shadow-lg overflow-hidden">
+      <Card className="border-navy-800 bg-gradient-to-br from-blue-900/20 to-black shadow-lg overflow-hidden">
         <CardHeader className="flex flex-col pb-4">
           <CardTitle className="text-xl font-bold text-neutral-100">
             Custom Events Overview
@@ -62,7 +62,7 @@ export default function SiteCustomEvents({
           <p className="text-sm text-neutral-400">
             Learn more in our{" "}
             <a
-              href="https://github.com/AlexCodess/analytica#readme"
+              href="https://github.com/Troy2727/analytica#readme"
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-400 hover:text-blue-300 underline"
@@ -84,7 +84,7 @@ export default function SiteCustomEvents({
                 <CarouselItem key={eventName} className="md:basis-1/2 lg:basis-1/3">
                   <div className="p-1">
                     <Card
-                      className={`cursor-pointer border-neutral-800 bg-neutral-900 transition-all duration-300 hover:bg-neutral-700 ${
+                      className={`cursor-pointer border-navy-800 bg-navy-900 transition-all duration-300 hover:bg-navy-700 ${
                         activeCustomEventTab === eventName
                           ? "ring-2 ring-neutral-400 shadow-lg"
                           : ""
@@ -108,14 +108,14 @@ export default function SiteCustomEvents({
               ))}
             </CarouselContent>
             <div className="flex items-center justify-end gap-2 p-1 mt-8">
-              <CarouselPrevious className="static bg-neutral-800 hover:bg-neutral-700 text-neutral-100 hover:text-neutral-100" />
-              <CarouselNext className="static bg-neutral-800 hover:bg-neutral-700 text-neutral-100 hover:text-neutral-100" />
+              <CarouselPrevious className="static bg-navy-800 hover:bg-navy-700 text-neutral-100 hover:text-neutral-100" />
+              <CarouselNext className="static bg-navy-800 hover:bg-navy-700 text-neutral-100 hover:text-neutral-100" />
             </div>
           </Carousel>
         </CardContent>
       </Card>
 
-      <Card className="border-neutral-800 bg-[#0a0a0a] shadow-lg">
+      <Card className="border-navy-800 bg-gradient-to-br from-blue-900/20 to-black shadow-lg">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-xl font-bold text-neutral-100">Event Details</CardTitle>
           {activeCustomEventTab && (
@@ -123,7 +123,7 @@ export default function SiteCustomEvents({
               onClick={() => setActiveCustomEventTab("")}
               variant="outline"
               size="sm"
-              className="border-neutral-700 bg-neutral-800 text-neutral-100 hover:bg-neutral-700 hover:text-neutral-50 transition-all duration-200"
+              className="border-navy-700 bg-navy-800 text-neutral-100 hover:bg-navy-700 hover:text-neutral-50 transition-all duration-200"
             >
               Show All
             </Button>
@@ -141,11 +141,11 @@ export default function SiteCustomEvents({
               .map((event) => (
                 <Card
                   key={event.id}
-                  className="mb-4 border-neutral-800 bg-neutral-900 transition-all duration-200 hover:bg-neutral-750"
+                  className="mb-4 border-navy-800 bg-navy-900 transition-all duration-200 hover:bg-neutral-750"
                 >
                   <CardContent className="p-4">
                     <div className="flex justify-between items-start mb-2">
-                      <Badge variant="outline" className="bg-blue-800 text-blue-100 border-blue-400">
+                      <Badge variant="outline" className="bg-emerald-900 text-emerald-100 border-emerald-500">
                         {event.event_name}
                       </Badge>
                       <p className="text-xs text-neutral-400">
@@ -154,7 +154,7 @@ export default function SiteCustomEvents({
                     </div>
                     <p className="text-sm text-neutral-300 mt-2">{event.message}</p>
                     {event.fields && event.fields.length > 0 && (
-                      <div className="mt-3 pt-3 border-t border-neutral-800">
+                      <div className="mt-3 pt-3 border-t border-navy-800">
                         <div className="grid grid-cols-2 gap-2">
                           {event.fields.map((field, idx) => (
                             <div key={idx} className="space-y-1">

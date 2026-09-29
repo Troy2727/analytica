@@ -185,10 +185,10 @@ export default function AnalyticsPage() {
           </div>
           <div className="flex items-center space-x-4">
             <Select value={filterValue} onValueChange={handleFilterChange}>
-              <SelectTrigger className="w-[180px] border-neutral-800 bg-neutral-900/20 text-neutral-100 backdrop-blur-sm hover:bg-neutral-900/80">
+              <SelectTrigger className="w-[180px] border-navy-800 bg-navy-900/20 text-neutral-100 backdrop-blur-sm hover:bg-navy-900/80">
                 <SelectValue placeholder="Select timeframe" />
               </SelectTrigger>
-              <SelectContent className="border-neutral-800 bg-neutral-900 text-neutral-100">
+              <SelectContent className="border-navy-800 bg-navy-900 text-neutral-100">
                 <SelectItem value="0">Lifetime</SelectItem>
                 <SelectItem value="last 1 hour">Last 1 hour</SelectItem>
                 <SelectItem value="last 1 day">Last 1 day</SelectItem>
@@ -202,7 +202,7 @@ export default function AnalyticsPage() {
               onClick={() => handleFilterChange(filterValue)}
               variant="outline"
               size="icon"
-              className="border-neutral-800 bg-neutral-900/20 text-neutral-100 backdrop-blur-sm hover:bg-neutral-900/80 hover:text-white"
+              className="border-navy-800 bg-navy-900/20 text-neutral-100 backdrop-blur-sm hover:bg-navy-900/80 hover:text-white"
             >
               <RefreshCcw className="h-4 w-4" />
               <span className="sr-only">Refresh analytics</span>
@@ -211,28 +211,28 @@ export default function AnalyticsPage() {
         </div>
 
         <Tabs defaultValue="general" className="w-full">
-          <TabsList className="mb-2 w-full bg-neutral-900/30 border border-neutral-900 p-1 backdrop-blur-sm">
+          <TabsList className="mb-2 w-full bg-navy-900/30 border border-navy-900 p-1 backdrop-blur-sm">
             <TabsTrigger
               value="general"
-              className="data-[state=active]:bg-neutral-800 data-[state=active]:text-white w-1/4"
+              className="data-[state=active]:bg-navy-800 data-[state=active]:text-white w-1/4"
             >
               General
             </TabsTrigger>
             <TabsTrigger
               value="performance"
-              className="data-[state=active]:bg-neutral-800 data-[state=active]:text-white w-1/4"
+              className="data-[state=active]:bg-navy-800 data-[state=active]:text-white w-1/4"
             >
               Performance
             </TabsTrigger>
             <TabsTrigger
               value="custom-events"
-              className="data-[state=active]:bg-neutral-800 data-[state=active]:text-white w-1/4"
+              className="data-[state=active]:bg-navy-800 data-[state=active]:text-white w-1/4"
             >
               Events
             </TabsTrigger>
             <TabsTrigger
               value="settings"
-              className="data-[state=active]:bg-neutral-800 data-[state=active]:text-white w-1/4"
+              className="data-[state=active]:bg-navy-800 data-[state=active]:text-white w-1/4"
             >
               Settings
             </TabsTrigger>

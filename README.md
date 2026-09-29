@@ -19,6 +19,8 @@ Analytica is a free and open-source analytics tool that requires just one line o
 
 It comes with built-in Discord notifications and works seamlessly with any website, giving you all the analytics data you need to make informed decisions.
 
+![Analytica dashboard](./public/hero-dashboard-v4.jpg)
+
 ---
 
 ### 📑 Table of Contents
@@ -82,7 +84,7 @@ Here are some of the core features of Analytica:
   const axios = require('axios');
 
   const API_KEY = "YOUR_API_KEY";
-  const url = "https://analytica.vercel.app/api/events";
+  const url = "https://analytica-phi.vercel.app/api/events";
   const headers = {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${API_KEY}`
@@ -119,7 +121,7 @@ Here are some of the core features of Analytica:
   import requests
 
   API_KEY = "YOUR_API_KEY"
-  url = "https://analytica.vercel.app/api/events"
+  url = "https://analytica-phi.vercel.app/api/events"
   headers = {
       "Content-Type": "application/json",
       "Authorization": f"Bearer {API_KEY}"
@@ -245,7 +247,7 @@ It's super easy to get started:
    <script
      defer
      data-domain="your-website.com"
-     src="https://analytica.vercel.app/tracking-script.js"
+     src="https://analytica-phi.vercel.app/tracking-script.js"
    >
    </script>
    ```
@@ -255,7 +257,7 @@ It's super easy to get started:
    <Script
      defer
      data-domain="your-website.com"
-     src="https://analytica.vercel.app/tracking-script.js"
+     src="https://analytica-phi.vercel.app/tracking-script.js"
    />
    ```
 
@@ -271,9 +273,8 @@ After you are done, start seeing real analytics on your dashboard.
 
 ### 🌟 Quick Links
 
-- **Try it out:** [analytica.vercel.app](https://analytica.vercel.app)
-- **Get the code:** [GitHub](https://github.com/arjuncodess/analytica)
-- **Launch:** [Product Hunt](https://www.producthunt.com/posts/analytica)
+- **Try it out:** [analytica-phi.vercel.app](https://analytica-phi.vercel.app)
+- **Get the code:** [GitHub](https://github.com/Troy2727/analytica)
 
 ---
 
@@ -281,10 +282,10 @@ After you are done, start seeing real analytics on your dashboard.
 
 Got questions? Ideas? Just want to say hi.
 
-- Drop an issue on GitHub
-- DM me on Discord or X (@ArjunCodess)
+- Drop an issue on [GitHub](https://github.com/Troy2727/analytica/issues)
+- DM me on X ([@AlexMieses27](https://x.com/AlexMieses27))
 
-We love hearing from users!
+Built and maintained by **Alex Mieses**. We love hearing from users!
 
 ---
 
@@ -294,7 +295,7 @@ Thanks for checking out Analytica! We hope it makes your life a bit easier.
 
 Happy tracking! 📊
 
-P.S. If you like it, maybe give us a star on GitHub and an upvote on Product Hunt. ⭐
+P.S. If you like it, maybe give us a star on [GitHub](https://github.com/Troy2727/analytica). ⭐
 
 ---
 

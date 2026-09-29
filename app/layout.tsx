@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Bricolage_Grotesque, Geist } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "@/components/ui/toaster";
 import Footer from "@/components/footer";
+import AnimatedBackground from "@/components/animated-background";
 import Script from "next/script";
 
-const inter = Inter({ subsets: ["latin"] });
+const geist = Geist({ subsets: ["latin"] });
+const display = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-display" });
 
 export const metadata: Metadata = {
   title: "Analytica - Real-time Analytics for Modern Applications",
@@ -26,16 +28,16 @@ export const metadata: Metadata = {
   ],
   authors: [
     {
-      name: "Alex",
-      url: "https://github.com/alexcodess",
+      name: "Alex Mieses",
+      url: "https://github.com/Troy2727",
     },
   ],
-  creator: "Alex",
+  creator: "Alex Mieses",
   publisher: "Analytica",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://analytica.vercel.app",
+    url: "https://analytica-phi.vercel.app",
     title: "Analytica - Real-time Analytics for Modern Applications",
     description:
       "Privacy-focused website analytics and event tracking tool for developers. Monitor user journeys, capture custom events, and get real-time insights.",
@@ -54,7 +56,7 @@ export const metadata: Metadata = {
     title: "Analytica - Real-time Analytics for Modern Applications",
     description:
       "Privacy-focused website analytics and event tracking tool for developers",
-    creator: "@alexcodess",
+    creator: "@AlexMieses27",
     images: ["/og.png"],
   },
   icons: {
@@ -70,8 +72,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`bg-gradient-to-b from-black to-neutral-950 text-neutral-50 ${inter.className} antialiased`}
+        className={`bg-slate-950 text-neutral-50 ${geist.className} ${display.variable} antialiased`}
       >
+        <AnimatedBackground />
         <Header />
         {children}
         <Analytics />
@@ -80,8 +83,8 @@ export default function RootLayout({
 
         <Script
           defer
-          data-domain="analytica.vercel.app"
-          src="https://analytica.vercel.app/tracking-script.js"
+          data-domain="analytica-phi.vercel.app"
+          src="https://analytica-phi.vercel.app/tracking-script.js"
         />
       </body>
     </html>

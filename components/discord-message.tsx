@@ -45,7 +45,7 @@ export const DiscordMessage = ({
           <p className="font-normal lg:font-semibold text-sm lg:text-base text-white">
             {username}
           </p>
-          <span className="ml-1.5 lg:ml-2 px-1 lg:px-1.5 py-0.5 text-[10px] lg:text-xs font-normal lg:font-semibold bg-brand-600 text-white rounded bg-blue-600">
+          <span className="ml-1.5 lg:ml-2 px-1 lg:px-1.5 py-0.5 text-[10px] lg:text-xs font-normal lg:font-semibold text-white rounded bg-gradient-to-r from-blue-500 to-emerald-500">
             APP
           </span>
           <span className="text-gray-400 ml-1 lg:ml-1.5 text-[10px] lg:text-xs font-normal">
@@ -53,7 +53,7 @@ export const DiscordMessage = ({
           </span>
         </div>
 
-        <div className="bg-[#2f3136] w-full rounded p-2 lg:p-3 mb-3 lg:mb-4 mt-1 lg:mt-1.5">
+        <div className="w-full rounded-xl border border-blue-400/30 bg-gradient-to-br from-blue-900/30 to-black/50 p-2 lg:p-3 mb-3 lg:mb-4 mt-1 lg:mt-1.5">
           <div className="flex flex-row items-center justify-between mb-1.5 lg:mb-2">
             <p className="text-white order-1 text-sm lg:text-base font-normal lg:font-semibold leading-5 lg:leading-7">
               {emoji} {title}

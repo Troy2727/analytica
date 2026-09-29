@@ -96,14 +96,14 @@ const DetailedMetricCard = ({
   };
 
   return (
-    <div className="group relative rounded-xl bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 p-6 transition-all duration-300 ease-in-out hover:bg-neutral-800/50 hover:border-neutral-700">
+    <div className="group relative rounded-xl bg-gradient-to-br from-blue-900/20 to-black backdrop-blur-sm border border-blue-400/20 p-6 transition-all duration-300 ease-in-out hover:bg-navy-800/50 hover:border-navy-700">
       <div className="flex flex-col gap-1">
         <p className="text-sm font-medium text-neutral-400">{label}</p>
         <p className="text-3xl tracking-tight font-semibold bg-gradient-to-br from-white to-neutral-400 bg-clip-text text-transparent">
           {formatMetricValue(value, format)}
         </p>
       </div>
-      <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-neutral-700 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+      <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-navy-700 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
     </div>
   );
 };
@@ -126,12 +126,12 @@ function PerformanceScoreCard({ metrics }: { metrics: PerformanceMetrics }) {
     isGood: false,
     label: 'No Data',
     color: 'text-neutral-400',
-    bg: 'bg-neutral-800'
+    bg: 'bg-navy-800'
   };
 
   return (
-    <div className="group relative h-full rounded-xl bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 p-2 sm:p-4 transition-all duration-300 ease-in-out hover:bg-neutral-800/50 hover:border-neutral-700">
-      <div className="flex flex-col h-full items-center justify-center p-4 sm:p-6 rounded-lg bg-neutral-900/90 border border-neutral-800">
+    <div className="group relative h-full rounded-xl bg-gradient-to-br from-blue-900/20 to-black backdrop-blur-sm border border-blue-400/20 p-2 sm:p-4 transition-all duration-300 ease-in-out hover:bg-navy-800/50 hover:border-navy-700">
+      <div className="flex flex-col h-full items-center justify-center p-4 sm:p-6 rounded-lg bg-navy-900/90 border border-navy-800">
         <div className={`p-2 sm:p-3 rounded-full ${category.bg} mb-4 sm:mb-6`}>
           {category.isGood ? (
             <ArrowUpIcon className={`w-6 h-6 sm:w-8 sm:h-8 ${category.color}`} />
@@ -156,7 +156,7 @@ function PerformanceScoreCard({ metrics }: { metrics: PerformanceMetrics }) {
           </p>
         </div>
       </div>
-      <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-neutral-700 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+      <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-navy-700 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
     </div>
   )
 }
@@ -165,7 +165,7 @@ const OptimizationCard = ({ metrics }: { metrics: PerformanceMetrics }) => {
   const recommendations = getRecommendations(metrics);
 
   return (
-    <div className="group relative h-full rounded-xl bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 p-6 transition-all duration-300 ease-in-out hover:bg-neutral-800/50 hover:border-neutral-700">
+    <div className="group relative h-full rounded-xl bg-gradient-to-br from-blue-900/20 to-black backdrop-blur-sm border border-blue-400/20 p-6 transition-all duration-300 ease-in-out hover:bg-navy-800/50 hover:border-navy-700">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h3 className="text-lg md:text-xl font-semibold text-white">Optimization Opportunities</h3>
@@ -178,9 +178,9 @@ const OptimizationCard = ({ metrics }: { metrics: PerformanceMetrics }) => {
           recommendations.map((rec, index) => (
             <div
               key={index}
-              className="group/card flex items-start space-x-4 p-4 rounded-lg bg-neutral-900/50 border border-neutral-800 transition-all duration-300 hover:bg-neutral-800/50 hover:border-neutral-700"
+              className="group/card flex items-start space-x-4 p-4 rounded-lg bg-navy-900/50 border border-navy-800 transition-all duration-300 hover:bg-navy-800/50 hover:border-navy-700"
             >
-              <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-neutral-800/50 text-2xl">
+              <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-navy-800/50 text-2xl">
                 {rec.icon}
               </div>
               <div className="flex-1 min-w-0">
@@ -207,7 +207,7 @@ const OptimizationCard = ({ metrics }: { metrics: PerformanceMetrics }) => {
           </div>
         )}
       </div>
-      <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-neutral-700 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+      <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-navy-700 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
     </div>
   );
 };
@@ -263,8 +263,8 @@ export default function Performance({
 
   if (!metrics) {
     return (
-      <Card className="bg-[#0A0A0A] border border-[#1F1F1F] text-neutral-100">
-        <CardHeader className="border-b border-neutral-800">
+      <Card className="bg-gradient-to-br from-blue-900/20 to-black border border-blue-400/20 text-neutral-100">
+        <CardHeader className="border-b border-navy-800">
           <CardTitle className="text-2xl font-bold">
             Performance Metrics
           </CardTitle>
@@ -279,7 +279,7 @@ export default function Performance({
           <Button
             onClick={refreshMetrics}
             disabled={loading}
-            className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200"
+            className="bg-blue-600 hover:bg-blue-500 text-white transition-all duration-200"
           >
             {loading ? (
               <>
@@ -297,8 +297,8 @@ export default function Performance({
   }
 
   return (
-    <Card className="bg-[#0A0A0A] border border-[#1F1F1F]">
-      <CardHeader className="border-b border-neutral-800">
+    <Card className="bg-gradient-to-br from-blue-900/20 to-black border border-blue-400/20">
+      <CardHeader className="border-b border-navy-800">
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="text-xl font-bold text-white">
@@ -313,7 +313,7 @@ export default function Performance({
             disabled={loading}
             variant="outline"
             size="icon"
-            className="border-neutral-800 bg-neutral-900/20 text-neutral-100 backdrop-blur-sm hover:bg-neutral-900/80 hover:text-white"
+            className="border-navy-800 bg-navy-900/20 text-neutral-100 backdrop-blur-sm hover:bg-navy-900/80 hover:text-white"
           >
             {loading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
