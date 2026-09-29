@@ -46,9 +46,9 @@ export default function CodeBlock({
   const customStyle = {
     ...oneDark,
     // Add syntax highlighting styles
-    keyword: { color: "#EC4899" },
-    property: { color: "#93C5FD" },
-    string: { color: "#93C5FD" },
+    keyword: { color: "#60A5FA" },
+    property: { color: "#A5B4FC" },
+    string: { color: "#6EE7B7" },
     number: { color: "#e5e7eb" },
     punctuation: { color: "#9CA3AF" },
     function: { color: "#93C5FD" },
@@ -62,8 +62,8 @@ export default function CodeBlock({
   return (
     <div className={cn("flex flex-col space-y-5", className)}>
       {/* Setup Column */}
-      <div className="rounded-xl overflow-hidden bg-[#0B1120] backdrop-blur-xl border border-neutral-800/50 shadow-lg">
-        <div className="flex items-center justify-between px-4 py-2 bg-[#0B1120]/80 border-b border-neutral-800">
+      <div className="rounded-xl overflow-hidden bg-slate-950/70 backdrop-blur-xl border border-white/10 shadow-lg">
+        <div className="flex items-center justify-between px-4 py-2 bg-white/5 border-b border-neutral-800">
           <h3 className="text-white font-medium">Setup</h3>
           <div className="flex gap-2">
             {setupFiles.map((file, index) => (
@@ -73,7 +73,7 @@ export default function CodeBlock({
                 className={cn(
                   "px-3 py-1 rounded-md text-sm font-medium transition-colors",
                   index === activeSetupFile
-                    ? "bg-blue-900 text-white"
+                    ? "bg-blue-600/80 text-white"
                     : "text-neutral-400 hover:text-neutral-300"
                 )}
                 whileHover={{ scale: 1.05 }}
@@ -84,7 +84,7 @@ export default function CodeBlock({
             ))}
           </div>
         </div>
-        <div className="p-4 font-mono text-sm bg-[#0B1120] relative">
+        <div className="p-4 font-mono text-sm bg-slate-950/70 relative">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeSetupFile}
@@ -128,8 +128,8 @@ export default function CodeBlock({
       </div>
 
       {/* Events Column */}
-      <div className="rounded-xl overflow-hidden bg-[#0B1120] backdrop-blur-xl border border-neutral-800/50 shadow-lg">
-        <div className="flex items-center justify-between px-4 py-2 bg-[#0B1120]/80 border-b border-neutral-800">
+      <div className="rounded-xl overflow-hidden bg-slate-950/70 backdrop-blur-xl border border-white/10 shadow-lg">
+        <div className="flex items-center justify-between px-4 py-2 bg-white/5 border-b border-neutral-800">
           <h3 className="text-white font-medium">Events</h3>
           <div className="flex gap-2">
             {eventFiles.map((file, index) => (
@@ -139,7 +139,7 @@ export default function CodeBlock({
                 className={cn(
                   "px-3 py-1 rounded-md text-sm font-medium transition-colors",
                   index === activeEventFile
-                    ? "bg-blue-900 text-white"
+                    ? "bg-blue-600/80 text-white"
                     : "text-neutral-400 hover:text-neutral-300"
                 )}
                 whileHover={{ scale: 1.05 }}
@@ -150,7 +150,7 @@ export default function CodeBlock({
             ))}
           </div>
         </div>
-        <div className="p-4 font-mono text-sm bg-[#0B1120] relative">
+        <div className="p-4 font-mono text-sm bg-slate-950/70 relative">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeEventFile}

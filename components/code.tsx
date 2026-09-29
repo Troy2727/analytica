@@ -10,7 +10,7 @@ export default function Code({ language }: { language: string }) {
   const javascriptCode = `const axios = require('axios');
 
 const API_KEY = "YOUR_API_KEY";
-const url = "https://analytica.vercel.app/api/events";
+const url = "https://analytica-phi.vercel.app/api/events";
 const headers = {
     "Content-Type": "application/json",
     "Authorization": \`Bearer \${API_KEY}\`
@@ -44,7 +44,7 @@ sendRequest();`;
   const pythonCode = `import requests
 
 API_KEY = "YOUR_API_KEY"
-url = "https://analytica.vercel.app/api/events"
+url = "https://analytica-phi.vercel.app/api/events"
 headers = {
     "Content-Type": "application/json",
     "Authorization": f"Bearer {API_KEY}"
@@ -84,7 +84,7 @@ send_request()`;
   };
 
   return (
-    <div className="w-full overflow-hidden rounded-md bg-neutral-950 border border-neutral-800 p-4">
+    <div className="w-full overflow-hidden rounded-xl border border-blue-400/20 bg-gradient-to-br from-blue-900/20 to-black p-4">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center space-x-2">
           <Code2 className="h-5 w-5 text-neutral-400" />
@@ -96,7 +96,7 @@ send_request()`;
           onClick={copyCode}
           variant="ghost"
           size="sm"
-          className="text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800 border border-neutral-700"
+          className="text-neutral-400 hover:text-neutral-100 hover:bg-navy-800 border border-navy-700"
         >
           <Copy className="h-4 w-4 mr-2" />
           Copy
@@ -107,8 +107,9 @@ send_request()`;
         style={oneDark}
         customStyle={{
           padding: '1rem',
-          borderRadius: '0.375rem',
-          border: '1px solid rgb(38, 38, 38)',
+          borderRadius: '0.75rem',
+          border: '1px solid rgba(96, 165, 250, 0.2)',
+          background: 'rgba(2, 6, 23, 0.7)',
           overflowX: 'auto' as const,
         }}
       >

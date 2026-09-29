@@ -76,18 +76,18 @@ export default function DashboardPage() {
   if (loading) return <Loading text="Getting your websites..." />;
 
   return (
-    <div className="min-h-screen bg-neutral-900/10 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-navy-900/10 p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-neutral-100">Your Websites</h1>
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="secondary">
+              <Button className="rounded-xl bg-gradient-to-r from-blue-400 to-emerald-400 text-white shadow-lg shadow-blue-900/30 hover:opacity-90">
                 <Plus className="mr-2 h-4 w-4" />
                 Add Website
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-neutral-900 p-4 max-w-lg sm:max-w-xl mx-auto">
+            <DialogContent className="border-blue-400/20 bg-gradient-to-br from-navy-900 to-black p-4 max-w-lg sm:max-w-xl mx-auto">
               <DialogTitle className="sr-only">Add a new website</DialogTitle>
               <AddWebsite />
             </DialogContent>

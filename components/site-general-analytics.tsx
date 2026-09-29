@@ -114,7 +114,7 @@ export default function GeneralAnalytics({
 
   if (filteredPageViews.length === 0 && filteredVisits.length === 0) {
     return (
-      <Card className="border-neutral-800 bg-[#0a0a0a] backdrop-blur-sm">
+      <Card className="border-navy-800 bg-gradient-to-br from-blue-900/20 to-black backdrop-blur-sm">
         <CardContent className="p-6 text-center">
           <p className="text-neutral-100">
             No analytics available for the given time range.
@@ -226,7 +226,7 @@ export default function GeneralAnalytics({
   return (
     <>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <Card className="border-neutral-800 bg-[#0a0a0a] backdrop-blur-sm">
+        <Card className="border-navy-800 bg-gradient-to-br from-blue-900/20 to-black backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="text-neutral-300 text-base md:text-lg flex justify-between items-center">
               <div className="flex items-center gap-2">
@@ -244,7 +244,7 @@ export default function GeneralAnalytics({
           </CardHeader>
         </Card>
 
-        <Card className="border-neutral-800 bg-[#0a0a0a] backdrop-blur-sm">
+        <Card className="border-navy-800 bg-gradient-to-br from-blue-900/20 to-black backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="text-neutral-300 text-base md:text-lg flex justify-between items-center">
               <div className="flex items-center gap-2">
@@ -262,7 +262,7 @@ export default function GeneralAnalytics({
           </CardHeader>
         </Card>
 
-        <Card className="border-neutral-800 bg-[#0a0a0a] backdrop-blur-sm">
+        <Card className="border-navy-800 bg-gradient-to-br from-blue-900/20 to-black backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="text-neutral-300 text-base md:text-lg flex justify-between items-center">
               <div className="flex items-center gap-2">
@@ -278,7 +278,7 @@ export default function GeneralAnalytics({
           </CardHeader>
         </Card>
 
-        <Card className="border-neutral-800 bg-[#0a0a0a] backdrop-blur-sm">
+        <Card className="border-navy-800 bg-gradient-to-br from-blue-900/20 to-black backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="text-neutral-300 text-base md:text-lg flex justify-between items-center">
               <div className="flex items-center gap-2">
@@ -304,7 +304,7 @@ export default function GeneralAnalytics({
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <Card className="border-neutral-800 bg-[#0a0a0a] backdrop-blur-sm">
+        <Card className="border-navy-800 bg-gradient-to-br from-blue-900/20 to-black backdrop-blur-sm">
           <CardHeader className="py-0 pt-4 pb-2">
             <CardTitle className="text-neutral-300 text-base md:text-lg flex flex-row justify-between">
               <p>Top Pages</p>
@@ -317,10 +317,10 @@ export default function GeneralAnalytics({
                 {groupedPageViews.map((view, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between bg-[#111111] px-3 py-2 rounded-md relative mb-2"
+                    className="flex items-center justify-between bg-gradient-to-br from-blue-900/30 to-black/50 px-3 py-2 rounded-md relative mb-2"
                   >
                     <div
-                      className="absolute left-0 top-0 bottom-0 bg-neutral-800/50 rounded-md"
+                      className="absolute left-0 top-0 bottom-0 bg-navy-800/50 rounded-md"
                       style={{
                         width: `${(view.visits / maxPageViews) * 100}%`,
                       }}
@@ -335,11 +335,11 @@ export default function GeneralAnalytics({
                 ))}
               </div>
             </ScrollArea>
-            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-neutral-950/50 to-transparent pointer-events-none" />
+            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-navy-950/50 to-transparent pointer-events-none" />
           </CardContent>
         </Card>
 
-        <Card className="border-neutral-800 bg-[#0a0a0a] backdrop-blur-sm">
+        <Card className="border-navy-800 bg-gradient-to-br from-blue-900/20 to-black backdrop-blur-sm">
           <CardHeader className="py-0 pt-4 pb-2">
             <CardTitle className="text-neutral-300 text-base md:text-lg flex flex-row justify-between">
               <p>Top Visit Sources</p>
@@ -352,10 +352,10 @@ export default function GeneralAnalytics({
                 {sourcesWithPercentages.map((source, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between bg-[#111111] px-3 py-2 rounded-md relative mb-2"
+                    className="flex items-center justify-between bg-gradient-to-br from-blue-900/30 to-black/50 px-3 py-2 rounded-md relative mb-2"
                   >
                     <div
-                      className="absolute left-0 top-0 bottom-0 bg-neutral-800/50 rounded-md"
+                      className="absolute left-0 top-0 bottom-0 bg-navy-800/50 rounded-md"
                       style={{ width: `${(source.visits / maxSourceViews) * 100}%` }}
                     />
                     <span className="text-sm text-neutral-100 relative z-10">
@@ -368,11 +368,11 @@ export default function GeneralAnalytics({
                 ))}
               </div>
             </ScrollArea>
-            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-neutral-950/50 to-transparent pointer-events-none" />
+            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-navy-950/50 to-transparent pointer-events-none" />
           </CardContent>
         </Card>
 
-        <Card className="border-neutral-800 bg-[#0a0a0a] backdrop-blur-sm">
+        <Card className="border-navy-800 bg-gradient-to-br from-blue-900/20 to-black backdrop-blur-sm">
           <CardHeader className="py-0 pt-4 pb-2">
             <CardTitle className="text-neutral-300 text-base md:text-lg flex flex-row justify-between items-center">
               <div className="flex items-center gap-4">
@@ -397,10 +397,10 @@ export default function GeneralAnalytics({
                   .map((location, index) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between bg-[#111111] px-3 py-2 rounded-md relative mb-2"
+                      className="flex items-center justify-between bg-gradient-to-br from-blue-900/30 to-black/50 px-3 py-2 rounded-md relative mb-2"
                     >
                       <div
-                        className="absolute left-0 top-0 bottom-0 bg-neutral-800/50 rounded-md"
+                        className="absolute left-0 top-0 bottom-0 bg-navy-800/50 rounded-md"
                         style={{ width: `${(location.visits / maxLocationViews) * 100}%` }}
                       />
                       <div className="flex items-center gap-4 flex-1 relative z-10">
@@ -438,11 +438,11 @@ export default function GeneralAnalytics({
                   ))}
               </div>
             </ScrollArea>
-            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-neutral-950/50 to-transparent pointer-events-none" />
+            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-navy-950/50 to-transparent pointer-events-none" />
           </CardContent>
         </Card>
 
-        <Card className="border-neutral-800 bg-[#0a0a0a] backdrop-blur-sm">
+        <Card className="border-navy-800 bg-gradient-to-br from-blue-900/20 to-black backdrop-blur-sm">
           <CardHeader className="py-0 pt-4 pb-2">
             <CardTitle className="text-neutral-300 text-base md:text-lg flex flex-row justify-between">
               <p>Operating Systems</p>
@@ -455,10 +455,10 @@ export default function GeneralAnalytics({
                 {osStats.map((os, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between bg-[#111111] px-3 py-2 rounded-md relative mb-2"
+                    className="flex items-center justify-between bg-gradient-to-br from-blue-900/30 to-black/50 px-3 py-2 rounded-md relative mb-2"
                   >
                     <div
-                      className="absolute left-0 top-0 bottom-0 bg-neutral-800/50 rounded-md"
+                      className="absolute left-0 top-0 bottom-0 bg-navy-800/50 rounded-md"
                       style={{ width: `${(os.visits / maxOSViews) * 100}%` }}
                     />
                     <div className="flex items-center gap-2 relative z-10">
@@ -474,11 +474,11 @@ export default function GeneralAnalytics({
                 ))}
               </div>
             </ScrollArea>
-            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-neutral-950/50 to-transparent pointer-events-none" />
+            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-navy-950/50 to-transparent pointer-events-none" />
           </CardContent>
         </Card>
 
-        <Card className="border-neutral-800 bg-[#0a0a0a] backdrop-blur-sm">
+        <Card className="border-navy-800 bg-gradient-to-br from-blue-900/20 to-black backdrop-blur-sm">
           <CardHeader className="py-0 pt-4 pb-2">
             <CardTitle className="text-neutral-300 text-base md:text-lg flex flex-row justify-between">
               <p>Device Types</p>
@@ -491,10 +491,10 @@ export default function GeneralAnalytics({
                 {deviceStats.map(({ deviceType, count }) => (
                   <div
                     key={deviceType}
-                    className="flex items-center justify-between bg-[#111111] px-3 py-2 rounded-md relative mb-2"
+                    className="flex items-center justify-between bg-gradient-to-br from-blue-900/30 to-black/50 px-3 py-2 rounded-md relative mb-2"
                   >
                     <div
-                      className="absolute left-0 top-0 bottom-0 bg-neutral-800/50 rounded-md"
+                      className="absolute left-0 top-0 bottom-0 bg-navy-800/50 rounded-md"
                       style={{ width: `${(count / maxDeviceViews) * 100}%` }}
                     />
                     <div className="flex items-center gap-2 relative z-10">
@@ -510,11 +510,11 @@ export default function GeneralAnalytics({
                 ))}
               </div>
             </ScrollArea>
-            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-neutral-950/50 to-transparent pointer-events-none" />
+            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-navy-950/50 to-transparent pointer-events-none" />
           </CardContent>
         </Card>
 
-        <Card className="border-neutral-800 bg-[#0a0a0a] backdrop-blur-sm">
+        <Card className="border-navy-800 bg-gradient-to-br from-blue-900/20 to-black backdrop-blur-sm">
           <CardHeader className="py-0 pt-4 pb-2">
             <CardTitle className="text-neutral-300 text-base md:text-lg flex flex-row justify-between">
               <p>Browsers</p>
@@ -527,10 +527,10 @@ export default function GeneralAnalytics({
                 {browserStats.map(({ browser, count }) => (
                   <div
                     key={browser}
-                    className="flex items-center justify-between bg-[#111111] px-3 py-2 rounded-md relative mb-2"
+                    className="flex items-center justify-between bg-gradient-to-br from-blue-900/30 to-black/50 px-3 py-2 rounded-md relative mb-2"
                   >
                     <div
-                      className="absolute left-0 top-0 bottom-0 bg-neutral-800/50 rounded-md"
+                      className="absolute left-0 top-0 bottom-0 bg-navy-800/50 rounded-md"
                       style={{ width: `${(count / maxBrowserViews) * 100}%` }}
                     />
                     <div className="flex items-center gap-2 relative z-10">
@@ -546,7 +546,7 @@ export default function GeneralAnalytics({
                 ))}
               </div>
             </ScrollArea>
-            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-neutral-950/50 to-transparent pointer-events-none" />
+            <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-navy-950/50 to-transparent pointer-events-none" />
           </CardContent>
         </Card>
       </div>

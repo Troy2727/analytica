@@ -125,7 +125,7 @@ export default function SiteSettings({ website }: SiteSettingsProps) {
   return (
     <div className="space-y-6 w-full max-w-[95vw] mx-auto">
       {/* Installation Section */}
-      <Card className="border-neutral-800 bg-[#0a0a0a] backdrop-blur-sm overflow-hidden">
+      <Card className="border-navy-800 bg-gradient-to-br from-blue-900/20 to-black backdrop-blur-sm overflow-hidden">
         <CardHeader className="pb-1 sm:pb-0">
           <CardTitle className="text-neutral-300 text-sm md:text-base lg:text-lg flex items-center gap-2">
             <Code className="h-4 w-4 md:h-5 md:w-5" />
@@ -134,7 +134,7 @@ export default function SiteSettings({ website }: SiteSettingsProps) {
           <CardDescription className="text-neutral-400 mt-2">
             For detailed setup instructions and advanced usage, check our{" "}
             <a
-              href="https://github.com/AlexCodess/analytica#readme"
+              href="https://github.com/Troy2727/analytica#readme"
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-400 hover:text-blue-300 underline"
@@ -153,7 +153,7 @@ export default function SiteSettings({ website }: SiteSettingsProps) {
       </Card>
 
       {/* Download Section */}
-      <Card className="border-neutral-800 bg-[#0a0a0a] backdrop-blur-sm">
+      <Card className="border-navy-800 bg-gradient-to-br from-blue-900/20 to-black backdrop-blur-sm">
         <CardHeader className="pb-0">
           <CardTitle className="text-neutral-300 text-sm md:text-base lg:text-lg flex items-center gap-2">
             <Download className="h-4 w-4 md:h-5 md:w-5" />
@@ -162,7 +162,7 @@ export default function SiteSettings({ website }: SiteSettingsProps) {
         </CardHeader>
         <CardContent className="p-4 sm:p-6">
           <div className="space-y-4">
-            <div className="rounded-lg border border-neutral-800 bg-neutral-900/60 p-4">
+            <div className="rounded-lg border border-blue-400/30 bg-gradient-to-br from-blue-900/30 to-black/50 p-4">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <p className="text-xs md:text-sm font-medium text-neutral-100 flex items-center gap-2">
@@ -177,7 +177,7 @@ export default function SiteSettings({ website }: SiteSettingsProps) {
                   onClick={handleDownloadAnalytics}
                   disabled={isDownloadingAnalytics}
                   variant="outline"
-                  className="border-neutral-800 bg-neutral-900/60 text-neutral-100 hover:bg-neutral-950/40 hover:text-neutral-100"
+                  className="border-navy-800 bg-navy-900/60 text-neutral-100 hover:bg-navy-950/40 hover:text-neutral-100"
                 >
                   <Download className="h-4 w-4 mr-2" />
                   {isDownloadingAnalytics ? "Downloading..." : "Download Analytics"}
@@ -185,7 +185,7 @@ export default function SiteSettings({ website }: SiteSettingsProps) {
               </div>
             </div>
 
-            <div className="rounded-lg border border-neutral-800 bg-neutral-900/60 p-4">
+            <div className="rounded-lg border border-blue-400/30 bg-gradient-to-br from-blue-900/30 to-black/50 p-4">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <p className="text-xs md:text-sm font-medium text-neutral-100 flex items-center gap-2">
@@ -200,7 +200,7 @@ export default function SiteSettings({ website }: SiteSettingsProps) {
                   onClick={handleDownloadEvents}
                   disabled={isDownloadingEvents}
                   variant="outline"
-                  className="border-neutral-800 bg-neutral-900/60 text-neutral-100 hover:bg-neutral-950/40 hover:text-neutral-100"
+                  className="border-navy-800 bg-navy-900/60 text-neutral-100 hover:bg-navy-950/40 hover:text-neutral-100"
                 >
                   <Download className="h-4 w-4 mr-2" />
                   {isDownloadingEvents ? "Downloading..." : "Download Events"}
@@ -212,7 +212,7 @@ export default function SiteSettings({ website }: SiteSettingsProps) {
       </Card>
 
       {/* Danger Zone Section */}
-      <Card className="border-neutral-800 bg-[#0a0a0a] backdrop-blur-sm">
+      <Card className="border-navy-800 bg-gradient-to-br from-blue-900/20 to-black backdrop-blur-sm">
         <CardHeader className="pb-0">
           <CardTitle className="text-neutral-300 text-sm md:text-base lg:text-lg flex items-center gap-2">
             <Trash2 className="h-4 w-4 md:h-5 md:w-5" />
@@ -240,7 +240,7 @@ export default function SiteSettings({ website }: SiteSettingsProps) {
                     {isDeleting ? "Deleting..." : "Delete Website"}
                   </Button>
                 </AlertDialogTrigger>
-                <AlertDialogContent className="border-neutral-800 bg-neutral-900">
+                <AlertDialogContent className="border-navy-800 bg-navy-900">
                   <AlertDialogHeader>
                     <AlertDialogTitle className="text-sm md:text-base text-neutral-100">
                       Are you absolutely sure?
@@ -252,7 +252,7 @@ export default function SiteSettings({ website }: SiteSettingsProps) {
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel className="border-neutral-800 bg-neutral-900 text-neutral-100">
+                    <AlertDialogCancel className="border-navy-800 bg-navy-900 text-neutral-100">
                       Cancel
                     </AlertDialogCancel>
                     <AlertDialogAction

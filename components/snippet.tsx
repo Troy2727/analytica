@@ -16,14 +16,14 @@ export default function Snippet() {
   const react_snippet = `<script
   defer
   data-domain="${website}"
-  src="https://analytica.vercel.app/tracking-script.js"
+  src="https://analytica-phi.vercel.app/tracking-script.js"
 >
 </script>`;
 
   const next_snippet = `<Script
   defer
   data-domain="${website}"
-  src="https://analytica.vercel.app/tracking-script.js"
+  src="https://analytica-phi.vercel.app/tracking-script.js"
 />`;
 
   const copySnippet = (snippet: string) => {
@@ -36,25 +36,25 @@ export default function Snippet() {
   };
 
   return (
-    <Card className="border-neutral-800 bg-neutral-900/40">
+    <Card className="rounded-xl border-blue-400/20 bg-gradient-to-br from-blue-900/20 to-black">
       <CardContent className="pt-6">
         <Tabs defaultValue="JavaScript/React.js" className="w-full">
-          <TabsList className="w-full grid grid-cols-2 bg-neutral-800/50">
+          <TabsList className="w-full grid grid-cols-2 bg-navy-800/50">
             <TabsTrigger
               value="JavaScript/React.js"
-              className="data-[state=active]:bg-neutral-700 data-[state=active]:text-neutral-100 text-neutral-400"
+              className="data-[state=active]:bg-blue-600/80 data-[state=active]:text-neutral-100 text-neutral-400"
             >
               JavaScript / React.js
             </TabsTrigger>
             <TabsTrigger
               value="Next.js"
-              className="data-[state=active]:bg-neutral-700 data-[state=active]:text-neutral-100 text-neutral-400"
+              className="data-[state=active]:bg-blue-600/80 data-[state=active]:text-neutral-100 text-neutral-400"
             >
               Next.js
             </TabsTrigger>
           </TabsList>
           <TabsContent value="JavaScript/React.js" className="mt-4">
-            <div className="rounded-lg bg-neutral-950 border border-neutral-800 p-4">
+            <div className="rounded-xl border border-blue-400/20 bg-gradient-to-br from-blue-900/20 to-black p-4">
               <div className="flex items-center justify-between mb-3">
                 <p className="text-sm text-neutral-400">
                   Add to your index.html:
@@ -63,7 +63,7 @@ export default function Snippet() {
                   onClick={() => copySnippet(react_snippet)}
                   variant="ghost"
                   size="sm"
-                  className="border border-neutral-800 text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800"
+                  className="border border-navy-800 text-neutral-400 hover:text-neutral-100 hover:bg-navy-800"
                 >
                   <Copy className="h-4 w-4 mr-2" />
                   Copy
@@ -74,8 +74,9 @@ export default function Snippet() {
                 style={oneDark}
                 customStyle={{
                   padding: '1rem',
-                  borderRadius: '0.375rem',
-                  border: '1px solid rgb(38, 38, 38)',
+                  borderRadius: '0.75rem',
+                  border: '1px solid rgba(96, 165, 250, 0.2)',
+                  background: 'rgba(2, 6, 23, 0.7)',
                   overflowX: 'auto' as const,
                 }}
               >
@@ -84,7 +85,7 @@ export default function Snippet() {
             </div>
           </TabsContent>
           <TabsContent value="Next.js" className="mt-4">
-            <div className="rounded-lg bg-neutral-950 border border-neutral-800 p-4">
+            <div className="rounded-xl border border-blue-400/20 bg-gradient-to-br from-blue-900/20 to-black p-4">
               <div className="flex items-center justify-between mb-3">
                 <p className="text-sm text-neutral-400">
                   Add to your app/layout.tsx:
@@ -93,7 +94,7 @@ export default function Snippet() {
                   onClick={() => copySnippet(next_snippet)}
                   variant="ghost"
                   size="sm"
-                  className="border border-neutral-800 text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800"
+                  className="border border-navy-800 text-neutral-400 hover:text-neutral-100 hover:bg-navy-800"
                 >
                   <Copy className="h-4 w-4 mr-2" />
                   Copy
@@ -104,8 +105,9 @@ export default function Snippet() {
                 style={oneDark}
                 customStyle={{
                   padding: '1rem',
-                  borderRadius: '0.375rem',
-                  border: '1px solid rgb(38, 38, 38)',
+                  borderRadius: '0.75rem',
+                  border: '1px solid rgba(96, 165, 250, 0.2)',
+                  background: 'rgba(2, 6, 23, 0.7)',
                   overflowX: 'auto' as const,
                 }}
               >

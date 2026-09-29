@@ -27,15 +27,15 @@ export const AccordionTrigger = React.forwardRef<
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        "group w-full rounded-2xl bg-[rgb(18,18,18)] px-6 py-5 text-left text-lg font-medium text-zinc-200 transition-all",
-        "data-[state=open]:rounded-b-none",
+        "group w-full rounded-2xl border border-blue-400/20 bg-gradient-to-br from-blue-900/20 to-black px-6 py-5 text-left text-lg font-medium text-white backdrop-blur-xl transition-all hover:border-blue-400/40",
+        "data-[state=open]:rounded-b-none data-[state=open]:border-b-transparent",
         className
       )}
       {...props}
     >
       <div className="flex items-center justify-between">
         {children}
-        <Plus className="h-5 w-5 text-blue-400 transition-transform duration-500 ease-in-out group-data-[state=open]:rotate-45" />
+        <Plus className="h-5 w-5 text-emerald-400 transition-transform duration-500 ease-in-out group-data-[state=open]:rotate-45" />
       </div>
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
@@ -49,10 +49,10 @@ export const AccordionContent = React.forwardRef<
   <AccordionPrimitive.Content
     ref={ref}
     className={cn(
-      "overflow-hidden text-zinc-400",
+      "overflow-hidden text-gray-300",
       "transition-all duration-300 ease-in-out",
       "data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
-      "bg-[rgb(18,18,18)] rounded-b-2xl",
+      "rounded-b-2xl border border-t-0 border-blue-400/20 bg-gradient-to-br from-blue-900/10 to-black backdrop-blur-xl",
       className
     )}
     {...props}

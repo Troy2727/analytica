@@ -189,7 +189,7 @@ export default function SettingsPage() {
         <h1 className="text-3xl font-bold text-white mb-8">API Settings</h1>
         <div className="space-y-8">
           {/* Documentation Card - New */}
-          <Card className="border-neutral-800 bg-neutral-900 shadow-2xl">
+          <Card className="rounded-2xl border-blue-400/20 bg-gradient-to-br from-blue-900/20 to-black shadow-2xl backdrop-blur-xl">
             <CardHeader>
               <CardTitle className="text-xl font-semibold text-neutral-100">
                 Documentation
@@ -204,7 +204,7 @@ export default function SettingsPage() {
                 <p className="text-sm text-neutral-400">
                   Visit our{" "}
                   <a
-                    href="https://github.com/AlexCodess/analytica#readme"
+                    href="https://github.com/Troy2727/analytica#readme"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-400 hover:text-blue-300 underline"
@@ -218,7 +218,7 @@ export default function SettingsPage() {
           </Card>
 
           {/* Discord ID Card */}
-          <Card className="border-neutral-800 bg-neutral-900 shadow-2xl">
+          <Card className="rounded-2xl border-blue-400/20 bg-gradient-to-br from-blue-900/20 to-black shadow-2xl backdrop-blur-xl">
             <CardHeader>
               <CardTitle className="text-xl font-semibold text-neutral-100">
                 Discord Integration
@@ -242,21 +242,21 @@ export default function SettingsPage() {
                       value={isEditing ? tempDiscordId : discordId}
                       onChange={(e) => setTempDiscordId(e.target.value)}
                       placeholder="Enter your Discord User ID"
-                      className="bg-neutral-800 text-neutral-200 border-neutral-700 focus:border-neutral-600"
+                      className="bg-navy-800 text-neutral-200 border-navy-700 focus:border-neutral-600"
                       disabled={!isEditing}
                     />
                     {isEditing ? (
                       <>
                         <Button
                           onClick={updateDiscordId}
-                          className="bg-neutral-800 hover:bg-neutral-700 text-white border border-neutral-700"
+                          className="bg-navy-800 hover:bg-navy-700 text-white border border-navy-700"
                         >
                           Save
                         </Button>
                         <Button
                           onClick={handleCancelEdit}
                           variant="outline"
-                          className="bg-neutral-900 hover:bg-neutral-800 text-white border border-neutral-700 hover:text-white"
+                          className="bg-navy-900 hover:bg-navy-800 text-white border border-navy-700 hover:text-white"
                         >
                           Cancel
                         </Button>
@@ -264,7 +264,7 @@ export default function SettingsPage() {
                     ) : (
                       <Button
                         onClick={handleEditClick}
-                        className="bg-neutral-800 hover:bg-neutral-700 text-white border border-neutral-700"
+                        className="bg-navy-800 hover:bg-navy-700 text-white border border-navy-700"
                       >
                         Edit
                       </Button>
@@ -281,7 +281,7 @@ export default function SettingsPage() {
           </Card>
 
           {/* API Key Card */}
-          <Card className="border-neutral-800 bg-neutral-900 shadow-2xl">
+          <Card className="rounded-2xl border-blue-400/20 bg-gradient-to-br from-blue-900/20 to-black shadow-2xl backdrop-blur-xl">
             <CardHeader>
               <CardTitle className="text-xl font-semibold text-neutral-100">
                 API Key Management
@@ -297,7 +297,7 @@ export default function SettingsPage() {
               {!apiKey ? (
                 <Button
                   onClick={generateApiKey}
-                  className="w-full bg-neutral-800 hover:bg-neutral-700 text-white border border-neutral-700"
+                  className="w-full bg-navy-800 hover:bg-navy-700 text-white border border-navy-700"
                 >
                   <Key className="mr-2 h-5 w-5" /> Generate API Key
                 </Button>
@@ -316,13 +316,13 @@ export default function SettingsPage() {
                         type="text"
                         value={apiKey}
                         readOnly
-                        className="bg-neutral-800 text-neutral-200 border-neutral-700 focus:border-neutral-600"
+                        className="bg-navy-800 text-neutral-200 border-navy-700 focus:border-neutral-600"
                       />
                       <Button
                         onClick={copyApiKey}
                         size="icon"
                         variant="outline"
-                        className="bg-neutral-900 border-neutral-700 hover:bg-neutral-800 text-white hover:text-white"
+                        className="bg-navy-900 border-navy-700 hover:bg-navy-800 text-white hover:text-white"
                       >
                         <Copy className="h-4 w-4" />
                       </Button>
@@ -331,7 +331,7 @@ export default function SettingsPage() {
                       <Button
                         onClick={regenerateApiKey}
                         variant="outline"
-                        className="bg-neutral-900 border-neutral-700 hover:bg-neutral-800 text-white hover:text-white"
+                        className="bg-navy-900 border-navy-700 hover:bg-navy-800 text-white hover:text-white"
                       >
                         <Key className="mr-2 h-4 w-4" /> Regenerate Key
                       </Button>
@@ -351,7 +351,7 @@ export default function SettingsPage() {
           </Card>
 
           {/* Usage Instructions Card */}
-          <Card className="border-neutral-800 bg-neutral-900 shadow-2xl">
+          <Card className="rounded-2xl border-blue-400/20 bg-gradient-to-br from-blue-900/20 to-black shadow-2xl backdrop-blur-xl">
             <CardHeader>
               <CardTitle className="text-xl font-semibold text-neutral-100">
                 Usage Instructions
@@ -369,16 +369,16 @@ export default function SettingsPage() {
                 </ul>
               </div>
               <Tabs defaultValue="javascript" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 bg-neutral-800 mb-4">
+                <TabsList className="grid w-full grid-cols-2 bg-navy-800 mb-4">
                   <TabsTrigger
                     value="javascript"
-                    className="data-[state=active]:bg-neutral-700 data-[state=active]:text-neutral-100"
+                    className="data-[state=active]:bg-navy-700 data-[state=active]:text-neutral-100"
                   >
                     JavaScript
                   </TabsTrigger>
                   <TabsTrigger
                     value="python"
-                    className="data-[state=active]:bg-neutral-700 data-[state=active]:text-neutral-100"
+                    className="data-[state=active]:bg-navy-700 data-[state=active]:text-neutral-100"
                   >
                     Python
                   </TabsTrigger>

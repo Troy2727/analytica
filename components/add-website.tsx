@@ -128,7 +128,7 @@ export default function AddWebsite() {
                   setWebsite(e.target.value.trim().toLowerCase())
                 }
                 placeholder="example.com"
-                className={`text-black ${error ? "border-red-500" : ""}`}
+                className={`rounded-xl border-blue-400/20 bg-black/30 text-white ${error ? "border-red-500" : ""}`}
               />
               {error ? (
                 <p className="text-sm text-red-500">{error}</p>
@@ -140,7 +140,7 @@ export default function AddWebsite() {
             </div>
             {!error && (
               <Button
-                variant="secondary"
+                className="rounded-xl bg-gradient-to-r from-blue-400 to-emerald-400 text-white shadow-lg shadow-blue-900/30 hover:opacity-90"
                 onClick={checkDomainAddedBefore}
                 disabled={loading || !website.trim()}
               >

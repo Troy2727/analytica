@@ -12,7 +12,7 @@ export function LargeGradientText({ text, className = '' }: LargeGradientTextPro
       <h1 
         className="text-6xl md:text-8xl font-bold tracking-tighter"
         style={{
-          background: 'linear-gradient(90deg, #00ffff, #2d8fff, #9333ff, #ff00ff)',
+          background: 'linear-gradient(90deg, #60a5fa, #34d399)',
           WebkitBackgroundClip: 'text',
           backgroundClip: 'text',
           color: 'transparent',

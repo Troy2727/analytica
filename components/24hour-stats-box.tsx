@@ -21,7 +21,7 @@ export default function StatsBox({
   onClose,
 }: StatsBoxProps) {
   return (
-    <Card className="bg-black/95 border-neutral-800 text-white backdrop-blur-sm mb-8">
+    <Card className="bg-black/95 border-navy-800 text-white backdrop-blur-sm mb-8">
       <CardContent className="p-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <p className="text-sm font-medium mb-2 sm:mb-0">Last 24-hour stats:</p>
@@ -41,7 +41,7 @@ export default function StatsBox({
             variant="ghost"
             size="icon"
             onClick={onClose}
-            className="h-8 w-8 rounded-full hover:bg-neutral-800 hover:text-white self-end sm:self-auto"
+            className="h-8 w-8 rounded-full hover:bg-navy-800 hover:text-white self-end sm:self-auto"
           >
             <X className="h-4 w-4" />
             <span className="sr-only">Close 24-hour stats</span>
