@@ -191,7 +191,7 @@ export interface CodeCompProps {
 
 export interface UserData {
   api: string;
-  user_id: string;
+  id: string;
   discord_id?: string;
 }
 
