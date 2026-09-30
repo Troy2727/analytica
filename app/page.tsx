@@ -249,14 +249,14 @@ send_request()`,
         </div>
 
         <BlurFade delay={0.5} yOffset={20}>
-          <div className="mx-auto max-w-6xl pb-16">
+          <div className="mx-auto max-w-7xl pb-16">
             <div className="overflow-hidden rounded-2xl border border-blue-400/20 shadow-2xl shadow-blue-950/50">
               <Safari url="https://analytica-phi.vercel.app">
                 <Image
                   alt="Analytica dashboard"
-                  src="/hero-dashboard-v4.jpg"
-                  width={2000}
-                  height={1000}
+                  src="/hero-dashboard-v5.jpg"
+                  width={2609}
+                  height={2020}
                 />
               </Safari>
             </div>
