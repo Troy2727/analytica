@@ -42,7 +42,7 @@ export default function SettingsPage() {
 
     const { data } = await supabase
       .from("users")
-      .insert([{ api: randomString, user_id: user.id }])
+      .insert([{ id: user.id, email: user.email, api: randomString }])
       .select()
       .returns<UserData[]>();
 
@@ -57,7 +57,7 @@ export default function SettingsPage() {
     const { data: userData, error: userError } = await supabase
       .from("users")
       .select("*")
-      .eq("user_id", user.id)
+      .eq("id", user.id)
       .returns<UserData[]>();
 
     if (userError) {
@@ -99,7 +99,7 @@ export default function SettingsPage() {
       const { error } = await supabase
         .from("users")
         .update({ discord_id: tempDiscordId })
-        .eq("user_id", user.id);
+        .eq("id", user.id);
 
       if (error) throw error;
 
@@ -150,7 +150,7 @@ export default function SettingsPage() {
       const { data, error } = await supabase
         .from("users")
         .update({ api: randomString })
-        .eq("user_id", user.id)
+        .eq("id", user.id)
         .select()
         .returns<UserData[]>();
 
