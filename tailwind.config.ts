@@ -82,6 +82,7 @@ const config: Config = {
         "aurora-3": "aurora-3 30s ease-in-out infinite",
         wave: "wave 18s linear infinite",
         "wave-slow": "wave 30s linear infinite reverse",
+        "blur-fade": "blur-fade 0.4s ease-out both",
       },
       keyframes: {
         "aurora-1": {
@@ -99,6 +100,18 @@ const config: Config = {
         wave: {
           from: { transform: "translateX(0)" },
           to: { transform: "translateX(-50%)" },
+        },
+        "blur-fade": {
+          from: {
+            opacity: "0",
+            filter: "blur(var(--blur-fade-blur))",
+            transform: "translateY(var(--blur-fade-y))",
+          },
+          to: {
+            opacity: "1",
+            filter: "blur(0px)",
+            transform: "translateY(calc(var(--blur-fade-y) * -1))",
+          },
         },
         "accordion-down": {
           from: { height: "0" },

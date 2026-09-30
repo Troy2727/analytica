@@ -85,7 +85,7 @@ export default function CodeBlock({
           </div>
         </div>
         <div className="p-4 font-mono text-sm bg-slate-950/70 relative">
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={activeSetupFile}
               initial={{ opacity: 0, x: -20 }}
@@ -151,7 +151,7 @@ export default function CodeBlock({
           </div>
         </div>
         <div className="p-4 font-mono text-sm bg-slate-950/70 relative">
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={activeEventFile}
               initial={{ opacity: 0, x: -20 }}
