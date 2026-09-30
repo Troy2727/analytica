@@ -51,12 +51,12 @@ export default function AnimatedBackground() {
       aria-hidden
       className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-slate-950"
     >
-      <div className="absolute -top-48 left-[10%] h-[40rem] w-[40rem] rounded-full bg-blue-600/20 blur-[140px] motion-safe:animate-aurora-1" />
-      <div className="absolute top-[20%] -right-40 h-[36rem] w-[36rem] rounded-full bg-emerald-500/15 blur-[140px] motion-safe:animate-aurora-2" />
-      <div className="absolute -bottom-40 left-[30%] h-[32rem] w-[32rem] rounded-full bg-indigo-600/15 blur-[140px] motion-safe:animate-aurora-3" />
+      <div className="absolute -top-48 left-[10%] h-[40rem] w-[40rem] rounded-full bg-blue-600/20 blur-[140px] md:motion-safe:animate-aurora-1" />
+      <div className="absolute top-[20%] -right-40 h-[36rem] w-[36rem] rounded-full bg-emerald-500/15 blur-[140px] md:motion-safe:animate-aurora-2" />
+      <div className="absolute -bottom-40 left-[30%] h-[32rem] w-[32rem] rounded-full bg-indigo-600/15 blur-[140px] md:motion-safe:animate-aurora-3" />
       <div className="absolute inset-x-0 top-[38%] h-[46vh] opacity-70">
-        <WaveLayer id="wave-a" path={WAVE_A} opacity={0.35} className="motion-safe:animate-wave" />
-        <WaveLayer id="wave-b" path={WAVE_B} opacity={0.2} className="top-6 motion-safe:animate-wave-slow" />
+        <WaveLayer id="wave-a" path={WAVE_A} opacity={0.35} className="md:motion-safe:animate-wave" />
+        <WaveLayer id="wave-b" path={WAVE_B} opacity={0.2} className="top-6 md:motion-safe:animate-wave-slow" />
       </div>
     </div>
   );

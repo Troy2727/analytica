@@ -257,6 +257,7 @@ send_request()`,
                   src="/hero-dashboard-v5.jpg"
                   width={2609}
                   height={2020}
+                  sizes="(min-width: 1280px) 1280px, 100vw"
                 />
               </Safari>
             </div>
