@@ -14,12 +14,23 @@ interface TrackingData {
   url: string;
   event: 'session_start' | 'pageview' | 'session_end';
   source?: string;
-  city?: string;
-  region?: string;
-  country?: string;
   operatingSystem?: string;
   deviceType?: string;
   browserName?: string;
+}
+
+const countryNames = new Intl.DisplayNames(["en"], { type: "region" });
+
+// Vercel adds these geo headers to every request in production
+function getLocation(request: NextRequest) {
+  const city = request.headers.get("x-vercel-ip-city");
+  const region = request.headers.get("x-vercel-ip-country-region");
+  const countryCode = request.headers.get("x-vercel-ip-country");
+  return {
+    city: city ? decodeURIComponent(city) : "Unknown",
+    region: region || "Unknown",
+    country: countryCode ? countryNames.of(countryCode) || "Unknown" : "Unknown",
+  };
 }
 
 export async function OPTIONS() {
@@ -34,14 +45,13 @@ export async function POST(request: NextRequest) {
       url, 
       event, 
       source,
-      city,
-      region,
-      country,
       operatingSystem,
       deviceType,
       browserName,
     } = data;
     
+    const { city, region, country } = getLocation(request);
+
     if (!url.includes(domain)) {
       return NextResponse.json(
         { error: "Domain mismatch" },
@@ -55,9 +65,9 @@ export async function POST(request: NextRequest) {
         .insert([{ 
           domain, 
           page: url,
-          city: city || 'Unknown',
-          region: region || 'Unknown',
-          country: country || 'Unknown',
+          city,
+          region,
+          country,
           operating_system: operatingSystem || 'Unknown',
           device_type: deviceType || 'Unknown',
           browser_name: browserName || 'Unknown',
