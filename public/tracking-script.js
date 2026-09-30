@@ -13,28 +13,6 @@
 
   var endpoint = "https://analytica-phi.vercel.app/api/track";
 
-  async function getUserLocation() {
-    try {
-      const response = await fetch('https://ipapi.co/json/');
-      if (!response.ok) {
-        throw new Error('Failed to fetch location data');
-      }
-      const data = await response.json();
-      return {
-        city: data.city || 'Unknown',
-        region: data.region || 'Unknown',
-        country: data.country_name || 'Unknown',
-      };
-    } catch (error) {
-      console.error('Error fetching location:', error);
-      return {
-        city: 'Unknown',
-        region: 'Unknown',
-        country: 'Unknown',
-      };
-    }
-  }
-
   function getOperatingSystem() {
     var userAgent = navigator.userAgent;
     var os = "Unknown";
@@ -125,9 +103,8 @@
     return { browserName };
   }
 
-  async function trigger(eventName, options) {
+  function trigger(eventName, options) {
     try {
-      const locationData = await getUserLocation();
       const operatingSystem = getOperatingSystem();
       const deviceType = getDeviceType();
       const { browserName } = getBrowserInfo();
@@ -137,9 +114,6 @@
         url: location.href,
         domain: dataDomain,
         source,
-        city: locationData.city,
-        region: locationData.region,
-        country: locationData.country,
         operatingSystem,
         deviceType,
         browserName,
