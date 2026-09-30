@@ -1,4 +1,6 @@
-import { PropsWithChildren } from "react"
+"use client"
+
+import { PropsWithChildren, useState } from "react"
 import { Icons } from "./icons"
 import {
   Cog,
@@ -20,10 +22,23 @@ import {
 import Image from "next/image"
 
 export const MockDiscordUI = ({ children }: PropsWithChildren) => {
+  const [menuOpen, setMenuOpen] = useState(false)
+
   return (
-    <div className="flex min-h-[800px] w-full text-white rounded-xl overflow-hidden">
+    <div className="relative flex min-h-[800px] w-full text-white rounded-xl overflow-hidden">
+      {/* mobile drawer backdrop */}
+      {menuOpen && (
+        <button
+          aria-label="Close menu"
+          onClick={() => setMenuOpen(false)}
+          className="absolute inset-0 z-10 bg-black/60 md:hidden"
+        />
+      )}
+
+      {/* sidebars: a drawer over the chat below md, inline from md up */}
+      <div className={`flex ${menuOpen ? "absolute inset-y-0 left-0 z-20 max-w-[85%] bg-slate-950 shadow-2xl" : ""} md:static md:max-w-none md:bg-transparent md:shadow-none`}>
       {/* server list */}
-      <div className="hidden sm:flex w-[72px] bg-black/40 pt-3 flex-col items-center">
+      <div className={`${menuOpen ? "flex" : "hidden"} sm:flex w-[72px] bg-black/40 pt-3 flex-col items-center`}>
         <div className="size-10 lg:size-12 bg-discord-brand-color rounded-2xl flex items-center justify-center mb-2 hover:rounded-xl transition-all duration-200">
           <Icons.discord className="size-3/5 text-white" />
         </div>
@@ -47,7 +62,7 @@ export const MockDiscordUI = ({ children }: PropsWithChildren) => {
       </div>
 
       {/* dm list */}
-      <div className="hidden md:flex w-64 bg-blue-950/20 border-x border-blue-400/10 flex-col">
+      <div className={`${menuOpen ? "flex" : "hidden"} md:flex w-64 bg-blue-950/20 border-x border-blue-400/10 flex-col`}>
         <div className="px-4 h-16 border-b border-blue-400/10 flex items-center shadow-sm">
           <div className="w-full bg-black/40 border border-blue-400/10 text-xs lg:text-sm rounded h-8 flex items-center justify-center text-gray-500 cursor-not-allowed truncate">
             Find or start a conversation
@@ -110,14 +125,20 @@ export const MockDiscordUI = ({ children }: PropsWithChildren) => {
           </div>
         </div>
       </div>
+      </div>
 
       {/* main content */}
       <div className="flex-1 flex flex-col">
         {/* dm header */}
         <div className="h-16 flex items-center px-4 shadow-sm border-b border-blue-400/10">
-          <div className="md:hidden mr-4">
+          <button
+            aria-label="Open menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen(true)}
+            className="md:hidden mr-4"
+          >
             <Menu className="size-5 text-[#b9bbbe] hover:text-white cursor-pointer stroke-[1.5]" />
-          </div>
+          </button>
 
           <div className="flex items-center">
             <div className="relative">
