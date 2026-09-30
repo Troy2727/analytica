@@ -45,15 +45,37 @@ function WaveLayer({
   );
 }
 
+// A soft glow drawn as a radial gradient that follows the falloff of a circle blurred
+// by 140px. A real `filter: blur(140px)` looks the same but is very slow on iPhones.
+function Glow({ rgb, alpha }: { rgb: string; alpha: number }) {
+  const stops = [
+    [0.95, 0], [0.85, 20], [0.51, 40], [0.32, 50], [0.16, 60], [0.07, 70], [0.02, 85], [0, 100],
+  ]
+    .map(([k, at]) => `rgba(${rgb},${+(k * alpha).toFixed(3)}) ${at}%`)
+    .join(", ");
+  return (
+    <div
+      className="absolute -inset-[26.25rem]"
+      style={{ background: `radial-gradient(closest-side, ${stops})` }}
+    />
+  );
+}
+
 export default function AnimatedBackground() {
   return (
     <div
       aria-hidden
       className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-slate-950"
     >
-      <div className="absolute -top-48 left-[10%] h-[40rem] w-[40rem] rounded-full bg-blue-600/20 blur-[140px] md:motion-safe:animate-aurora-1" />
-      <div className="absolute top-[20%] -right-40 h-[36rem] w-[36rem] rounded-full bg-emerald-500/15 blur-[140px] md:motion-safe:animate-aurora-2" />
-      <div className="absolute -bottom-40 left-[30%] h-[32rem] w-[32rem] rounded-full bg-indigo-600/15 blur-[140px] md:motion-safe:animate-aurora-3" />
+      <div className="absolute -top-48 left-[10%] h-[40rem] w-[40rem] md:motion-safe:animate-aurora-1">
+        <Glow rgb="37,99,235" alpha={0.2} />
+      </div>
+      <div className="absolute top-[20%] -right-40 h-[36rem] w-[36rem] md:motion-safe:animate-aurora-2">
+        <Glow rgb="16,185,129" alpha={0.15} />
+      </div>
+      <div className="absolute -bottom-40 left-[30%] h-[32rem] w-[32rem] md:motion-safe:animate-aurora-3">
+        <Glow rgb="79,70,229" alpha={0.15} />
+      </div>
       <div className="absolute inset-x-0 top-[38%] h-[46vh] opacity-70">
         <WaveLayer id="wave-a" path={WAVE_A} opacity={0.35} className="md:motion-safe:animate-wave" />
         <WaveLayer id="wave-b" path={WAVE_B} opacity={0.2} className="top-6 md:motion-safe:animate-wave-slow" />
