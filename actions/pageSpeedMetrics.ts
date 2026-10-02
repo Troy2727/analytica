@@ -1,7 +1,16 @@
 'use server'
 
-import { supabase } from "@/config/supabase";
+import { createClient } from "@supabase/supabase-js";
 import { PerformanceMetrics, WebsiteMetrics } from "@/types";
+
+// Server actions run without the user's session, and websites rows are
+// owner-only under RLS, so metrics are read/written with the service role.
+function supabaseAdmin() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+}
 
 export async function fetchPageSpeedMetrics(websiteId: string): Promise<PerformanceMetrics | null> {
   try {
@@ -11,7 +20,7 @@ export async function fetchPageSpeedMetrics(websiteId: string): Promise<Performa
 
     const cleanWebsiteId = websiteId.replace(/^(https?:\/\/)?(www\.)?/, '').trim();
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin()
       .from("websites")
       .select(`
         firstContentfulPaint,
@@ -113,7 +122,7 @@ export async function getPageSpeedMetrics(websiteId: string, url: string): Promi
     };
 
     // Update the database
-    const { error: updateError } = await supabase
+    const { error: updateError } = await supabaseAdmin()
       .from('websites')
       .update(metrics)
       .eq('name', cleanWebsiteId);

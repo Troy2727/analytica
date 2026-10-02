@@ -1,5 +1,3 @@
-'use server'
-
 import { supabase } from "@/config/supabase";
 import { Website } from "@/types";
 
