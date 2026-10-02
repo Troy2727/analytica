@@ -18,7 +18,7 @@ jobs:
       run: |
         echo "Pinging Supabase at $NEXT_PUBLIC_SUPABASE_URL"
 
-        response=$(curl -s -w "\n%{http_code}" -X GET "$NEXT_PUBLIC_SUPABASE_URL/rest/v1/" \
+        response=$(curl -s -w "\n%{http_code}" -X GET "$NEXT_PUBLIC_SUPABASE_URL/rest/v1/websites?select=id&limit=1" \
           -H "apikey: $NEXT_PUBLIC_SUPABASE_ANON_KEY" \
           -H "Authorization: Bearer $NEXT_PUBLIC_SUPABASE_ANON_KEY" || echo "000")
 
