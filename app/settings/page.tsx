@@ -42,7 +42,7 @@ export default function SettingsPage() {
 
     const { data } = await supabase
       .from("users")
-      .insert([{ id: user.id, email: user.email, api: randomString }])
+      .upsert([{ id: user.id, email: user.email, api: randomString }])
       .select()
       .returns<UserData[]>();
 
