@@ -35,7 +35,10 @@ export async function fetchPageSpeedMetrics(websiteId: string): Promise<Performa
         speedIndex
       `)
       .eq("name", cleanWebsiteId)
-      .single<WebsiteMetrics>();
+      // Several users can add the same domain; metrics are per domain and
+      // getPageSpeedMetrics updates every row with that name, so any row works.
+      .limit(1)
+      .maybeSingle<WebsiteMetrics>();
 
     if (error) {
       throw new Error(`[fetchPageSpeedMetrics] Database error: ${error.message}`);

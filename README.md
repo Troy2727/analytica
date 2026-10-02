@@ -22,6 +22,16 @@ It comes with built-in Discord notifications and works seamlessly with any websi
 
 ![Analytica dashboard](./public/hero-dashboard-v4.jpg)
 
+### 🔑 Live Demo
+
+Try it without signing up: **[analytica-phi.vercel.app/sign-in](https://analytica-phi.vercel.app/sign-in)**
+
+| Email | Password |
+|---|---|
+| `demo@example.com` | `AnalyticaDemo2026!` |
+
+The demo account tracks this site itself, so you'll see real visits, page views, custom events and PageSpeed scores.
+
 ---
 
 ### 📑 Table of Contents
