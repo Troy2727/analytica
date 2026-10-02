@@ -119,6 +119,7 @@ export default function CodeBlock({
           <motion.button
             className="absolute top-2 right-2 text-neutral-400 hover:text-white bg-neutral-800/50 rounded-md p-1.5"
             onClick={() => copyToClipboard(setupFiles[activeSetupFile].code)}
+            aria-label="Copy code"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -185,6 +186,7 @@ export default function CodeBlock({
           <motion.button
             className="absolute top-2 right-2 text-neutral-400 hover:text-white bg-neutral-800/50 rounded-md p-1.5"
             onClick={() => copyToClipboard(eventFiles[activeEventFile].code)}
+            aria-label="Copy code"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >

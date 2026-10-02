@@ -81,6 +81,7 @@ export async function POST(request: NextRequest) {
         .from("visits")
         .insert([{ 
           website_id: domain, 
+          event: "session_start",
           source: source || "direct",
         }]);
 

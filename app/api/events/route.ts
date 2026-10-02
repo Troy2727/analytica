@@ -1,4 +1,5 @@
 import { supabase } from "@/config/supabase";
+import { createClient } from "@supabase/supabase-js";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
@@ -57,8 +58,18 @@ export async function POST(req: NextRequest) {
     } = (await req.json()) as EventRequest;
 
     if (authHeader && authHeader.startsWith("Bearer ")) {
+      if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+        throw new Error("SUPABASE_SERVICE_ROLE_KEY is not configured");
+      }
+      // Server-only client: API-key requests have no user session, so RLS would
+      // hide the users row and block the insert. Ownership is checked below instead.
+      const supabaseAdmin = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY
+      );
+
       const apiKey = authHeader.split("Bearer ")[1];
-      const { data: userData } = await supabase
+      const { data: userData } = await supabaseAdmin
         .from("users")
         .select("*")
         .eq("api", apiKey)
@@ -78,10 +89,25 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      const { error: eventError } = await supabase.from("events").insert([
+      const { data: website } = await supabaseAdmin
+        .from("websites")
+        .select("id")
+        .eq("name", domain)
+        .eq("user_id", userData.id)
+        .maybeSingle();
+
+      if (!website) {
+        return NextResponse.json(
+          { error: "Forbidden - Domain not registered to this API key" },
+          { status: 403, headers: getCorsHeaders() }
+        );
+      }
+
+      const { error: eventError } = await supabaseAdmin.from("events").insert([
         {
           event_name: name,
           website_id: domain,
+          domain: domain,
           message: description,
           fields: fields,
         },
