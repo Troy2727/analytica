@@ -16,6 +16,12 @@ test("track allows cross-origin requests from any site", async ({ request }) => 
   expect(res.headers()["access-control-allow-origin"]).toBe("*");
 });
 
+test("keepalive reaches the database", async ({ request }) => {
+  const res = await request.get("/api/keepalive");
+  expect(res.status()).toBe(200);
+  expect(await res.json()).toEqual({ ok: true });
+});
+
 test("events requires an API key", async ({ request }) => {
   const res = await request.post("/api/events", {
     data: { name: "e2e", domain: "example.com", description: "e2e" },
