@@ -33,7 +33,7 @@ jobs:
     env:
       NEXT_PUBLIC_SUPABASE_URL: https://vbvfqtkfvcwfcedobzab.supabase.co
       NEXT_PUBLIC_SUPABASE_ANON_KEY: sb_publishable_Qmsdq6ydCfcCHVZXUMAwcg_qzSmNmM2
-      GOOGLE_PAGESPEED_API_KEY: AIzaSyDHp95vCnikprqhrY60GWHyo7_ZKOC2S
+      GOOGLE_PAGESPEED_API_KEY: ${{ secrets.GOOGLE_PAGESPEED_API_KEY }}
       SUPABASE_USER_ID: ${{ secrets.SUPABASE_USER_ID }}
 
     steps:
