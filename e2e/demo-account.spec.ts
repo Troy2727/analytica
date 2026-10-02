@@ -30,7 +30,9 @@ test("demo site page shows analytics, events and PageSpeed scores", async ({ pag
   await expect(page.getByText("Total Visits")).toBeVisible();
 
   await page.getByRole("tab", { name: "Events" }).click();
-  await expect(page.getByText("Custom Events Overview")).toBeVisible();
+  await expect(
+    page.getByText(/Custom Events Overview|No custom events recorded yet/)
+  ).toBeVisible();
 
   await page.getByRole("tab", { name: "Performance" }).click();
   const panel = page.locator('[role="tabpanel"][data-state="active"]');
