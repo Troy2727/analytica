@@ -215,6 +215,10 @@ Setting up Discord notifications is easy:
    - Paste your Discord User ID
    - Save the changes
 
+4. **Add Analytica Bot to a server you're in**
+   - Discord only delivers DMs from bots you share a server with
+   - [Invite Analytica Bot](https://discord.com/oauth2/authorize?client_id=1365847380309704714&scope=bot&permissions=0) to any server you're in (a private one works)
+
 Once set up, you'll get real-time notifications for:
 
 - Website traffic spikes

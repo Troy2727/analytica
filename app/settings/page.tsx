@@ -275,6 +275,19 @@ export default function SettingsPage() {
                     Settings → Advanced 2. Enable Developer Mode 3. Click
                     your profile or username 4. Click &quot;Copy User ID&quot;.
                   </p>
+                  <p className="text-xs text-neutral-400 mt-1">
+                    Discord only delivers DMs from bots you share a server with,
+                    so{" "}
+                    <a
+                      href="https://discord.com/oauth2/authorize?client_id=1365847380309704714&scope=bot&permissions=0"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-400 underline"
+                    >
+                      add Analytica Bot to a server you&apos;re in
+                    </a>
+                    .
+                  </p>
                 </div>
               </div>
             </CardContent>
