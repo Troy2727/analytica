@@ -1,5 +1,3 @@
-'use server'
-
 import { supabase } from "@/config/supabase";
 
 export async function fetchActiveUsers(website: string, minutes: number = 10): Promise<number> {
