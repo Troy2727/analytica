@@ -42,6 +42,7 @@ The demo account tracks this site itself, so you'll see real visits, page views,
 - [Discord Integration](#-discord-integration)
 - [What Makes It Different?](#-what-makes-it-different)
 - [Want to Try It?](#-want-to-try-it)
+- [Testing](#-testing)
 - [Quick Links](#-quick-links)
 - [Let's Chat!](#-lets-chat)
 - [FAQ](#-frequently-asked-questions)
@@ -283,6 +284,26 @@ It's super easy to get started:
 3. It's done!
 
 After you are done, start seeing real analytics on your dashboard.
+
+---
+
+### 🧪 Testing
+
+Analytica has [Playwright](https://playwright.dev) end-to-end tests that run against the live site on desktop and mobile viewports:
+
+- **Public pages:** the homepage renders and its own tracking calls are stored, no horizontal scroll on mobile, logged-out visitors are redirected to sign-in, wrong passwords show an error, and unknown routes return a 404
+- **API:** tracking rejects mismatched domains and allows cross-origin requests, the events endpoint requires a valid API key, and the keepalive route reaches the database
+- **Signed-in flow:** the [demo account](#-live-demo) signs in and sees its dashboard, site analytics, custom events, PageSpeed scores and settings
+
+None of the tests write to the database. They run automatically after every successful production deploy ([E2E Tests workflow](https://github.com/Troy2727/analytica/actions/workflows/e2e.yml)), and you can run them locally:
+
+```bash
+npx playwright install chromium
+npm test                            # against production
+BASE_URL=https://<deployment> npm test   # against another deployment
+```
+
+The homepage tracking test expects production, since the tracking script always reports to the live API.
 
 ---
 
