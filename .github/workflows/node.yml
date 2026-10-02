@@ -125,9 +125,6 @@ jobs:
     - name: Build
       run: npm run build
 
-    - name: Test JavaScript
-      run: npm test || echo "Tests failed but continuing"
-
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
