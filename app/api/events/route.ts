@@ -1,174 +1,101 @@
-import { supabase } from "@/config/supabase";
-import { createClient } from "@supabase/supabase-js";
-import { headers } from "next/headers";
-import { NextResponse } from "next/server";
-import { NextRequest } from "next/server";
-import { getCorsHeaders } from "@/lib/cors";
-import { DiscordClient } from "@/lib/discord-client";
-import { UserData } from "@/types";
+// Custom events API: `POST /api/events` with `Authorization: Bearer <API key>`.
+// Records the event and, if the owner linked Discord, DMs them about it.
 
-export const dynamic = 'force-dynamic';
+import { NextRequest, NextResponse } from "next/server";
+import { CORS_HEADERS } from "@/lib/cors";
+import { sendDiscordDm } from "@/lib/discord";
+import { supabase, supabaseAdmin } from "@/lib/supabase";
+import type { EventField, UserData } from "@/types";
 
-export async function GET() {
-  try {
-    const { data, error } = await supabase.from("events").select("*");
-
-    if (error) {
-      return NextResponse.json(
-        { error: "Failed to fetch events" },
-        { status: 500, headers: getCorsHeaders() }
-      );
-    }
-
-    return NextResponse.json(data, {
-      headers: getCorsHeaders(),
-    });
-  } catch {
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500, headers: getCorsHeaders() }
-    );
-  }
-}
-
-export async function OPTIONS() {
-  return new Response(null, {
-    headers: getCorsHeaders(),
-  });
-}
+export const dynamic = "force-dynamic";
 
 interface EventRequest {
   name: string;
   domain: string;
   description: string;
-  fields?: Array<{ name: string; value: string; inline?: boolean }>;
+  fields?: EventField[];
   emoji?: string;
 }
 
-export async function POST(req: NextRequest) {
+const reply = (body: unknown, status = 200) =>
+  NextResponse.json(body, { status, headers: CORS_HEADERS });
+
+export function OPTIONS() {
+  return new Response(null, { headers: CORS_HEADERS });
+}
+
+export async function GET() {
+  // Anon client: RLS decides what is visible.
+  const { data, error } = await supabase.from("events").select("*");
+  return error ? reply({ error: "Failed to fetch events" }, 500) : reply(data);
+}
+
+export async function POST(request: NextRequest) {
   try {
-    const headersList = await headers();
-    const authHeader = headersList.get("authorization");
-    const {
-      name,
-      domain,
-      description,
-      fields = [],
-      emoji = "🔔",
-    } = (await req.json()) as EventRequest;
-
-    if (authHeader && authHeader.startsWith("Bearer ")) {
-      if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-        throw new Error("SUPABASE_SERVICE_ROLE_KEY is not configured");
-      }
-      // Server-only client: API-key requests have no user session, so RLS would
-      // hide the users row and block the insert. Ownership is checked below instead.
-      const supabaseAdmin = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY
-      );
-
-      const apiKey = authHeader.split("Bearer ")[1];
-      const { data: userData } = await supabaseAdmin
-        .from("users")
-        .select("*")
-        .eq("api", apiKey)
-        .single<UserData>();
-
-      if (!userData) {
-        return NextResponse.json(
-          { error: "Unauthorized - Invalid API" },
-          { status: 403, headers: getCorsHeaders() }
-        );
-      }
-
-      if (name == "" || domain == "" || description == "") {
-        return NextResponse.json(
-          { error: "Name, Domain, and Description Fields Must NOT Be Empty." },
-          { status: 400, headers: getCorsHeaders() }
-        );
-      }
-
-      const { data: website } = await supabaseAdmin
-        .from("websites")
-        .select("id")
-        .eq("name", domain)
-        .eq("user_id", userData.id)
-        .maybeSingle();
-
-      if (!website) {
-        return NextResponse.json(
-          { error: "Forbidden - Domain not registered to this API key" },
-          { status: 403, headers: getCorsHeaders() }
-        );
-      }
-
-      const { error: eventError } = await supabaseAdmin.from("events").insert([
-        {
-          event_name: name,
-          website_id: domain,
-          domain: domain,
-          message: description,
-          fields: fields,
-        },
-      ]);
-
-      if (eventError) {
-        return NextResponse.json(
-          { error: eventError },
-          { status: 400, headers: getCorsHeaders() }
-        );
-      }
-
-      if (userData.discord_id && process.env.DISCORD_BOT_TOKEN) {
-        try {
-          const discord = new DiscordClient(process.env.DISCORD_BOT_TOKEN);
-          const dmChannel = await discord.createDM(userData.discord_id);
-
-          await discord.sendEmbed(dmChannel.id, {
-            title: `${emoji} New Event: ${name}`,
-            description: description,
-            color: 0x0099ff,
-            timestamp: new Date().toISOString(),
-            fields: [
-              {
-                name: "Domain",
-                value: domain,
-                inline: true
-              },
-              ...fields
-            ],
-          });
-
-          return NextResponse.json(
-            { message: "success with discord notification" },
-            { status: 200, headers: getCorsHeaders() }
-          );
-        } catch (discordError) {
-          console.error("Discord delivery failed:", discordError);
-          return NextResponse.json(
-            { message: "Event recorded but Discord notification failed" },
-            { status: 200, headers: getCorsHeaders() }
-          );
-        }
-      }
-
-      return NextResponse.json(
-        { message: "success without discord notification" },
-        { status: 200, headers: getCorsHeaders() }
-      );
+    const auth = request.headers.get("authorization");
+    const body = (await request.json()) as EventRequest;
+    if (!auth?.startsWith("Bearer ")) {
+      return reply({ error: "Unauthorized - Invalid API" }, 401);
     }
 
-    return NextResponse.json(
-      { error: "Unauthorized - Invalid API" },
-      { status: 401, headers: getCorsHeaders() }
-    );
+    // API-key requests have no user session, so the admin client is used and
+    // ownership is checked here instead of by RLS.
+    const db = supabaseAdmin();
+    const { data: owner } = await db
+      .from("users")
+      .select("*")
+      .eq("api", auth.slice("Bearer ".length))
+      .single<UserData>();
+    if (!owner) {
+      return reply({ error: "Unauthorized - Invalid API" }, 403);
+    }
+
+    const { name, domain, description, fields = [], emoji = "🔔" } = body;
+    if (!name || !domain || !description) {
+      return reply({ error: "Name, Domain, and Description Fields Must NOT Be Empty." }, 400);
+    }
+
+    const { data: site } = await db
+      .from("websites")
+      .select("id")
+      .eq("name", domain)
+      .eq("user_id", owner.id)
+      .maybeSingle();
+    if (!site) {
+      return reply({ error: "Forbidden - Domain not registered to this API key" }, 403);
+    }
+
+    const { error } = await db.from("events").insert({
+      event_name: name,
+      website_id: domain,
+      domain,
+      message: description,
+      fields,
+    });
+    if (error) return reply({ error }, 400);
+
+    const token = process.env.DISCORD_BOT_TOKEN;
+    if (!owner.discord_id || !token) {
+      return reply({ message: "success without discord notification" });
+    }
+    try {
+      await sendDiscordDm(
+        owner.discord_id,
+        {
+          title: `${emoji} New Event: ${name}`,
+          description,
+          color: 0x0099ff,
+          timestamp: new Date().toISOString(),
+          fields: [{ name: "Domain", value: domain, inline: true }, ...fields],
+        },
+        token
+      );
+      return reply({ message: "success with discord notification" });
+    } catch (discordError) {
+      console.error("Discord delivery failed:", discordError);
+      return reply({ message: "Event recorded but Discord notification failed" });
+    }
   } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error occurred";
-    return NextResponse.json(
-      { error: errorMessage },
-      { status: 500, headers: getCorsHeaders() }
-    );
+    return reply({ error: error instanceof Error ? error.message : "Unknown error occurred" }, 500);
   }
 }

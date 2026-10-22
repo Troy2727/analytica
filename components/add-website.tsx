@@ -1,168 +1,115 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { supabase } from "@/config/supabase";
-import useUser from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
-import Snippet from "./snippet";
-import { getPageSpeedMetrics } from "@/actions/pageSpeedMetrics";
+import { useState } from "react";
+import { runPageSpeed } from "@/actions/pagespeed";
+import InstallSnippet from "@/components/install-snippet";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import useUser from "@/hooks/useUser";
+import { supabase } from "@/lib/supabase";
 
-type Website = {
-  id: string;
-  name: string;
-  user_id: string;
-};
+const brandButton =
+  "rounded-xl bg-gradient-to-r from-blue-400 to-emerald-400 text-white shadow-lg shadow-blue-900/30 hover:opacity-90";
 
+/** Why `domain` can't be added as typed, or null if it looks like a bare domain. */
+function domainProblem(domain: string): string | null {
+  if (/https?|:\/\/|\//.test(domain)) return "Please enter the domain only (e.g., google.com).";
+  return null;
+}
+
+/**
+ * Two steps: register the domain (and run a first PageSpeed analysis), then
+ * show the install snippet for it.
+ */
 export default function AddWebsite() {
-  const [website, setWebsite] = useState("");
-  const [loading, setLoading] = useState(false);
-  const { user } = useUser();
-  const [step, setStep] = useState(1);
   const router = useRouter();
-  const [error, setError] = useState("");
-  const [metricsError, setMetricsError] = useState<string | null>(null);
+  const { user } = useUser();
+  const [domain, setDomain] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [added, setAdded] = useState(false);
+  const [metricsFailed, setMetricsFailed] = useState(false);
 
-  const addWebsite = async () => {
-    if (website.trim() === "" || loading) return;
-    setLoading(true);
-    setMetricsError(null);
+  const problem = domainProblem(domain);
 
+  async function add() {
+    if (!user || !domain || problem || saving) return;
+    setSaving(true);
+    setError(null);
     try {
-      const { data, error: insertError } = await supabase
+      const { count } = await supabase
         .from("websites")
-        .insert([{ name: website.trim(), user_id: user?.id }])
-        .select()
-        .returns<Website[]>();
-
-      if (insertError) throw insertError;
-
-      if (data && data[0]) {
-        const urlString = website.trim();
-        const fullUrl = `https://${urlString}`;
-        
-        try {
-          new URL(fullUrl);
-          
-          const metrics = await getPageSpeedMetrics(data[0].name, fullUrl);
-          
-          if (!metrics) {
-            console.warn('Failed to fetch metrics for:', fullUrl);
-            setMetricsError("Unable to fetch performance metrics. You can try again later from the dashboard.");
-          } else {
-            console.log('Successfully fetched metrics for:', fullUrl);
-          }
-        } catch (metricsError) {
-          console.error('Metrics error:', metricsError);
-          setMetricsError("Unable to analyze website performance. You can try again later from the dashboard.");
-        }
-      }
-
-      setStep(2);
-    } catch (err) {
-      console.error("Error adding website:", err);
-      setError("Failed to add website. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const checkDomainAddedBefore = async () => {
-    try {
-      const { data: websites, error } = await supabase
-        .from("websites")
-        .select("*")
-        .eq("name", website.trim());
-
-      if (error) throw error;
-
-      if (websites && websites.length > 0) {
+        .select("id", { count: "exact", head: true })
+        .eq("name", domain);
+      if (count) {
         setError("This domain has already been added.");
         return;
       }
 
-      addWebsite();
+      const { error: insertError } = await supabase.from("websites").insert({ name: domain, user_id: user.id });
+      if (insertError) throw insertError;
+
+      // A first Lighthouse run so the Performance tab isn't empty. Failing here is fine.
+      setMetricsFailed(!(await runPageSpeed(domain, `https://${domain}`)));
+      setAdded(true);
     } catch (err) {
-      console.error("Error checking domain:", err);
-      setError("Failed to check domain. Please try again.");
+      console.error("Adding website failed:", err);
+      setError("Failed to add website. Please try again.");
+    } finally {
+      setSaving(false);
     }
-  };
-
-  useEffect(() => {
-    const invalidChars = ["http", "://", "/", "https"];
-    const hasInvalidChars = invalidChars.some((char) =>
-      website.trim().includes(char)
-    );
-
-    if (hasInvalidChars) {
-      setError("Please enter the domain only (e.g., google.com).");
-    } else {
-      setError("");
-    }
-  }, [website]);
+  }
 
   return (
-    <Card className="bg-transparent border-0 text-neutral-50 overflow-hidden">
+    <Card className="overflow-hidden border-0 bg-transparent text-neutral-50">
       <CardHeader>
         <CardTitle>Add Website</CardTitle>
-        <CardDescription className="text-neutral-300">
-          Add your website to start tracking analytics
-        </CardDescription>
+        <CardDescription className="text-neutral-300">Add your website to start tracking analytics</CardDescription>
       </CardHeader>
       <CardContent>
-        {step === 1 ? (
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Domain</label>
-              <Input
-                value={website}
-                onChange={(e) =>
-                  setWebsite(e.target.value.trim().toLowerCase())
-                }
-                placeholder="example.com"
-                className={`rounded-xl border-blue-400/20 bg-black/30 text-white ${error ? "border-red-500" : ""}`}
-              />
-              {error ? (
-                <p className="text-sm text-red-500">{error}</p>
-              ) : (
-                <p className="text-sm text-muted-foreground text-neutral-300">
-                  Enter the domain or subdomain without &quot;www&quot;
-                </p>
-              )}
-            </div>
-            {!error && (
-              <Button
-                className="rounded-xl bg-gradient-to-r from-blue-400 to-emerald-400 text-white shadow-lg shadow-blue-900/30 hover:opacity-90"
-                onClick={checkDomainAddedBefore}
-                disabled={loading || !website.trim()}
-              >
-                {loading ? "Adding & Analyzing..." : "Add Website"}
-              </Button>
-            )}
-          </div>
-        ) : (
+        {added ? (
           <div className="space-y-8">
-            {metricsError && (
-              <p className="text-amber-400 text-sm bg-amber-400/10 p-3 rounded-md">
-                {metricsError}
+            {metricsFailed && (
+              <p className="rounded-md bg-amber-400/10 p-3 text-sm text-amber-400">
+                Couldn&apos;t run a performance analysis yet. You can run one later from the site&apos;s Performance tab.
               </p>
             )}
-            <Snippet />
-            <Button
-              onClick={() => router.push(`/site/${website.trim()}`)}
-              variant="secondary"
-            >
+            <InstallSnippet domain={domain} />
+            <Button variant="secondary" onClick={() => router.push(`/site/${domain}`)}>
               Continue to See Analytics
             </Button>
           </div>
+        ) : (
+          <form
+            className="space-y-6"
+            onSubmit={(e) => {
+              e.preventDefault();
+              add();
+            }}
+          >
+            <div className="space-y-2">
+              <label htmlFor="domain" className="text-sm font-medium">
+                Domain
+              </label>
+              <Input
+                id="domain"
+                value={domain}
+                onChange={(e) => setDomain(e.target.value.trim().toLowerCase())}
+                placeholder="example.com"
+                className={`rounded-xl border-blue-400/20 bg-black/30 text-white ${problem || error ? "border-red-500" : ""}`}
+              />
+              <p className={`text-sm ${problem || error ? "text-red-500" : "text-neutral-300"}`}>
+                {problem ?? error ?? "Enter the domain or subdomain without “www”"}
+              </p>
+            </div>
+            {!problem && (
+              <Button type="submit" className={brandButton} disabled={saving || !domain}>
+                {saving ? "Adding & Analyzing..." : "Add Website"}
+              </Button>
+            )}
+          </form>
         )}
       </CardContent>
     </Card>

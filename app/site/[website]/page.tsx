@@ -1,272 +1,145 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import { useEffect, useState, useCallback } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  ArrowUpRightIcon,
-  RefreshCcw,
-} from "lucide-react";
-import {
-  GroupedSource,
-  GroupedView,
-  PageView,
-  Visit,
-  CustomEvent,
-} from "@/types";
-import Loading from "@/components/loading";
-import { Button } from "@/components/ui/button";
+import { ArrowUpRightIcon, RefreshCcw } from "lucide-react";
 import Link from "next/link";
-import { fetchViews } from "@/actions/fetchViews";
-import { groupPageViews, groupPageSources } from "@/lib/utils";
-import SiteSettings from "@/components/site-settings";
-import SiteCustomEvents from "@/components/site-custom-events";
-import NoPageViewsState from "@/components/no-page-views";
-import GeneralAnalytics from "@/components/site-general-analytics";
-import Performance from "@/components/site-performance";
+import { useParams, useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import Loading from "@/components/loading";
+import DaySummary from "@/components/site/day-summary";
+import EventsTab from "@/components/site/events-tab";
+import GeneralTab from "@/components/site/general-tab";
+import PerformanceTab from "@/components/site/performance-tab";
+import SettingsTab from "@/components/site/settings-tab";
+import WaitingForData from "@/components/site/waiting-for-data";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useUser from "@/hooks/useUser";
-import { useRouter } from "next/navigation";
-import { supabase } from "@/config/supabase";
-import StatsBox from "@/components/24hour-stats-box";
+import { getSiteData, type SiteData } from "@/lib/queries";
+import { supabase } from "@/lib/supabase";
+import { TIMEFRAMES, withinTimeframe } from "@/lib/timeframe";
 
-export default function AnalyticsPage() {
-  const { website } = useParams();
-  const { user, loading: userLoading } = useUser();
+const TABS = [
+  { value: "general", label: "General" },
+  { value: "performance", label: "Performance" },
+  { value: "custom-events", label: "Events" },
+  { value: "settings", label: "Settings" },
+];
+
+const glassControl = "border-navy-800 bg-navy-900/20 text-neutral-100 backdrop-blur-sm hover:bg-navy-900/80";
+
+/** Analytics for one of the user's websites. Other users' domains bounce to the dashboard. */
+export default function SitePage() {
+  const domain = String(useParams().website);
   const router = useRouter();
+  const { user } = useUser({ required: true });
 
-  const [pageViews, setPageViews] = useState<PageView[]>([]);
-  const [totalVisits, setTotalVisits] = useState<Visit[]>([]);
-  const [customEvents, setCustomEvents] = useState<CustomEvent[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [groupedPageViews, setGroupedPageViews] = useState<GroupedView[]>([]);
-  const [groupedPageSources, setGroupedPageSources] = useState<GroupedSource[]>(
-    []
-  );
-  const [groupedCustomEvents, setGroupedCustomEvents] = useState<
-    Record<string, number>
-  >({});
-  const [activeCustomEventTab, setActiveCustomEventTab] = useState("");
-  const [filterValue, setFilterValue] = useState("0");
-  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
-  const [showStatsBox, setShowStatsBox] = useState(true);
+  const [owned, setOwned] = useState<boolean | null>(null);
+  const [timeframe, setTimeframe] = useState("0");
+  const [data, setData] = useState<SiteData | null>(null);
+  const [showDaySummary, setShowDaySummary] = useState(true);
 
   useEffect(() => {
-    if (!userLoading && !user) {
-      router.push("/sign-in");
-    }
-  }, [user, userLoading, router]);
-
-  const checkWebsiteOwnership = useCallback(async () => {
     if (!user) return;
+    supabase
+      .from("websites")
+      .select("id")
+      .eq("name", domain)
+      .eq("user_id", user.id)
+      .maybeSingle()
+      .then(({ data: site, error }) => {
+        setOwned(Boolean(site) && !error);
+        if (!site || error) router.push("/dashboard");
+      });
+  }, [user, domain, router]);
 
-    try {
-      const { data, error } = await supabase
-        .from("websites")
-        .select("id")
-        .eq("name", website)
-        .eq("user_id", user.id)
-        .single();
-
-      if (error || !data) {
-        setIsAuthorized(false);
-        router.push("/dashboard");
-        return false;
-      }
-
-      setIsAuthorized(true);
-      return true;
-    } catch (error) {
-      console.error("Error checking website ownership:", error);
-      setIsAuthorized(false);
-      router.push("/dashboard");
-      return false;
-    }
-  }, [user, website, router]);
-
-  const handleFilterChange = useCallback(
-    async (value: string) => {
-      if (!isAuthorized) return;
-
-      setLoading(true);
+  const load = useCallback(
+    async (range: string) => {
+      setData(null);
       try {
-        const result = await fetchViews(website as string, value);
-        if (result.error) {
-          console.error(result.error);
-          return;
-        }
-
-        setPageViews(result.pageViews || []);
-        setTotalVisits(result.visits || []);
-        setCustomEvents(result.customEvents || []);
-        setGroupedPageViews(groupPageViews(result.pageViews || []));
-        setGroupedPageSources(groupPageSources(result.visits || []));
-
-        const newGroupedEvents = (result.customEvents || []).reduce<
-          Record<string, number>
-        >((acc, event) => {
-          if (event?.event_name) {
-            acc[event.event_name] = (acc[event.event_name] || 0) + 1;
-          }
-          return acc;
-        }, {});
-        setGroupedCustomEvents(newGroupedEvents);
-        setFilterValue(value);
+        setData(await getSiteData(domain, range));
+        setTimeframe(range);
       } catch (error) {
-        console.error("Error updating views:", error);
-      } finally {
-        setLoading(false);
+        console.error("Loading site analytics failed:", error);
+        setData({ pageViews: [], visits: [], events: [] });
       }
     },
-    [website, isAuthorized]
+    [domain]
   );
 
   useEffect(() => {
-    if (user) {
-      checkWebsiteOwnership();
-    }
-  }, [checkWebsiteOwnership, user]);
+    if (owned) load("0");
+  }, [owned, load]);
 
-  useEffect(() => {
-    if (isAuthorized === true) {
-      handleFilterChange("0");
-    }
-  }, [isAuthorized, handleFilterChange]);
-
-  if (userLoading || isAuthorized === null || loading) {
-    return <Loading text="Getting your data..." />;
-  }
-
-  if (!isAuthorized) {
-    return null;
-  }
-
-  if (pageViews?.length === 0) {
-    return <NoPageViewsState website={website as string} />;
-  }
-
-  const pageViews24h = pageViews.filter(
-    (pv) => new Date(pv.created_at) > new Date(Date.now() - 24 * 60 * 60 * 1000)
-  ).length;
-  const totalVisits24h = totalVisits.filter(
-    (v) => new Date(v.created_at) > new Date(Date.now() - 24 * 60 * 60 * 1000)
-  ).length;
+  if (!owned || !data) return owned === false ? null : <Loading text="Getting your data..." />;
+  // Only a site with no traffic ever gets the install screen; an empty shorter
+  // timeframe shows the General tab's "no analytics" message instead.
+  if (data.pageViews.length === 0 && timeframe === "0") return <WaitingForData domain={domain} />;
 
   return (
     <div className="min-h-screen px-4 py-12">
       <div className="mx-auto max-w-7xl">
-        {showStatsBox && (
-          <StatsBox
-            pageViews24h={pageViews24h}
-            totalVisits24h={totalVisits24h}
-            pageViews={pageViews.length}
-            totalVisits={totalVisits.length}
-            onClose={() => setShowStatsBox(false)}
+        {showDaySummary && (
+          <DaySummary
+            visits={{ recent: withinTimeframe(data.visits, "last 1 day").length, total: data.visits.length }}
+            pageViews={{ recent: withinTimeframe(data.pageViews, "last 1 day").length, total: data.pageViews.length }}
+            onClose={() => setShowDaySummary(false)}
           />
         )}
 
-        <div className="mb-8 flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+        <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-1">
-            <h1 className="text-xl md:text-2xl font-bold tracking-tight text-white flex flex-row">
-              Analytics for {website}
-              <Link href={`https://${website}`} target="_blank">
-                <ArrowUpRightIcon className="w-6 h-6 md:w-9 md:h-9 md:-mt-1" />
+            <h1 className="flex text-xl font-bold tracking-tight text-white md:text-2xl">
+              Analytics for {domain}
+              <Link href={`https://${domain}`} target="_blank" aria-label={`Open ${domain}`}>
+                <ArrowUpRightIcon className="h-6 w-6 md:-mt-1 md:h-9 md:w-9" />
               </Link>
             </h1>
-            <p className="text-sm text-neutral-100">
-              Track your website performance and user engagement
-            </p>
+            <p className="text-sm text-neutral-100">Track your website performance and user engagement</p>
           </div>
-          <div className="flex items-center space-x-4">
-            <Select value={filterValue} onValueChange={handleFilterChange}>
-              <SelectTrigger className="w-[180px] border-navy-800 bg-navy-900/20 text-neutral-100 backdrop-blur-sm hover:bg-navy-900/80">
+          <div className="flex items-center gap-4">
+            <Select value={timeframe} onValueChange={load}>
+              <SelectTrigger className={`w-[180px] ${glassControl}`}>
                 <SelectValue placeholder="Select timeframe" />
               </SelectTrigger>
               <SelectContent className="border-navy-800 bg-navy-900 text-neutral-100">
-                <SelectItem value="0">Lifetime</SelectItem>
-                <SelectItem value="last 1 hour">Last 1 hour</SelectItem>
-                <SelectItem value="last 1 day">Last 1 day</SelectItem>
-                <SelectItem value="last 7 days">Last 7 days</SelectItem>
-                <SelectItem value="last 30 days">Last 30 days</SelectItem>
-                <SelectItem value="last 90 days">Last 90 days</SelectItem>
-                <SelectItem value="last 365 days">Last 365 days</SelectItem>
+                {TIMEFRAMES.map((t) => (
+                  <SelectItem key={t.value} value={t.value}>
+                    {t.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
-            <Button
-              onClick={() => handleFilterChange(filterValue)}
-              variant="outline"
-              size="icon"
-              className="border-navy-800 bg-navy-900/20 text-neutral-100 backdrop-blur-sm hover:bg-navy-900/80 hover:text-white"
-            >
+            <Button onClick={() => load(timeframe)} variant="outline" size="icon" className={`${glassControl} hover:text-white`}>
               <RefreshCcw className="h-4 w-4" />
               <span className="sr-only">Refresh analytics</span>
             </Button>
           </div>
-        </div>
+        </header>
 
         <Tabs defaultValue="general" className="w-full">
-          <TabsList className="mb-2 w-full bg-navy-900/30 border border-navy-900 p-1 backdrop-blur-sm">
-            <TabsTrigger
-              value="general"
-              className="data-[state=active]:bg-navy-800 data-[state=active]:text-white w-1/4"
-            >
-              General
-            </TabsTrigger>
-            <TabsTrigger
-              value="performance"
-              className="data-[state=active]:bg-navy-800 data-[state=active]:text-white w-1/4"
-            >
-              Performance
-            </TabsTrigger>
-            <TabsTrigger
-              value="custom-events"
-              className="data-[state=active]:bg-navy-800 data-[state=active]:text-white w-1/4"
-            >
-              Events
-            </TabsTrigger>
-            <TabsTrigger
-              value="settings"
-              className="data-[state=active]:bg-navy-800 data-[state=active]:text-white w-1/4"
-            >
-              Settings
-            </TabsTrigger>
+          <TabsList className="mb-2 w-full border border-navy-900 bg-navy-900/30 p-1 backdrop-blur-sm">
+            {TABS.map((tab) => (
+              <TabsTrigger
+                key={tab.value}
+                value={tab.value}
+                className="w-1/4 data-[state=active]:bg-navy-800 data-[state=active]:text-white"
+              >
+                {tab.label}
+              </TabsTrigger>
+            ))}
           </TabsList>
-
           <TabsContent value="general">
-            <GeneralAnalytics
-              pageViews={pageViews}
-              totalVisits={totalVisits}
-              groupedPageViews={groupedPageViews}
-              groupedPageSources={groupedPageSources}
-              filterValue={filterValue}
-              website={website as string}
-            />
+            <GeneralTab domain={domain} pageViews={data.pageViews} visits={data.visits} timeframe={timeframe} />
           </TabsContent>
-
           <TabsContent value="performance">
-            <Performance
-              websiteId={website as string}
-              websiteUrl={`https://${website}`}
-            />
+            <PerformanceTab domain={domain} />
           </TabsContent>
-
           <TabsContent value="custom-events">
-            <SiteCustomEvents
-              customEvents={customEvents}
-              groupedCustomEvents={groupedCustomEvents}
-              activeCustomEventTab={activeCustomEventTab}
-              setActiveCustomEventTab={setActiveCustomEventTab}
-            />
+            <EventsTab events={data.events} />
           </TabsContent>
-
           <TabsContent value="settings">
-            <SiteSettings website={website as string} />
+            <SettingsTab domain={domain} />
           </TabsContent>
         </Tabs>
       </div>

@@ -1,102 +1,74 @@
-import { supabase } from "@/config/supabase";
+// Receives events from public/tracking-script.js running on customers' sites.
+
 import { NextRequest, NextResponse } from "next/server";
+import { CORS_HEADERS } from "@/lib/cors";
+import { supabase } from "@/lib/supabase";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
-};
-
-interface TrackingData {
+interface TrackRequest {
+  event: "session_start" | "pageview" | "session_end";
   domain: string;
   url: string;
-  event: 'session_start' | 'pageview' | 'session_end';
   source?: string;
   operatingSystem?: string;
   deviceType?: string;
   browserName?: string;
 }
 
-const countryNames = new Intl.DisplayNames(["en"], { type: "region" });
+const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
 
-// Vercel adds these geo headers to every request in production
-function getLocation(request: NextRequest) {
-  const city = request.headers.get("x-vercel-ip-city");
-  const region = request.headers.get("x-vercel-ip-country-region");
-  const countryCode = request.headers.get("x-vercel-ip-country");
+/** Visitor location from the geo headers Vercel adds to every request. */
+function locate(request: NextRequest) {
+  const header = (name: string) => request.headers.get(`x-vercel-ip-${name}`);
+  const city = header("city");
+  const country = header("country");
   return {
     city: city ? decodeURIComponent(city) : "Unknown",
-    region: region || "Unknown",
-    country: countryCode ? countryNames.of(countryCode) || "Unknown" : "Unknown",
+    region: header("country-region") || "Unknown",
+    country: (country && regionNames.of(country)) || "Unknown",
   };
 }
 
-export async function OPTIONS() {
-  return NextResponse.json({}, { headers: corsHeaders });
+const reply = (body: object, status: number) =>
+  NextResponse.json(body, { status, headers: CORS_HEADERS });
+
+export function OPTIONS() {
+  return reply({}, 200);
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const data = await request.json() as TrackingData;
-    const { 
-      domain, 
-      url, 
-      event, 
-      source,
-      operatingSystem,
-      deviceType,
-      browserName,
-    } = data;
-    
-    const { city, region, country } = getLocation(request);
+    const body = (await request.json()) as TrackRequest;
 
-    if (!url.includes(domain)) {
-      return NextResponse.json(
-        { error: "Domain mismatch" },
-        { status: 400, headers: corsHeaders }
-      );
+    // Only record events for the page's own domain, so a site can't post
+    // traffic in another site's name.
+    if (!body.url?.includes(body.domain)) {
+      return reply({ error: "Domain mismatch" }, 400);
     }
 
-    if (event === "pageview") {
-      const { error } = await supabase
-        .from("page_views")
-        .insert([{ 
-          domain, 
-          page: url,
-          city,
-          region,
-          country,
-          operating_system: operatingSystem || 'Unknown',
-          device_type: deviceType || 'Unknown',
-          browser_name: browserName || 'Unknown',
-        }]);
-
+    if (body.event === "pageview") {
+      const { error } = await supabase.from("page_views").insert({
+        domain: body.domain,
+        page: body.url,
+        ...locate(request),
+        operating_system: body.operatingSystem || "Unknown",
+        device_type: body.deviceType || "Unknown",
+        browser_name: body.browserName || "Unknown",
+      });
+      if (error) throw error;
+    } else if (body.event === "session_start") {
+      const { error } = await supabase.from("visits").insert({
+        website_id: body.domain,
+        event: "session_start",
+        source: body.source || "direct",
+      });
       if (error) throw error;
     }
 
-    if (event === "session_start") {
-      const { error } = await supabase
-        .from("visits")
-        .insert([{ 
-          website_id: domain, 
-          event: "session_start",
-          source: source || "direct",
-        }]);
-
-      if (error) throw error;
-    }
-
-    return NextResponse.json(
-      { success: true, data }, 
-      { status: 201, headers: corsHeaders }
-    );
+    return reply({ success: true, data: body }, 201);
   } catch (error) {
-    console.error('Error processing tracking request:', error);
-    return NextResponse.json(
-      { error: "Failed to process tracking request" },
-      { status: 500, headers: corsHeaders }
-    );
+    console.error("Tracking request failed:", error);
+    return reply({ error: "Failed to process tracking request" }, 500);
   }
 }

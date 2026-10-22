@@ -1,74 +1,13 @@
-export interface TrackingWindow extends Window {
-  your_tracking: {
-    (eventName: string, options?: TrackingOptions): void;
-    q?: Array<[string, TrackingOptions?]>;
-  };
-}
-
-export interface TrackingOptions {
-  callback?: () => void;
-}
-
-export interface UserAgentInfo {
-  userAgent: string;
-  platform: string;
-  language: string;
-  viewportSize: string;
-  isMobile: boolean;
-}
-
-export interface PageMetrics {
-  timeOnPage: number;
-  docHeight: number;
-  referrer: string;
-  lastActiveTime: number;
-}
-
-export interface TrackingPayload {
-  event: string;
-  url: string;
-  domain: string | null;
-  source: string | null;
-  timestamp: number;
-  userAgent: UserAgentInfo;
-  metrics: PageMetrics;
-  [key: string]: unknown;
-}
-
-export interface Session {
-  sessionId: string;
-  expirationTimestamp: number;
-}
+// Row shapes for the Supabase tables the app reads (see supabase/migrations).
 
 export interface Website {
   id: string;
-  name: string;
-  user_id: string;
-  created_at: string;
-  visitors_count?: number;
-  pageviews_count?: number;
-  bounce_rate?: number;
-}
-
-export interface WebsiteRow {
-  id: string;
-  name: string;
+  name: string; // the bare domain, e.g. "example.com"
   user_id: string;
   created_at: string;
 }
 
-export interface Analytics {
-  visitors_count: number;
-  pageviews_count: number;
-  bounce_rate: number;
-}
-
-export type DbResult<T> = T extends PromiseLike<infer U> ? U : never;
-export type DbResultOk<T> = T extends PromiseLike<{ data: infer U }>
-  ? Exclude<U, null>
-  : never;
-export type CountResult = { count: number | null };
-
+/** One row per tracked page load (`page_views`). */
 export interface PageView {
   id: string;
   domain: string;
@@ -82,6 +21,7 @@ export interface PageView {
   browser_name?: string;
 }
 
+/** One row per browser session (`visits`); `website_id` holds the domain. */
 export interface Visit {
   session_id: string;
   event: "session_start" | "session_end" | "pageview";
@@ -89,134 +29,52 @@ export interface Visit {
   source: string | null;
 }
 
-export interface CustomField {
+export interface EventField {
   name: string;
   value: string;
   inline?: boolean;
 }
 
+/** A custom event sent to /api/events (`events`). */
 export interface CustomEvent {
   id: string;
   event_name: string;
   website_id: string;
   message: string;
   created_at: string;
-  fields?: CustomField[];
-  emoji?: string;
+  fields?: EventField[];
   domain?: string;
-  description?: string;
 }
 
-export interface GroupedView {
-  page: string;
-  visits: number;
-}
-
-export interface GroupedSource {
-  source: string;
-  visits: number;
-}
-
-export interface AnalyticsCardProps {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-}
-
-export interface TopPagesCardProps {
-  groupedPageViews: GroupedView[];
-  abbreviateNumber: (n: number) => string;
-}
-
-export interface TopSourcesCardProps {
-  groupedPageSources: GroupedSource[];
-  abbreviateNumber: (n: number) => string;
-}
-
-export interface CustomEventsCarouselProps {
-  groupedCustomEvents: Record<string, number>;
-  activeCustomEventTab: string;
-  setActiveCustomEventTab: (tab: string) => void;
-}
-
-export interface CustomEventsDetailsProps {
-  customEvents: CustomEvent[];
-  activeCustomEventTab: string;
-  setActiveCustomEventTab: (tab: string) => void;
-  formatTimeStamp: (date: string) => string;
-}
-
-export interface DangerZoneProps {
-  isDeleting: boolean;
-  onDelete: () => Promise<void>;
-}
-
-export interface SessionDurationStats {
-  averageDuration: string;
-  shortestSession: string;
-  longestSession: string;
-}
-
-export interface GroupedLocation {
-  city: string;
-  region: string;
-  country: string;
-  visits: number;
-}
-
-export interface GroupedOS {
-  operating_system: string;
-  visits: number;
-}
-
-export interface User {
-  id: string;
-  email?: string;
-}
-
-export interface ApiKeyResponse {
-  api: string;
-  user_id: string;
-}
-
-export interface CustomEventPayload {
-  name: string;
-  domain: string;
-  description?: string;
-}
-
-export interface CodeCompProps {
-  apiKey?: string;
-}
-
+/** The `users` row: API key and optional Discord ID for event DMs. */
 export interface UserData {
-  api: string;
   id: string;
+  api: string;
   discord_id?: string;
 }
 
+/** Lighthouse results, stored as columns on `websites`. Times are in ms. */
 export interface PerformanceMetrics {
-  firstContentfulPaint: number;
-  largestContentfulPaint: number;
-  timeToInteractive: number;
-  cumulativeLayoutShift: number;
-  totalBlockingTime: number;
   performance: number;
   accessibility: number;
   bestPractices: number;
   seo: number;
+  firstContentfulPaint: number;
+  largestContentfulPaint: number;
+  timeToInteractive: number;
+  totalBlockingTime: number;
+  cumulativeLayoutShift: number;
   speedIndex: number;
 }
 
-export interface WebsiteMetrics {
-  firstContentfulPaint: number;
-  largestContentfulPaint: number;
-  timeToInteractive: number;
-  cumulativeLayoutShift: number;
-  totalBlockingTime: number;
-  performance: number;
-  accessibility: number;
-  bestPractices: number;
-  seo: number;
-  speedIndex: number;
+/** A label and how many times it occurred, for the "top N" lists. */
+export interface Tally {
+  label: string;
+  count: number;
+}
+
+export interface LocationTally extends Tally {
+  city: string;
+  region: string;
+  country: string;
 }

@@ -1,173 +1,129 @@
+/*
+ * Analytica tracking script. Add to a page with:
+ *   <script defer data-domain="example.com" src="https://analytica-phi.vercel.app/tracking-script.js"></script>
+ *
+ * Sends a `session_start` when a visitor's session begins (sessions last 10 minutes),
+ * a `pageview` for the first page and every client-side navigation, and a
+ * `session_end` when an expired session is replaced. Custom calls:
+ *   window.your_tracking("event_name", { callback: fn })
+ * Calls made before this script loads can be queued in window.your_tracking.q.
+ */
 (function () {
   "use strict";
 
-  var location = window.location;
-  var document = window.document;
-  var navigator = window.navigator;
+  var ENDPOINT = "https://analytica-phi.vercel.app/api/track";
+  var SESSION_MS = 10 * 60 * 1000;
+  var KEY_ID = "session_id";
+  var KEY_EXPIRES = "session_expiration_timestamp";
 
-  var scriptElement = document.currentScript;
-  var dataDomain = scriptElement.getAttribute("data-domain");
-  let queryString = location.search;
-  const params = new URLSearchParams(queryString);
-  var source = params.get("utm") || params.get("ref");
+  var script = document.currentScript;
+  var domain = script && script.getAttribute("data-domain");
+  var query = new URLSearchParams(window.location.search);
+  var source = query.get("utm") || query.get("ref");
+  var ua = navigator.userAgent;
 
-  var endpoint = "https://analytica-phi.vercel.app/api/track";
-
-  function getOperatingSystem() {
-    var userAgent = navigator.userAgent;
-    var os = "Unknown";
-
-    if (userAgent.indexOf("Windows") !== -1) os = "Windows";
-    if (userAgent.indexOf("Mac OS") !== -1) os = "MacOS";
-    if (userAgent.indexOf("Linux") !== -1) os = "Linux";
-    if (userAgent.indexOf("Android") !== -1) os = "Android";
-    if (userAgent.indexOf("iPhone") !== -1 || userAgent.indexOf("iPad") !== -1) os = "iOS";
-
-    return os;
+  function operatingSystem() {
+    if (/iPhone|iPad|iPod/.test(ua)) return "iOS";
+    if (/Android/.test(ua)) return "Android";
+    if (/Windows/.test(ua)) return "Windows";
+    if (/Mac OS/.test(ua)) return "MacOS";
+    if (/Linux/.test(ua)) return "Linux";
+    return "Unknown";
   }
 
-  function generateSessionId() {
-    // Use crypto.getRandomValues for cryptographically secure random values
-    var array = new Uint8Array(16);
-    window.crypto.getRandomValues(array);
-    // Convert to hex string
-    var hexString = Array.from(array)
-      .map(function(byte) {
-        return ('0' + byte.toString(16)).slice(-2);
-      })
-      .join('');
-    return "session-" + hexString.substring(0, 16);
+  function deviceType() {
+    if (/tablet|ipad|playbook|silk|android(?!.*mobi)/i.test(ua)) return "tablet";
+    if (/Mobi|iPhone|iPod|IEMobile|BlackBerry|Kindle|Opera Mini/i.test(ua)) return "mobile";
+    // Small screens without a touch user agent are most likely laptops.
+    return screen.width <= 1366 && screen.height <= 768 ? "laptop" : "desktop";
   }
 
-  function initializeSession() {
-    var sessionId = localStorage.getItem("session_id");
-    var expirationTimestamp = localStorage.getItem(
-      "session_expiration_timestamp"
-    );
-
-    if (!sessionId || !expirationTimestamp) {
-      sessionId = generateSessionId();
-      expirationTimestamp = Date.now() + 10 * 60 * 1000; // 10 minutes
-      localStorage.setItem("session_id", sessionId);
-      localStorage.setItem("session_expiration_timestamp", expirationTimestamp);
-      trackSessionStart();
-    }
-
-    return {
-      sessionId: sessionId,
-      expirationTimestamp: parseInt(expirationTimestamp),
-    };
+  function browserName() {
+    // Order matters: Edge and Opera user agents also mention Chrome, and Chrome mentions Safari.
+    if (/Edg\//.test(ua)) return "Edge";
+    if (/OPR\/|Opera/.test(ua)) return "Opera";
+    if (/Firefox\//.test(ua)) return "Firefox";
+    if (/Chrome\//.test(ua)) return "Chrome";
+    if (/Safari\//.test(ua)) return "Safari";
+    return "Unknown";
   }
 
-  function isSessionExpired(expirationTimestamp) {
-    return Date.now() >= expirationTimestamp;
-  }
+  var context = {
+    domain: domain,
+    source: source,
+    operatingSystem: operatingSystem(),
+    deviceType: deviceType(),
+    browserName: browserName(),
+  };
 
-  function checkSessionStatus() {
-    var session = initializeSession();
-    if (isSessionExpired(session.expirationTimestamp)) {
-      localStorage.removeItem("session_id");
-      localStorage.removeItem("session_expiration_timestamp");
-      trackSessionEnd();
-      initializeSession();
-    }
-  }
-
-  checkSessionStatus();
-
-  function getDeviceType() {
-    const ua = navigator.userAgent;
-    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
-      return "tablet";
-    }
-    if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
-      return "mobile";
-    }
-    // Check if it's a laptop by screen size
-    if (window.screen.width <= 1366 && window.screen.height <= 768) {
-      return "laptop";
-    }
-    return "desktop";
-  }
-
-  function getBrowserInfo() {
-    const ua = navigator.userAgent;
-    let browserName = "Unknown";
-
-    if (ua.indexOf("Chrome") > -1) browserName = "Chrome";
-    else if (ua.indexOf("Safari") > -1) browserName = "Safari";
-    else if (ua.indexOf("Firefox") > -1) browserName = "Firefox";
-    else if (ua.indexOf("Edge") > -1) browserName = "Edge";
-    else if (ua.indexOf("Opera") > -1) browserName = "Opera";
-
-    return { browserName };
-  }
-
-  function trigger(eventName, options) {
+  function send(event, options) {
     try {
-      const operatingSystem = getOperatingSystem();
-      const deviceType = getDeviceType();
-      const { browserName } = getBrowserInfo();
-
-      var payload = {
-        event: eventName,
-        url: location.href,
-        domain: dataDomain,
-        source,
-        operatingSystem,
-        deviceType,
-        browserName,
+      var payload = Object.assign({ event: event, url: window.location.href }, context);
+      var request = new XMLHttpRequest();
+      request.open("POST", ENDPOINT, true);
+      request.setRequestHeader("Content-Type", "application/json");
+      request.onloadend = function () {
+        if (options && typeof options.callback === "function") options.callback();
       };
-
-      sendRequest(payload, options);
+      request.send(JSON.stringify(payload));
     } catch (error) {
-      console.error('Error in trigger:', error);
+      console.error("Analytica: could not send event", error);
     }
   }
 
-  function sendRequest(payload, options) {
-    var request = new XMLHttpRequest();
-    request.open("POST", endpoint, true);
-    request.setRequestHeader("Content-Type", "application/json");
-
-    request.onreadystatechange = function () {
-      if (request.readyState === 4 && options && options.callback) {
-        options.callback();
-      }
-    };
-
-    request.send(JSON.stringify(payload));
+  function randomId() {
+    var bytes = new Uint8Array(8);
+    crypto.getRandomValues(bytes);
+    return "session-" + Array.from(bytes, function (b) {
+      return b.toString(16).padStart(2, "0");
+    }).join("");
   }
 
-  var queue = (window.your_tracking && window.your_tracking.q) || [];
-  window.your_tracking = trigger;
-  for (var i = 0; i < queue.length; i++) {
-    trigger.apply(this, queue[i]);
+  function startSession() {
+    localStorage.setItem(KEY_ID, randomId());
+    localStorage.setItem(KEY_EXPIRES, String(Date.now() + SESSION_MS));
+    send("session_start");
   }
 
-  function trackPageView() {
-    trigger("pageview");
+  function ensureSession() {
+    var expires = Number(localStorage.getItem(KEY_EXPIRES));
+    if (!localStorage.getItem(KEY_ID) || !expires) {
+      startSession();
+    } else if (Date.now() >= expires) {
+      send("session_end");
+      startSession();
+    }
   }
-  function trackSessionStart() {
-    trigger("session_start");
-  }
-  function trackSessionEnd() {
-    trigger("session_end");
-  }
 
-  trackPageView();
-  var initialPathname = window.location.pathname;
-
-  window.addEventListener("popstate", trackPageView);
-
-  window.addEventListener("hashchange", trackPageView);
-
-  document.addEventListener("click", function () {
-    setTimeout(() => {
-      if (window.location.pathname !== initialPathname) {
-        trackPageView();
-        initialPathname = window.location.pathname;
-      }
-    }, 3000);
+  // Replay calls queued before the script loaded, then take over the global.
+  var queued = (window.your_tracking && window.your_tracking.q) || [];
+  window.your_tracking = send;
+  queued.forEach(function (args) {
+    send.apply(null, args);
   });
+
+  ensureSession();
+
+  var lastUrl = window.location.href;
+  function pageview() {
+    lastUrl = window.location.href;
+    send("pageview");
+  }
+  function onNavigate() {
+    if (window.location.href !== lastUrl) pageview();
+  }
+
+  // Single-page apps change the URL with the History API, which fires no event.
+  ["pushState", "replaceState"].forEach(function (method) {
+    var original = history[method];
+    history[method] = function () {
+      var result = original.apply(this, arguments);
+      onNavigate();
+      return result;
+    };
+  });
+  window.addEventListener("popstate", onNavigate);
+  window.addEventListener("hashchange", onNavigate);
+
+  pageview();
 })();

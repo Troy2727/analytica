@@ -1,369 +1,170 @@
-<div align="center">
+# Analytica
 
-# Analytica 📊
+[![E2E Tests](https://github.com/Troy2727/analytica/actions/workflows/e2e.yml/badge.svg)](https://github.com/Troy2727/analytica/actions/workflows/e2e.yml)
 
-![OG](./public/og.png)
+Free website analytics you install with one script tag. Analytica records page views, visits, traffic sources,
+locations, devices and browsers, runs Google PageSpeed on your site, and DMs you on Discord when your backend
+sends a custom event.
 
-![Next.js](https://img.shields.io/badge/next%20js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
-![shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui&logoColor=white)
-![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)
-![Supabase](https://img.shields.io/badge/Supabase-181818?style=for-the-badge&logo=supabase&logoColor=white)
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
-![E2E Tests](https://github.com/Troy2727/analytica/actions/workflows/e2e.yml/badge.svg)
+**Live:** [analytica-phi.vercel.app](https://analytica-phi.vercel.app)
 
-</div>
+![Analytica dashboard](./public/hero-dashboard-v5.jpg)
 
----
+## Try the demo
 
-### TL;DR 🚀
-Analytica is a free and open-source analytics tool that requires just one line of code to set up.
-
-It comes with built-in Discord notifications and works seamlessly with any website, giving you all the analytics data you need to make informed decisions.
-
-![Analytica dashboard](./public/hero-dashboard-v4.jpg)
-
-### 🔑 Live Demo
-
-Try it without signing up: **[analytica-phi.vercel.app/sign-in](https://analytica-phi.vercel.app/sign-in)**
+Sign in at [analytica-phi.vercel.app/sign-in](https://analytica-phi.vercel.app/sign-in) with:
 
 | Email | Password |
 |---|---|
 | `demo@example.com` | `AnalyticaDemo2026!` |
 
-The demo account tracks this site itself, so you'll see real visits, page views, custom events and PageSpeed scores.
-
----
-
-### 📑 Table of Contents
-- [Why Did We Build This?](#-why-did-we-build-this)
-- [Who Is This For?](#-who-is-this-for)
-- [What Can It Do?](#-what-can-it-do)
-- [How Does It Work?](#how-does-it-work)
-- [Discord Integration](#-discord-integration)
-- [What Makes It Different?](#-what-makes-it-different)
-- [Want to Try It?](#-want-to-try-it)
-- [Testing](#-testing)
-- [Quick Links](#-quick-links)
-- [Let's Chat!](#-lets-chat)
-- [FAQ](#-frequently-asked-questions)
-
----
-
-Hey there! 👋
-
-Thanks for checking out Analytica. It's a free tool that manages your website analytics and performance and offers many other features.
-
-This project is an alternative to premium analytics services like Vercel Analytics.
-
-With Analytica, you can monitor everything from visitor activity to site performance without paying for it.
-
-And the best part? It's **open-source** and **free for everyone**.
-
----
-
-### 💡 Why Did We Build This?
-
-Analytica doesn't charge you for tracking custom events or monitoring performance, unlike other analytics tools.
-
-You get all of this and more, totally free.
-
----
-
-### 🎯 Who Is This For?
-
-![Product 2](./public/product2.png)
-
-Developers who want to track their side projects.
-
-Small business owners watching their website traffic.
-
-Anyone who wants simple analytics without paying $$$.
-
----
-
-### 🚀 What Can It Do?
-
-Here are some of the core features of Analytica:
-
-- **Real-Time Tracking:** See what's happening on your website as it happens.
-
-- **Custom Event Tracking:** Track specific actions your visitors take (for example, clicks on certain buttons).
-
-  Here's how to track custom events:
-
-  Using JavaScript/Node.js:
-  ```javascript
-  const axios = require('axios');
-
-  const API_KEY = "YOUR_API_KEY";
-  const url = "https://analytica-phi.vercel.app/api/events";
-  const headers = {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${API_KEY}`
-  };
-
-  const eventData = {
-      name: "",        // required - event name
-      domain: "",      // required - your website domain
-      description: "", // required - event description
-      emoji: "🔔",    // optional - emoji for Discord notification
-      fields: [       // optional - additional fields for Discord notification
-        {
-          name: "Field Name",
-          value: "Field Value",
-          inline: true // optional - display fields in same line
-        }
-      ]
-  };
-
-  const sendRequest = async () => {
-      try {
-        const response = await axios.post(url, eventData, { headers });
-        console.log("Event sent successfully", response.data);
-      } catch (error) {
-        console.error("Error:", error.response ? error.response.data : error.message);
-      }
-  };
-
-  sendRequest();
-  ```
-
-  Using Python:
-  ```python
-  import requests
-
-  API_KEY = "YOUR_API_KEY"
-  url = "https://analytica-phi.vercel.app/api/events"
-  headers = {
-      "Content-Type": "application/json",
-      "Authorization": f"Bearer {API_KEY}"
-  }
-
-  event_data = {
-      "name": "",        # required - event name
-      "domain": "",      # required - your website domain
-      "description": "", # required - event description
-      "emoji": "🔔",    # optional - emoji for Discord notification
-      "fields": [       # optional - additional fields for Discord notification
-        {
-          "name": "Field Name",
-          "value": "Field Value",
-          "inline": True # optional - display fields in same line
-        }
-      ]
-  }
-
-  def send_request():
-      try:
-          response = requests.post(url, json=event_data, headers=headers)
-          response.raise_for_status()
-          print("Event sent successfully", response.json())
-      except requests.exceptions.RequestException as error:
-          print("Error:", error)
-
-  send_request()
-  ```
-
-  Yes, it's that simple!
-
-- **Performance Monitoring:** Monitor how fast your site loads (and find areas to improve with smart suggestions on what to optimize next).
-
-- **Device & Browser Stats:** See what devices, browsers, and operating systems your visitors are using.
-
-- **Location Tracking:** Understand where your visitors are coming from.
-
-- **Discord Notifications:** Get live updates on events right in your Discord DM.
-
----
-
-### How Does It Work?
-
-![Diagram](./public/diagram.png)
-
-Here's exactly how Analytica works, with no secrets:
-
-First, you add our tracking script to your website - it's just a simple piece of code that counts when people visit your pages and what they click on.
-
-This information goes straight to Supabase (our database provider), which organizes all this data.
-
-We store everything safely in Supabase's storage system.
-
-When you log in to your dashboard, you'll see all this information displayed in charts and numbers.
-
-And if you want, we can send updates about your website straight to your Discord - it's that straightforward!
-
-You can look at our code on GitHub to see exactly how everything works.
-
----
-
-### 🤖 Discord Integration
-
-![Product 3](./public/product3.png)
-
-Setting up Discord notifications is easy:
-
-1. **Enable Developer Mode in Discord**
-   - Open User Settings
-   - Go to App Settings → Advanced
-   - Enable Developer Mode
-
-2. **Get Your Discord User ID**
-   - Right-click your profile or username
-   - Click "Copy User ID"
-
-3. **Add it to Analytica**
-   - Go to /settings in your Analytica dashboard
-   - Paste your Discord User ID
-   - Save the changes
-
-4. **Add Analytica Bot to a server you're in**
-   - Discord only delivers DMs from bots you share a server with
-   - [Invite Analytica Bot](https://discord.com/oauth2/authorize?client_id=1365847380309704714&scope=bot&permissions=0) to any server you're in (a private one works)
-
-Once set up, you'll get real-time notifications for:
-
-- Website traffic spikes
-- Performance alerts
-- Custom event triggers
-- Error notifications
-- And more!
-
-(as you set it.)
-
----
-
-### 💪 What Makes It Different?
-
-![Product 1](./public/product1.png)
-
-1. **It's Free**
-   - No "free trial" tricks
-   - No "upgrade to see more data" stuff
-   - Just free, forever!
-
-2. **Super Easy to Use**
-   - Add one line of code to your site
-   - See your stats right away
-
-3. **Discord Integration**
-   - Real-time notifications
-   - Custom alerts for important events
-   - Manage everything from Discord
-
----
-
-### 📦 Want to Try It?
-
-It's super easy to get started:
-
-1. **Add the Tracking Script (and other stuff if needed)**
-
-   For Vanilla/React apps:
-   ```html
-   <script
-     defer
-     data-domain="your-website.com"
-     src="https://analytica-phi.vercel.app/tracking-script.js"
-   >
-   </script>
+The demo account tracks Analytica's own site, so it shows real traffic, events and PageSpeed scores. It can't
+change its password, Discord ID or demo website.
+
+## Features
+
+- **Traffic:** visits, page views, pages per session, people on the site in the last 10 minutes, and a chart by
+  hour or day for any timeframe from the last hour to lifetime.
+- **Breakdowns:** top pages, traffic sources (`?utm=` / `?ref=`), countries and cities, operating systems, device
+  types and browsers.
+- **Custom events:** send any event from your backend with one HTTP request and browse them per event name.
+- **Discord alerts:** each custom event can arrive as a Discord DM from Analytica Bot.
+- **Performance:** Lighthouse scores (performance, accessibility, best practices, SEO) and lab timings from the
+  PageSpeed API, with suggestions for anything below Google's thresholds.
+- **Export:** download page views, visits and events as CSV.
+
+## Install the tracking script
+
+Add it to every page you want to track, with your domain exactly as you added it on the dashboard (no
+`https://`, no `www`):
+
+```html
+<script defer data-domain="example.com" src="https://analytica-phi.vercel.app/tracking-script.js"></script>
+```
+
+In Next.js, use `next/script` in `app/layout.tsx`:
+
+```tsx
+import Script from "next/script";
+
+<Script defer data-domain="example.com" src="https://analytica-phi.vercel.app/tracking-script.js" />
+```
+
+The script sends a `session_start` when a visitor's session begins (sessions last 10 minutes), a `pageview` on
+load and on every client-side navigation, and keeps nothing in the browser except a random session ID.
+
+## Send custom events
+
+Create an API key under **Settings & API Keys**, then `POST` to `/api/events`:
+
+```bash
+curl -X POST https://analytica-phi.vercel.app/api/events \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "name": "new_signup",
+        "domain": "example.com",
+        "description": "A user signed up",
+        "emoji": "🎉",
+        "fields": [{ "name": "Plan", "value": "Pro", "inline": true }]
+      }'
+```
+
+| Field | Required | Notes |
+|---|---|---|
+| `name` | yes | Events are grouped by name on the dashboard |
+| `domain` | yes | Must be one of the websites on your account |
+| `description` | yes | The message body |
+| `emoji` | no | Shown in the Discord title (default 🔔) |
+| `fields` | no | Extra `{ name, value, inline? }` rows in the Discord message |
+
+| Status | Meaning |
+|---|---|
+| `200` | Recorded. `message` says whether a Discord DM was sent |
+| `400` | A required field is empty |
+| `401` | No `Authorization: Bearer` header |
+| `403` | Unknown API key, or the domain isn't registered to it |
+
+The settings page has the same request as copy-ready JavaScript and Python.
+
+### Discord alerts
+
+1. In Discord, turn on Developer Mode (User Settings → Advanced).
+2. Right-click your name, choose **Copy User ID**, and paste it under **Discord Integration** in settings.
+3. [Invite Analytica Bot](https://discord.com/oauth2/authorize?client_id=1365847380309704714&scope=bot&permissions=0)
+   to any server you're in. Discord only delivers DMs from bots you share a server with.
+
+## How it works
+
+![Architecture](./public/diagram.png)
+
+- **Next.js 16 (App Router)** on Vercel serves the dashboard and three API routes:
+  `/api/track` (tracking script), `/api/events` (custom events) and `/api/keepalive` (a daily Vercel Cron that
+  keeps the free Supabase project awake).
+- **Supabase (Postgres + Auth)** stores `users`, `websites`, `page_views`, `visits` and `events`. Row-level
+  security limits every dashboard query to the signed-in user's own websites. Requests without a user session
+  (API-key events, PageSpeed server actions) use the service role and check ownership in code.
+- Visitor location comes from Vercel's geo headers; no IP addresses are stored.
+
+```
+app/                  pages and API routes
+  site/[website]/     analytics for one website (tabs live in components/site)
+  api/                track, events, keepalive
+actions/pagespeed.ts  server actions: run and read PageSpeed results
+components/           UI; components/ui holds shadcn/ui and Magic UI primitives
+lib/                  Supabase clients, queries, analytics math, formatting, CSV
+public/tracking-script.js
+supabase/migrations/  schema, RLS policies, demo-account protection
+e2e/                  Playwright tests
+```
+
+## Run it locally
+
+You need Node 20+ and a Supabase project.
+
+1. Apply the SQL files in `supabase/migrations/` in order (Supabase SQL editor or `supabase db push`).
+2. Create `.env.local`:
+
+   ```bash
+   NEXT_PUBLIC_SUPABASE_URL=https://<project>.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon key>
+   SUPABASE_SERVICE_ROLE_KEY=<service role key>    # server only
+   GOOGLE_PAGESPEED_API_KEY=<key>                  # optional, for the Performance tab
+   DISCORD_BOT_TOKEN=<token>                       # optional, for event DMs
    ```
 
-   For Next.js apps:
-   ```html
-   <Script
-     defer
-     data-domain="your-website.com"
-     src="https://analytica-phi.vercel.app/tracking-script.js"
-   />
-   ```
+3. `npm install` and `npm run dev`, then open http://localhost:3000.
 
-   Just add this to your main layout or index file, and you're good to go!
+The tracking script always reports to the production API, so point `ENDPOINT` in `public/tracking-script.js` at
+your own deployment if you self-host.
 
-2. Deploy your app to production.
+## Testing
 
-3. It's done!
+[Playwright](https://playwright.dev) end-to-end tests run against the live site on desktop and mobile viewports
+after every production deploy ([E2E Tests workflow](https://github.com/Troy2727/analytica/actions/workflows/e2e.yml)):
 
-After you are done, start seeing real analytics on your dashboard.
+- **Public pages:** the homepage renders and its own tracking calls are stored, no horizontal scroll on mobile,
+  logged-out visitors are redirected to sign-in, wrong passwords show an error, and unknown routes return a 404.
+- **API:** tracking rejects mismatched domains and allows cross-origin requests, the events endpoint requires a
+  valid API key, and the keepalive route reaches the database.
+- **Signed-in flow:** the demo account sees its dashboard, site analytics, custom events, PageSpeed scores and
+  settings.
 
----
-
-### 🧪 Testing
-
-Analytica has [Playwright](https://playwright.dev) end-to-end tests that run against the live site on desktop and mobile viewports:
-
-- **Public pages:** the homepage renders and its own tracking calls are stored, no horizontal scroll on mobile, logged-out visitors are redirected to sign-in, wrong passwords show an error, and unknown routes return a 404
-- **API:** tracking rejects mismatched domains and allows cross-origin requests, the events endpoint requires a valid API key, and the keepalive route reaches the database
-- **Signed-in flow:** the [demo account](#-live-demo) signs in and sees its dashboard, site analytics, custom events, PageSpeed scores and settings
-
-None of the tests write to the database. They run automatically after every successful production deploy ([E2E Tests workflow](https://github.com/Troy2727/analytica/actions/workflows/e2e.yml)), and you can run them locally:
+None of the tests write to the database.
 
 ```bash
 npx playwright install chromium
-npm test                            # against production
-BASE_URL=https://<deployment> npm test   # against another deployment
+npm test                                  # against production
+BASE_URL=https://<deployment> npm test    # against another deployment
 ```
 
 The homepage tracking test expects production, since the tracking script always reports to the live API.
 
----
+## Credits
 
-### 🌟 Quick Links
+Analytica began as a fork of [analyzr](https://github.com/ArjunCodess/analyzr) by Arjun Vijay Prakash. The
+codebase has since been rewritten. UI primitives in `components/ui` come from [shadcn/ui](https://ui.shadcn.com)
+and [Magic UI](https://magicui.design).
 
-- **Try it out:** [analytica-phi.vercel.app](https://analytica-phi.vercel.app)
-- **Get the code:** [GitHub](https://github.com/Troy2727/analytica)
-
----
-
-### 💬 Let's Chat!
-
-Got questions? Ideas? Just want to say hi.
-
-- Drop an issue on [GitHub](https://github.com/Troy2727/analytica/issues)
-- DM me on X ([@AlexMieses27](https://x.com/AlexMieses27))
-
-Built and maintained by **Alex Mieses**. We love hearing from users!
-
----
-
-### 🎉 Thanks!
-
-Thanks for checking out Analytica! We hope it makes your life a bit easier.
-
-Happy tracking! 📊
-
-P.S. If you like it, maybe give us a star on [GitHub](https://github.com/Troy2727/analytica). ⭐
-
----
-
-### ❓ Frequently Asked Questions
-
-1. **Is Analytica really free?**
-   - Yes! We're 100% free and open source
-   - No hidden fees or premium features
-   - You can even self-host it if you want
-
-2. **Will this slow down my website?**
-   - Nope! Our tracking script is tiny (< 6KB)
-   - It loads asynchronously (won't block your page)
-   - Uses edge functions for super-fast response times
-
-3. **Is my data private and secure?**
-   - Absolutely! We use Supabase for secure data storage
-   - Your data is never sold or shared
-   - You can delete your data anytime
-   - We don't track personal user information
-
-4. **Can I use this with any website?**
-   - Yes! Works with:
-     - Next.js
-     - React
-     - Vue
-     - Plain HTML
-     - etc.
-
-5. **What's the difference between Analytica and other analytics tools?**
-   - Free custom event tracking (others charge for this)
-   - Built-in Discord notifications
-   - No complex setup needed
-   - Privacy-focused approach
-   - Completely open source
+Built and maintained by **Alex Mieses** ([GitHub](https://github.com/Troy2727), [X](https://x.com/AlexMieses27)).
+Questions and ideas are welcome in [issues](https://github.com/Troy2727/analytica/issues).

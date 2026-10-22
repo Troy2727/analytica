@@ -1,57 +1,38 @@
 "use client";
 
-import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-const FuzzyOverlay = () => {
+/** Film-grain texture that jitters over the page, like a lost TV signal. */
+function Static() {
   return (
     <motion.div
-      initial={{ transform: "translateX(-10%) translateY(-10%)" }}
-      animate={{
-        transform: "translateX(10%) translateY(10%)",
-      }}
-      transition={{
-        repeat: Infinity,
-        duration: 0.2,
-        ease: "linear",
-        repeatType: "mirror",
-      }}
-      style={{
-        backgroundImage: 'url("/noise.png")',
-      }}
-      className="pointer-events-none absolute -inset-[100%] opacity-[15%]"
+      aria-hidden
+      className="pointer-events-none absolute -inset-[100%] opacity-[0.15]"
+      style={{ backgroundImage: 'url("/noise.png")' }}
+      initial={{ x: "-10%", y: "-10%" }}
+      animate={{ x: "10%", y: "10%" }}
+      transition={{ duration: 0.2, ease: "linear", repeat: Infinity, repeatType: "mirror" }}
     />
   );
-};
+}
 
 export default function NotFound() {
   return (
-    <div className="relative overflow-hidden">
-      <div className="relative grid h-screen place-content-center space-y-6 bg-neutral-950 p-8">
-        <p className="text-center text-6xl font-black text-neutral-50">
-          404 - Data Not Found
-        </p>
-        <p className="text-center text-neutral-400">
-          The metrics you&apos;re looking for seem to have escaped our tracking radar 📊
-        </p>
-        <div className="flex items-center justify-center gap-3">
-          <Link 
-            href="/"
-            className="border rounded-md text-neutral-20 w-fit px-4 py-2 font-semibold text-neutral-200 transition-colors hover:bg-neutral-800"
-          >
+    <main className="relative overflow-hidden">
+      <div className="grid h-screen place-content-center gap-6 bg-neutral-950 p-8 text-center">
+        <h1 className="text-6xl font-black text-neutral-50">404 - Data Not Found</h1>
+        <p className="text-neutral-400">This page isn&apos;t in our data. Maybe it was never tracked 📊</p>
+        <div className="flex justify-center gap-3 font-semibold">
+          <Link href="/" className="rounded-md border px-4 py-2 text-neutral-200 transition-colors hover:bg-neutral-800">
             Return to Analytics
           </Link>
-          <Link 
-            href="/dashboard"
-            className="rounded-md w-fit bg-neutral-200 px-4 py-2 font-semibold text-neutral-700 transition-colors hover:bg-neutral-50"
-          >
+          <Link href="/dashboard" className="rounded-md bg-neutral-200 px-4 py-2 text-neutral-700 transition-colors hover:bg-neutral-50">
             Dashboard
           </Link>
         </div>
       </div>
-
-      <FuzzyOverlay />
-    </div>
+      <Static />
+    </main>
   );
 }
