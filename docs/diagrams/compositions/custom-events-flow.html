@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1600, height=1150" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@500;600;700;800&display=block"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../diagram.css" />
+  </head>
+  <body>
+    <div data-hf-id="hf-13b5" id="custom-events-flow" data-composition-id="custom-events-flow" data-start="0" data-duration="12" data-width="1600" data-height="1150">
+      <script src="../diagram.js"></script>
+      <script>
+        window.__timelines["custom-events-flow"] = AnalyticaDiagram.sequence(document.getElementById("custom-events-flow"), "How a custom event is handled", {
+          lanes: [
+            { x: 200, title: "Your backend", sub: "any language" },
+            { x: 600, title: "/api/events", sub: "Next.js on Vercel" },
+            { x: 1000, title: "Supabase", sub: "Postgres" },
+            { x: 1400, title: "Discord", sub: "Analytica Bot" },
+          ],
+          groups: [{ x1: 450, y1: 760, x2: 1550, y2: 900, label: "IF THE USER SAVED A DISCORD ID", step: 4 }],
+          steps: [
+            { from: 0, to: 1, y: 350, label: "POST /api/events", sub: "Authorization: Bearer <key>" },
+            { from: 1, to: 2, y: 440, label: "find the key's owner", sub: "users.api" },
+            { from: 1, to: 2, y: 530, label: "check the domain", sub: "is one of their websites" },
+            { from: 1, to: 2, y: 700, label: "insert into events" },
+            { from: 1, to: 3, y: 840, label: "DM from Analytica Bot", sub: "emoji, title, description, fields" },
+            { from: 1, to: 0, y: 980, label: "200 + whether the DM was sent", dashed: true },
+          ],
+          notes: [{ x: 600, y: 588, text: "401 / 403 if the key<br/>or domain is wrong" }],
+          end: 1040,
+        });
+      </script>
+    </div>
+  </body>
+</html>

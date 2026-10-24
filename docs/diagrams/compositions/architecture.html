@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1600, height=1150" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@500;600;700;800&display=block"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../diagram.css" />
+  </head>
+  <body>
+    <!-- Same layout as public/diagram.png, moved down 100px to sit centered on the 1150px canvas. -->
+    <div id="architecture" data-composition-id="architecture" data-start="0" data-duration="9" data-width="1600" data-height="1150">
+      <script src="../diagram.js"></script>
+      <script>
+        window.__timelines["architecture"] = AnalyticaDiagram.boxes(document.getElementById("architecture"), "How Analytica works", {
+          groups: [{ x1: 470, y1: 310, x2: 1130, y2: 950, label: "BACKEND" }],
+          nodes: [
+            { x: 80, y: 400, w: 300, h: 150, title: "Your website", sub: "tracking-script.js" },
+            { x: 560, y: 400, w: 480, h: 150, title: "Analytica API", sub: "Next.js · /api/track · /api/events" },
+            { x: 1220, y: 400, w: 300, h: 150, title: "Discord", sub: "instant alerts" },
+            { x: 560, y: 720, w: 480, h: 150, title: "Supabase", sub: "Postgres · visits · page views · events" },
+            { x: 1220, y: 720, w: 300, h: 150, title: "Dashboard", sub: "real-time charts" },
+          ],
+          links: [
+            { d: "M380 475 L554 475", label: "track", lx: 425, ly: 452 },
+            { d: "M800 550 L800 714", label: "store", lx: 816, ly: 638, anchor: "start" },
+            { d: "M1040 475 L1214 475", label: "alert", lx: 1175, ly: 452 },
+            { d: "M1040 795 L1214 795", label: "read", lx: 1175, ly: 772 },
+          ],
+        });
+      </script>
+    </div>
+  </body>
+</html>

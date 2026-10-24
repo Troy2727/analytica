@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1600, height=1150" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@500;600;700;800&display=block"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../diagram.css" />
+  </head>
+  <body>
+    <div data-hf-id="hf-ohx6" id="tracking-flow" data-composition-id="tracking-flow" data-start="0" data-duration="13" data-width="1600" data-height="1150">
+      <script src="../diagram.js"></script>
+      <script>
+        window.__timelines["tracking-flow"] = AnalyticaDiagram.sequence(document.getElementById("tracking-flow"), "How a page view is tracked", {
+          lanes: [
+            { x: 200, title: "Visitor's browser", sub: "any page of your site" },
+            { x: 600, title: "tracking-script.js", sub: "your one script tag" },
+            { x: 1000, title: "/api/track", sub: "Next.js on Vercel" },
+            { x: 1400, title: "Supabase", sub: "Postgres" },
+          ],
+          groups: [{ x1: 450, y1: 380, x2: 1550, y2: 560, label: "NEW OR EXPIRED SESSION", step: 1 }],
+          steps: [
+            { from: 0, to: 1, y: 340, label: "page loads" },
+            { from: 1, to: 2, y: 450, label: "session_start", sub: "+ source from ?utm or ?ref" },
+            { from: 2, to: 3, y: 520, label: "insert into visits" },
+            { from: 1, to: 2, y: 620, label: "pageview", sub: "+ OS, device type, browser" },
+            { from: 2, to: 3, y: 790, label: "insert into page_views", sub: "+ city, region, country" },
+            { from: 0, to: 1, y: 880, label: "client-side navigation", sub: "pushState · popstate · hashchange" },
+            { from: 1, to: 2, y: 960, label: "pageview" },
+            { from: 2, to: 3, y: 1030, label: "insert into page_views" },
+          ],
+          notes: [{ x: 1000, y: 668, text: "rejected unless the URL<br/>contains data-domain" }],
+          end: 1060,
+        });
+      </script>
+    </div>
+  </body>
+</html>

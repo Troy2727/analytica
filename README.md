@@ -23,6 +23,8 @@ change its password, Discord ID or demo website.
 
 ## Features
 
+![Visitors, page views and pages per session](./public/product2.png)
+
 - **Traffic:** visits, page views, pages per session, people on the site in the last 10 minutes, and a chart by
   hour or day for any timeframe from the last hour to lifetime.
 - **Breakdowns:** top pages, traffic sources (`?utm=` / `?ref=`), countries and cities, operating systems, device
@@ -53,7 +55,11 @@ import Script from "next/script";
 The script sends a `session_start` when a visitor's session begins (sessions last 10 minutes), a `pageview` on
 load and on every client-side navigation, and keeps nothing in the browser except a random session ID.
 
+![How a page view is tracked](./docs/diagrams/tracking-flow.png)
+
 ## Send custom events
+
+![Custom events](./public/product1.png)
 
 Create an API key under **Settings & API Keys**, then `POST` to `/api/events`:
 
@@ -87,7 +93,11 @@ curl -X POST https://analytica-phi.vercel.app/api/events \
 
 The settings page has the same request as copy-ready JavaScript and Python.
 
+![How a custom event is handled](./docs/diagrams/custom-events-flow.png)
+
 ### Discord alerts
+
+![Discord alerts](./public/product3.png)
 
 1. In Discord, turn on Developer Mode (User Settings → Advanced).
 2. Right-click your name, choose **Copy User ID**, and paste it under **Discord Integration** in settings.
@@ -105,6 +115,10 @@ The settings page has the same request as copy-ready JavaScript and Python.
   security limits every dashboard query to the signed-in user's own websites. Requests without a user session
   (API-key events, PageSpeed server actions) use the service role and check ownership in code.
 - Visitor location comes from Vercel's geo headers; no IP addresses are stored.
+
+Tracked rows are linked to a website by its domain, not by a foreign key:
+
+![Database tables](./docs/diagrams/data-model.png)
 
 ```
 app/                  pages and API routes
@@ -162,8 +176,7 @@ The homepage tracking test expects production, since the tracking script always 
 
 ## Credits
 
-Analytica began as a fork of [analyzr](https://github.com/ArjunCodess/analyzr) by Arjun Vijay Prakash. The
-codebase has since been rewritten. UI primitives in `components/ui` come from [shadcn/ui](https://ui.shadcn.com)
+UI primitives in `components/ui` come from [shadcn/ui](https://ui.shadcn.com)
 and [Magic UI](https://magicui.design).
 
 Built and maintained by **Alex Mieses** ([GitHub](https://github.com/Troy2727), [X](https://x.com/AlexMieses27)).

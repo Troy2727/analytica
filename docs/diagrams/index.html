@@ -1,0 +1,35 @@
+<!doctype html>
+<!--
+  README diagrams (HyperFrames). Each diagram is its own composition; this file plays them in a row.
+    Check:   npx hyperframes@0.8.193 check .
+    Stills:  npx hyperframes@0.8.193 snapshot . --at 21.9,33.9,43.9 --no-end -o out
+             (end frame of each diagram -> tracking-flow.png, custom-events-flow.png, data-model.png;
+             architecture stays public/diagram.png, which compositions/architecture.html copies)
+    Videos:  npx hyperframes@0.8.193 render . -c compositions/architecture.html -o renders/architecture.mp4
+             (same for tracking-flow, custom-events-flow and data-model)
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1600, height=1150" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@500;600;700;800&display=block"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="diagram.css" />
+  </head>
+  <body>
+    <div data-hf-id="hf-sush" id="root" data-composition-id="main" data-start="0" data-duration="44" data-width="1600" data-height="1150">
+      <div id="architecture-host" data-composition-id="architecture" data-composition-src="compositions/architecture.html" data-start="0" data-duration="9" data-track-index="0"></div>
+      <div data-hf-id="hf-edl0" id="tracking-flow-host" data-composition-id="tracking-flow" data-composition-src="compositions/tracking-flow.html" data-start="9" data-duration="13" data-track-index="0"></div>
+      <div data-hf-id="hf-rjb5" id="custom-events-flow-host" data-composition-id="custom-events-flow" data-composition-src="compositions/custom-events-flow.html" data-start="22" data-duration="12" data-track-index="0"></div>
+      <div data-hf-id="hf-x84m" id="data-model-host" data-composition-id="data-model" data-composition-src="compositions/data-model.html" data-start="34" data-duration="10" data-track-index="0"></div>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

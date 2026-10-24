@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1600, height=1150" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Manrope:wght@500;600;700;800&display=block"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../diagram.css" />
+  </head>
+  <body>
+    <div data-hf-id="hf-zlt3" id="data-model" data-composition-id="data-model" data-start="0" data-duration="10" data-width="1600" data-height="1150">
+      <script src="../diagram.js"></script>
+      <script>
+        window.__timelines["data-model"] = AnalyticaDiagram.dataModel(
+          document.getElementById("data-model"),
+          "Database tables",
+          "Tracked rows find their website by <b>domain</b>, not by a foreign key",
+          {
+            users: { x: 80, y: 500, w: 340, rows: [["id", "uuid", "PK"], ["email", "text"], ["api", "text", "API key"], ["discord_id", "text"]] },
+            websites: { x: 560, y: 470, w: 410, rows: [["id", "uuid", "PK"], ["user_id", "uuid", "FK"], ["name", "text", "", "link"], ["performance", "int"], ["+ 9 more PageSpeed columns", "", "", "muted"]] },
+            page_views: { x: 1130, y: 230, w: 400, rows: [["domain", "text", "", "link"], ["page", "text"], ["city, country", "text"], ["device_type", "text"], ["browser_name", "text"]] },
+            visits: { x: 1130, y: 514, w: 400, rows: [["session_id", "uuid", "PK"], ["website_id", "text", "", "link"], ["event", "event_type"], ["source", "text"]] },
+            events: { x: 1130, y: 758, w: 400, rows: [["event_name", "text"], ["domain", "text", "", "link"], ["message", "text"], ["fields", "jsonb"]] },
+          },
+          [
+            { from: "users", fromRow: 0, to: "websites", toRow: 1, color: AnalyticaDiagram.BLUE, label: "owns" },
+            { from: "websites", fromRow: 2, to: "page_views", toRow: 0 },
+            { from: "websites", fromRow: 2, to: "visits", toRow: 1 },
+            { from: "websites", fromRow: 2, to: "events", toRow: 1 },
+          ]
+        );
+      </script>
+    </div>
+  </body>
+</html>
