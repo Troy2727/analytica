@@ -56,7 +56,7 @@ The script sends a `session_start` when a visitor's session begins (sessions las
 load and on every client-side navigation, and keeps nothing in the browser except a random session ID.
 
 <p align="center">
-  <a href="https://github.com/Troy2727/analytica/blob/main/docs/diagrams/renders/tracking-flow.gif" title="Open this diagram full size">
+  <a href="https://github.com/Troy2727/analytica/blob/main/docs/diagrams/renders/tracking-flow.gif" title="Click to see full size">
     <img src="docs/diagrams/renders/tracking-flow.gif" alt="How a page view is tracked" width="100%" />
   </a>
   <br />
@@ -100,7 +100,7 @@ curl -X POST https://analytica-phi.vercel.app/api/events \
 The settings page has the same request as copy-ready JavaScript and Python.
 
 <p align="center">
-  <a href="https://github.com/Troy2727/analytica/blob/main/docs/diagrams/renders/custom-events-flow.gif" title="Open this diagram full size">
+  <a href="https://github.com/Troy2727/analytica/blob/main/docs/diagrams/renders/custom-events-flow.gif" title="Click to see full size">
     <img src="docs/diagrams/renders/custom-events-flow.gif" alt="How a custom event is handled" width="100%" />
   </a>
   <br />
@@ -119,7 +119,7 @@ The settings page has the same request as copy-ready JavaScript and Python.
 ## How it works
 
 <p align="center">
-  <a href="https://github.com/Troy2727/analytica/blob/main/docs/diagrams/renders/architecture.gif" title="Open this diagram full size">
+  <a href="https://github.com/Troy2727/analytica/blob/main/docs/diagrams/renders/architecture.gif" title="Click to see full size">
     <img src="docs/diagrams/renders/architecture.gif" alt="Architecture" width="100%" />
   </a>
   <br />
@@ -137,7 +137,7 @@ The settings page has the same request as copy-ready JavaScript and Python.
 Tracked rows are linked to a website by its domain, not by a foreign key:
 
 <p align="center">
-  <a href="https://github.com/Troy2727/analytica/blob/main/docs/diagrams/renders/data-model.gif" title="Open this diagram full size">
+  <a href="https://github.com/Troy2727/analytica/blob/main/docs/diagrams/renders/data-model.gif" title="Click to see full size">
     <img src="docs/diagrams/renders/data-model.gif" alt="Database tables" width="100%" />
   </a>
   <br />
