@@ -204,4 +204,11 @@ UI primitives in `components/ui` come from [shadcn/ui](https://ui.shadcn.com)
 and [Magic UI](https://magicui.design).
 
 Built and maintained by **Alex Mieses** ([GitHub](https://github.com/Troy2727), [X](https://x.com/AlexMieses27)).
+
+Alex built Analytica as a complete product, not just a tracking script: a one-tag script that follows
+client-side navigation, a Next.js 16 dashboard on Vercel backed by Supabase with row-level security, a custom
+events API that can DM you on Discord through Analytica Bot, and a Performance tab built on Google PageSpeed.
+No visitor IP addresses are stored, and Playwright end-to-end tests check the live site on desktop and mobile
+after every production deploy.
+
 Questions and ideas are welcome in [issues](https://github.com/Troy2727/analytica/issues).
