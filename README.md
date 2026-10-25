@@ -55,7 +55,7 @@ import Script from "next/script";
 The script sends a `session_start` when a visitor's session begins (sessions last 10 minutes), a `pageview` on
 load and on every client-side navigation, and keeps nothing in the browser except a random session ID.
 
-![How a page view is tracked](./docs/diagrams/tracking-flow.png)
+![How a page view is tracked](./docs/diagrams/renders/tracking-flow.gif)
 
 ## Send custom events
 
@@ -93,7 +93,7 @@ curl -X POST https://analytica-phi.vercel.app/api/events \
 
 The settings page has the same request as copy-ready JavaScript and Python.
 
-![How a custom event is handled](./docs/diagrams/custom-events-flow.png)
+![How a custom event is handled](./docs/diagrams/renders/custom-events-flow.gif)
 
 ### Discord alerts
 
@@ -106,7 +106,7 @@ The settings page has the same request as copy-ready JavaScript and Python.
 
 ## How it works
 
-![Architecture](./public/diagram.png)
+![Architecture](./docs/diagrams/renders/architecture.gif)
 
 - **Next.js 16 (App Router)** on Vercel serves the dashboard and three API routes:
   `/api/track` (tracking script), `/api/events` (custom events) and `/api/keepalive` (a daily Vercel Cron that
@@ -118,7 +118,7 @@ The settings page has the same request as copy-ready JavaScript and Python.
 
 Tracked rows are linked to a website by its domain, not by a foreign key:
 
-![Database tables](./docs/diagrams/data-model.png)
+![Database tables](./docs/diagrams/renders/data-model.gif)
 
 ```
 app/                  pages and API routes
