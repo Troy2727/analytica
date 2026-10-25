@@ -57,6 +57,8 @@ load and on every client-side navigation, and keeps nothing in the browser excep
 
 ![How a page view is tracked](./docs/diagrams/renders/tracking-flow.gif)
 
+<sub>Click the diagram to see it full size.</sub>
+
 ## Send custom events
 
 ![Custom events](./public/product1.png)
@@ -95,6 +97,8 @@ The settings page has the same request as copy-ready JavaScript and Python.
 
 ![How a custom event is handled](./docs/diagrams/renders/custom-events-flow.gif)
 
+<sub>Click the diagram to see it full size.</sub>
+
 ### Discord alerts
 
 ![Discord alerts](./public/product3.png)
@@ -108,6 +112,8 @@ The settings page has the same request as copy-ready JavaScript and Python.
 
 ![Architecture](./docs/diagrams/renders/architecture.gif)
 
+<sub>Click the diagram to see it full size.</sub>
+
 - **Next.js 16 (App Router)** on Vercel serves the dashboard and three API routes:
   `/api/track` (tracking script), `/api/events` (custom events) and `/api/keepalive` (a daily Vercel Cron that
   keeps the free Supabase project awake).
@@ -119,6 +125,8 @@ The settings page has the same request as copy-ready JavaScript and Python.
 Tracked rows are linked to a website by its domain, not by a foreign key:
 
 ![Database tables](./docs/diagrams/renders/data-model.gif)
+
+<sub>Click the diagram to see it full size.</sub>
 
 ```
 app/                  pages and API routes
