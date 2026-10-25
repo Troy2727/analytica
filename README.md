@@ -60,7 +60,7 @@ load and on every client-side navigation, and keeps nothing in the browser excep
     <img src="docs/diagrams/renders/tracking-flow.gif" alt="How a page view is tracked" width="100%" />
   </a>
   <br />
-  <sub>Click the diagram to see it full size.</sub>
+  <p align="center"><sub>Click the diagram to see it full size.</sub></p>
 </p>
 
 ## Send custom events
@@ -104,7 +104,7 @@ The settings page has the same request as copy-ready JavaScript and Python.
     <img src="docs/diagrams/renders/custom-events-flow.gif" alt="How a custom event is handled" width="100%" />
   </a>
   <br />
-  <sub>Click the diagram to see it full size.</sub>
+  <p align="center"><sub>Click the diagram to see it full size.</sub></p>
 </p>
 
 ### Discord alerts
@@ -123,7 +123,7 @@ The settings page has the same request as copy-ready JavaScript and Python.
     <img src="docs/diagrams/renders/architecture.gif" alt="Architecture" width="100%" />
   </a>
   <br />
-  <sub>Click the diagram to see it full size.</sub>
+  <p align="center"><sub>Click the diagram to see it full size.</sub></p>
 </p>
 
 - **Next.js 16 (App Router)** on Vercel serves the dashboard and three API routes:
@@ -141,7 +141,7 @@ Tracked rows are linked to a website by its domain, not by a foreign key:
     <img src="docs/diagrams/renders/data-model.gif" alt="Database tables" width="100%" />
   </a>
   <br />
-  <sub>Click the diagram to see it full size.</sub>
+  <p align="center"><sub>Click the diagram to see it full size.</sub></p>
 </p>
 
 ```
