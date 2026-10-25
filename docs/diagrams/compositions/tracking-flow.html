@@ -21,18 +21,18 @@
             { x: 1000, title: "/api/track", sub: "Next.js on Vercel" },
             { x: 1400, title: "Supabase", sub: "Postgres" },
           ],
-          groups: [{ x1: 450, y1: 380, x2: 1550, y2: 560, label: "NEW OR EXPIRED SESSION", step: 1 }],
+          groups: [{ x1: 450, y1: 362, x2: 1550, y2: 560, label: "NEW OR EXPIRED SESSION", step: 1 }],
           steps: [
             { from: 0, to: 1, y: 340, label: "page loads" },
             { from: 1, to: 2, y: 450, label: "session_start", sub: "+ source from ?utm or ?ref" },
             { from: 2, to: 3, y: 520, label: "insert into visits" },
             { from: 1, to: 2, y: 620, label: "pageview", sub: "+ OS, device type, browser" },
-            { from: 2, to: 3, y: 790, label: "insert into page_views", sub: "+ city, region, country" },
+            { from: 2, to: 3, y: 805, label: "insert into page_views", sub: "+ city, region, country" },
             { from: 0, to: 1, y: 880, label: "client-side navigation", sub: "pushState · popstate · hashchange" },
             { from: 1, to: 2, y: 960, label: "pageview" },
             { from: 2, to: 3, y: 1030, label: "insert into page_views" },
           ],
-          notes: [{ x: 1000, y: 668, text: "rejected unless the URL<br/>contains data-domain" }],
+          notes: [{ x: 1000, y: 666, text: "rejected unless the URL<br/>contains data-domain" }],
           end: 1060,
         });
       </script>

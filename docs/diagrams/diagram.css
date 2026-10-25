@@ -4,8 +4,8 @@
   --card-top: #0f1c4a;
   --border: #284585;
   --ink: #f1f5f9;
-  --muted: #8a9cc4;
-  --dim: #8291b8;
+  --muted: #b6c4e3;
+  --dim: #a5b4d8;
   --blue: #60a5fa;
   --emerald: #34d399;
   --font-display: "Manrope", sans-serif;
@@ -54,21 +54,21 @@ body {
   gap: 22px;
 }
 .header svg {
-  width: 62px;
-  height: 62px;
+  width: 72px;
+  height: 72px;
 }
 .header h1 {
-  font-size: 46px;
+  font-size: 56px;
   font-weight: 800;
   letter-spacing: -0.025em;
 }
 .caption {
   position: absolute;
-  top: 130px;
+  top: 136px;
   left: 0;
   right: 0;
   text-align: center;
-  font-size: 21px;
+  font-size: 28px;
   color: var(--muted);
 }
 .caption b {
@@ -82,7 +82,7 @@ body {
   right: 0;
   text-align: center;
   font-family: var(--font-mono);
-  font-size: 18px;
+  font-size: 22px;
   color: var(--dim);
 }
 svg.wires {
@@ -94,8 +94,8 @@ svg.wires {
 }
 .node {
   position: absolute;
-  width: 290px;
-  height: 92px;
+  width: 340px;
+  height: 110px;
   border: 1.5px solid var(--border);
   border-radius: 18px;
   background: linear-gradient(180deg, var(--card-top), var(--card));
@@ -107,32 +107,32 @@ svg.wires {
   gap: 4px;
 }
 .node .title {
-  font-size: 25px;
+  font-size: 31px;
   font-weight: 700;
 }
 .node .sub {
-  font-size: 17px;
+  font-size: 22px;
   color: var(--muted);
 }
 .note {
   position: absolute;
-  margin-left: -150px;
-  width: 300px;
+  margin-left: -170px;
+  width: 340px;
   padding: 10px 18px;
   border: 1px solid rgba(52, 211, 153, 0.55);
   border-radius: 12px;
   background: #0c1a3f;
-  font-size: 18px;
-  line-height: 1.35;
-  color: #cbd5e1;
+  font-size: 23px;
+  line-height: 1.3;
+  color: #e2e8f0;
   text-align: center;
 }
 .group-label {
   position: absolute;
   font-family: var(--font-mono);
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 500;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   color: var(--blue);
   padding: 2px 8px;
   border-radius: 6px;
@@ -151,7 +151,7 @@ svg.wires {
   display: flex;
   align-items: center;
   padding: 0 22px;
-  font-size: 23px;
+  font-size: 28px;
   font-weight: 700;
   background: var(--card-top);
   border-bottom: 1.5px solid var(--border);
@@ -163,14 +163,14 @@ svg.wires {
   gap: 10px;
   padding: 0 22px;
   font-family: var(--font-mono);
-  font-size: 18px;
+  font-size: 21px;
 }
 .table .row + .row {
   border-top: 1px solid rgba(40, 69, 133, 0.45);
 }
 .table .row .type {
   margin-left: auto;
-  font-size: 16px;
+  font-size: 19px;
   color: var(--dim);
 }
 .table .row.link {
@@ -181,7 +181,7 @@ svg.wires {
   color: var(--dim);
 }
 .badge {
-  font-size: 13px;
+  font-size: 15px;
   padding: 2px 7px;
   border-radius: 6px;
   border: 1px solid rgba(96, 165, 250, 0.5);

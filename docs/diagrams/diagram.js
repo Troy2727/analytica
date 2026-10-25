@@ -73,14 +73,14 @@ window.AnalyticaDiagram =
       const len = reveal.getTotalLength();
       reveal.setAttribute("stroke-dasharray", `${len} ${len}`);
       el("path", {
-        d, fill: "none", stroke: color, "stroke-width": 2.5, mask: `url(#${f.id}-m${n})`,
+        d, fill: "none", stroke: color, "stroke-width": 3.5, mask: `url(#${f.id}-m${n})`,
         ...(dashed ? { "stroke-dasharray": "8 7" } : {}),
         ...(arrow ? { "marker-end": `url(#${f.id}-head)` } : {}),
       }, f.svg);
       const start = reveal.getPointAtLength(0);
       const finish = reveal.getPointAtLength(len);
-      const startDot = el("circle", { cx: start.x, cy: start.y, r: 5, fill: color }, f.svg);
-      const endDot = ends ? el("circle", { cx: finish.x, cy: finish.y, r: 5, fill: color }, f.svg) : null;
+      const startDot = el("circle", { cx: start.x, cy: start.y, r: 6, fill: color }, f.svg);
+      const endDot = ends ? el("circle", { cx: finish.x, cy: finish.y, r: 6, fill: color }, f.svg) : null;
       const halo = el("circle", { r: 15, fill: color, opacity: 0, filter: `url(#${f.id}-glow)` }, f.svg);
       const dot = el("circle", { r: 6, fill: "#d1fae5", opacity: 0, filter: `url(#${f.id}-glow)` }, f.svg);
       const ride = { p: 0 };
@@ -118,7 +118,7 @@ window.AnalyticaDiagram =
     function sequence(root, title, { lanes, steps, groups = [], notes = [], end }) {
       const f = frame(root, title);
       const tl = f.tl;
-      const LANE_TOP = 180, LANE_BOTTOM = 272;
+      const LANE_TOP = 180, LANE_BOTTOM = 290;
 
       const groupEls = groups.map((g) => {
         const rect = el("rect", {
@@ -131,11 +131,11 @@ window.AnalyticaDiagram =
       });
 
       const nodes = lanes.map((lane) =>
-        html(root, "node", { left: `${lane.x - 145}px`, top: `${LANE_TOP}px` },
+        html(root, "node", { left: `${lane.x - 170}px`, top: `${LANE_TOP}px` },
           `<div class="title">${lane.title}</div><div class="sub">${lane.sub}</div>`)
       );
       const lifelines = lanes.map((lane) =>
-        el("line", { x1: lane.x, y1: LANE_BOTTOM, x2: lane.x, y2: end, stroke: "#22306e", "stroke-width": 2, "stroke-dasharray": "4 7" }, f.svg)
+        el("line", { x1: lane.x, y1: LANE_BOTTOM, x2: lane.x, y2: end, stroke: "#2c3f88", "stroke-width": 2, "stroke-dasharray": "4 7" }, f.svg)
       );
 
       tl.fromTo(nodes, { opacity: 0, y: 16, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.15, ease: "power2.out" }, 0.4);
@@ -151,10 +151,10 @@ window.AnalyticaDiagram =
         wire(f, `M${x1 + dir * 6} ${s.y} L${x2 - dir * 4} ${s.y}`, { dashed: s.dashed }, t, duration);
         const mid = (x1 + x2) / 2;
         const labels = [
-          el("text", { x: mid, y: s.y - 14, "text-anchor": "middle", fill: "#a9c9ff", "font-family": "JetBrains Mono", "font-size": 20 }, f.svg, s.label),
+          el("text", { x: mid, y: s.y - 16, "text-anchor": "middle", fill: "#d4e4ff", "font-family": "JetBrains Mono", "font-size": 26, "font-weight": 500 }, f.svg, s.label),
         ];
         if (s.sub) {
-          labels.push(el("text", { x: mid, y: s.y + 29, "text-anchor": "middle", fill: "#8696bf", "font-family": "JetBrains Mono", "font-size": 16 }, f.svg, s.sub));
+          labels.push(el("text", { x: mid, y: s.y + 34, "text-anchor": "middle", fill: "#b6c4e3", "font-family": "JetBrains Mono", "font-size": 20 }, f.svg, s.sub));
         }
         glowIn(f, labels, t + duration * 0.6);
         t += duration + 0.35;
@@ -186,7 +186,7 @@ window.AnalyticaDiagram =
         const c = (x2 - x1) / 2;
         wire(f, `M${x1} ${y1} C${x1 + c} ${y1} ${x2 - c} ${y2} ${x2} ${y2}`, { color: link.color, arrow: false, ends: true }, t, 0.8);
         if (link.label) {
-          const label = el("text", { x: (x1 + x2) / 2, y: Math.min(y1, y2) - 26, "text-anchor": "middle", fill: "#a9c9ff", "font-family": "JetBrains Mono", "font-size": 18 }, f.svg, link.label);
+          const label = el("text", { x: (x1 + x2) / 2, y: Math.min(y1, y2) - 26, "text-anchor": "middle", fill: "#d4e4ff", "font-family": "JetBrains Mono", "font-size": 24, "font-weight": 500 }, f.svg, link.label);
           glowIn(f, label, t + 0.5);
         }
         t += 0.8 + 0.3;
@@ -203,12 +203,12 @@ window.AnalyticaDiagram =
           x: g.x1, y: g.y1, width: g.x2 - g.x1, height: g.y2 - g.y1, rx: 24,
           fill: "none", stroke: EMERALD, "stroke-opacity": 0.45, "stroke-dasharray": "9 8", "stroke-width": 1.5,
         }, f.svg);
-        const label = html(root, "group-label", { left: `${g.x1 + 22}px`, top: `${g.y1 + 20}px`, fontSize: "18px", background: "none" }, g.label);
+        const label = html(root, "group-label", { left: `${g.x1 + 22}px`, top: `${g.y1 + 20}px`, fontSize: "22px", background: "none" }, g.label);
         return [rect, label];
       });
       const nodeEls = nodes.map((n) =>
         html(root, "node", { left: `${n.x}px`, top: `${n.y}px`, width: `${n.w}px`, height: `${n.h}px`, gap: "10px" },
-          `<div class="title" style="font-size:29px">${n.title}</div><div class="sub" style="font-size:19px">${n.sub}</div>`)
+          `<div class="title" style="font-size:36px">${n.title}</div><div class="sub" style="font-size:23px">${n.sub}</div>`)
       );
       f.tl.fromTo(groupEls.flat(), { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0.4);
       f.tl.fromTo(nodeEls, { opacity: 0, y: 16, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.18, ease: "power2.out" }, 0.6);
@@ -216,7 +216,7 @@ window.AnalyticaDiagram =
       let t = 0.6 + nodes.length * 0.18 + 0.6;
       for (const link of links) {
         wire(f, link.d, {}, t, 0.6);
-        const label = el("text", { x: link.lx, y: link.ly, "text-anchor": link.anchor || "middle", fill: "#a9c9ff", "font-family": "JetBrains Mono", "font-size": 19 }, f.svg, link.label);
+        const label = el("text", { x: link.lx, y: link.ly, "text-anchor": link.anchor || "middle", fill: "#d4e4ff", "font-family": "JetBrains Mono", "font-size": 26, "font-weight": 500 }, f.svg, link.label);
         glowIn(f, label, t + 0.35);
         t += 0.6 + 0.35;
       }
