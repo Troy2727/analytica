@@ -55,9 +55,13 @@ import Script from "next/script";
 The script sends a `session_start` when a visitor's session begins (sessions last 10 minutes), a `pageview` on
 load and on every client-side navigation, and keeps nothing in the browser except a random session ID.
 
-![How a page view is tracked](./docs/diagrams/renders/tracking-flow.gif)
-
-<sub>Click the diagram to see it full size.</sub>
+<p align="center">
+  <a href="https://github.com/Troy2727/analytica/blob/main/docs/diagrams/renders/tracking-flow.gif" title="Open this diagram full size">
+    <img src="docs/diagrams/renders/tracking-flow.gif" alt="How a page view is tracked" width="100%" />
+  </a>
+  <br />
+  <sub>Click the diagram to see it full size.</sub>
+</p>
 
 ## Send custom events
 
@@ -95,9 +99,13 @@ curl -X POST https://analytica-phi.vercel.app/api/events \
 
 The settings page has the same request as copy-ready JavaScript and Python.
 
-![How a custom event is handled](./docs/diagrams/renders/custom-events-flow.gif)
-
-<sub>Click the diagram to see it full size.</sub>
+<p align="center">
+  <a href="https://github.com/Troy2727/analytica/blob/main/docs/diagrams/renders/custom-events-flow.gif" title="Open this diagram full size">
+    <img src="docs/diagrams/renders/custom-events-flow.gif" alt="How a custom event is handled" width="100%" />
+  </a>
+  <br />
+  <sub>Click the diagram to see it full size.</sub>
+</p>
 
 ### Discord alerts
 
@@ -110,9 +118,13 @@ The settings page has the same request as copy-ready JavaScript and Python.
 
 ## How it works
 
-![Architecture](./docs/diagrams/renders/architecture.gif)
-
-<sub>Click the diagram to see it full size.</sub>
+<p align="center">
+  <a href="https://github.com/Troy2727/analytica/blob/main/docs/diagrams/renders/architecture.gif" title="Open this diagram full size">
+    <img src="docs/diagrams/renders/architecture.gif" alt="Architecture" width="100%" />
+  </a>
+  <br />
+  <sub>Click the diagram to see it full size.</sub>
+</p>
 
 - **Next.js 16 (App Router)** on Vercel serves the dashboard and three API routes:
   `/api/track` (tracking script), `/api/events` (custom events) and `/api/keepalive` (a daily Vercel Cron that
@@ -124,9 +136,13 @@ The settings page has the same request as copy-ready JavaScript and Python.
 
 Tracked rows are linked to a website by its domain, not by a foreign key:
 
-![Database tables](./docs/diagrams/renders/data-model.gif)
-
-<sub>Click the diagram to see it full size.</sub>
+<p align="center">
+  <a href="https://github.com/Troy2727/analytica/blob/main/docs/diagrams/renders/data-model.gif" title="Open this diagram full size">
+    <img src="docs/diagrams/renders/data-model.gif" alt="Database tables" width="100%" />
+  </a>
+  <br />
+  <sub>Click the diagram to see it full size.</sub>
+</p>
 
 ```
 app/                  pages and API routes
