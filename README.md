@@ -203,6 +203,8 @@ The homepage tracking test expects production, since the tracking script always 
 UI primitives in `components/ui` come from [shadcn/ui](https://ui.shadcn.com)
 and [Magic UI](https://magicui.design).
 
+## 👨‍💻 Author
+
 Built and maintained by **Alex Mieses** ([GitHub](https://github.com/Troy2727), [X](https://x.com/AlexMieses27)).
 
 Alex built Analytica as a complete product, not just a tracking script: a one-tag script that follows
