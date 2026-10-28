@@ -1,6 +1,14 @@
 # Analytica
 
 [![E2E Tests](https://github.com/Troy2727/analytica/actions/workflows/e2e.yml/badge.svg)](https://github.com/Troy2727/analytica/actions/workflows/e2e.yml)
+[![Next.js 16](https://img.shields.io/badge/Next.js-16-000000.svg?logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![React 18](https://img.shields.io/badge/React-18-61DAFB.svg?logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript 5](https://img.shields.io/badge/TypeScript-5-3178C6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS 3](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4.svg?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-Postgres-3FCF8E.svg?logo=supabase&logoColor=white)](https://supabase.com/)
+[![Vercel](https://img.shields.io/badge/Vercel-deployed-000000.svg?logo=vercel&logoColor=white)](https://vercel.com/)
+[![Playwright](https://img.shields.io/badge/Playwright-E2E-2EAD33.svg)](https://playwright.dev/)
+[![Discord](https://img.shields.io/badge/Discord-alerts-5865F2.svg?logo=discord&logoColor=white)](https://discord.com/)
 
 Free website analytics you install with one script tag. Analytica records page views, visits, traffic sources,
 locations, devices and browsers, runs Google PageSpeed on your site, and DMs you on Discord when your backend
@@ -10,7 +18,7 @@ sends a custom event.
 
 ![Analytica dashboard](./public/hero-dashboard-v5.jpg)
 
-## Try the demo
+## <img src="docs/icons/play.svg" width="24" height="24" alt="" /> Try the demo
 
 Sign in at [analytica-phi.vercel.app/sign-in](https://analytica-phi.vercel.app/sign-in) with:
 
@@ -21,7 +29,7 @@ Sign in at [analytica-phi.vercel.app/sign-in](https://analytica-phi.vercel.app/s
 The demo account tracks Analytica's own site, so it shows real traffic, events and PageSpeed scores. It can't
 change its password, Discord ID or demo website.
 
-## Features
+## <img src="docs/icons/sparkles.svg" width="24" height="24" alt="" /> Features
 
 ![Visitors, page views and pages per session](./public/product2.png)
 
@@ -35,7 +43,7 @@ change its password, Discord ID or demo website.
   PageSpeed API, with suggestions for anything below Google's thresholds.
 - **Export:** download page views, visits and events as CSV.
 
-## Install the tracking script
+## <img src="docs/icons/code-xml.svg" width="24" height="24" alt="" /> Install the tracking script
 
 Add it to every page you want to track, with your domain exactly as you added it on the dashboard (no
 `https://`, no `www`):
@@ -63,7 +71,7 @@ load and on every client-side navigation, and keeps nothing in the browser excep
   <p align="center"><sub>Click the diagram to see it full size.</sub></p>
 </p>
 
-## Send custom events
+## <img src="docs/icons/send.svg" width="24" height="24" alt="" /> Send custom events
 
 ![Custom events](./public/product1.png)
 
@@ -116,7 +124,7 @@ The settings page has the same request as copy-ready JavaScript and Python.
 3. [Invite Analytica Bot](https://discord.com/oauth2/authorize?client_id=1365847380309704714&scope=bot&permissions=0)
    to any server you're in. Discord only delivers DMs from bots you share a server with.
 
-## How it works
+## <img src="docs/icons/network.svg" width="24" height="24" alt="" /> How it works
 
 <p align="center">
   <a href="https://github.com/Troy2727/analytica/blob/main/docs/diagrams/renders/architecture.gif" title="Click to see full size">
@@ -156,7 +164,7 @@ supabase/migrations/  schema, RLS policies, demo-account protection
 e2e/                  Playwright tests
 ```
 
-## Run it locally
+## <img src="docs/icons/square-terminal.svg" width="24" height="24" alt="" /> Run it locally
 
 You need Node 20+ and a Supabase project.
 
@@ -176,7 +184,7 @@ You need Node 20+ and a Supabase project.
 The tracking script always reports to the production API, so point `ENDPOINT` in `public/tracking-script.js` at
 your own deployment if you self-host.
 
-## Testing
+## <img src="docs/icons/flask-conical.svg" width="24" height="24" alt="" /> Testing
 
 [Playwright](https://playwright.dev) end-to-end tests run against the live site on desktop and mobile viewports
 after every production deploy ([E2E Tests workflow](https://github.com/Troy2727/analytica/actions/workflows/e2e.yml)):
@@ -198,12 +206,12 @@ BASE_URL=https://<deployment> npm test    # against another deployment
 
 The homepage tracking test expects production, since the tracking script always reports to the live API.
 
-## Credits
+## <img src="docs/icons/heart.svg" width="24" height="24" alt="" /> Credits
 
 UI primitives in `components/ui` come from [shadcn/ui](https://ui.shadcn.com)
 and [Magic UI](https://magicui.design).
 
-## 👨‍💻 Author
+## <img src="docs/icons/user.svg" width="24" height="24" alt="" /> Author
 
 Built and maintained by **Alex Mieses** ([GitHub](https://github.com/Troy2727), [X](https://x.com/AlexMieses27)).
 
