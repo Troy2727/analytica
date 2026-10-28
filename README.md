@@ -1,14 +1,23 @@
 # Analytica
 
 [![E2E Tests](https://github.com/Troy2727/analytica/actions/workflows/e2e.yml/badge.svg)](https://github.com/Troy2727/analytica/actions/workflows/e2e.yml)
-[![Next.js 16](https://img.shields.io/badge/Next.js-16-000000.svg?logo=nextdotjs&logoColor=white)](https://nextjs.org/)
-[![React 18](https://img.shields.io/badge/React-18-61DAFB.svg?logo=react&logoColor=black)](https://react.dev/)
-[![TypeScript 5](https://img.shields.io/badge/TypeScript-5-3178C6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Tailwind CSS 3](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4.svg?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Supabase](https://img.shields.io/badge/Supabase-Postgres-3FCF8E.svg?logo=supabase&logoColor=white)](https://supabase.com/)
-[![Vercel](https://img.shields.io/badge/Vercel-deployed-000000.svg?logo=vercel&logoColor=white)](https://vercel.com/)
-[![Playwright](https://img.shields.io/badge/Playwright-E2E-2EAD33.svg)](https://playwright.dev/)
-[![Discord](https://img.shields.io/badge/Discord-alerts-5865F2.svg?logo=discord&logoColor=white)](https://discord.com/)
+[![Next.js 16](https://img.shields.io/badge/Next.js%2016-000000?style=flat-square&logo=nextdotjs&logoColor=white)](https://nextjs.org)
+[![React 18](https://img.shields.io/badge/React%2018-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
+[![TypeScript 5.9](https://img.shields.io/badge/TypeScript%205.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Tailwind CSS 3](https://img.shields.io/badge/Tailwind%20CSS%203-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Radix UI](https://img.shields.io/badge/Radix%20UI-161618?style=flat-square&logo=radixui&logoColor=white)](https://www.radix-ui.com)
+[![shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-000000?style=flat-square&logo=shadcnui&logoColor=white)](https://ui.shadcn.com)
+[![Framer Motion 11](https://img.shields.io/badge/Framer%20Motion%2011-0055FF?style=flat-square&logo=framer&logoColor=white)](https://motion.dev)
+[![Recharts 2](https://img.shields.io/badge/Recharts%202-1074B6?style=flat-square)](https://recharts.org)
+[![Lucide](https://img.shields.io/badge/Lucide-F56565?style=flat-square&logo=lucide&logoColor=white)](https://lucide.dev)
+[![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?style=flat-square&logo=supabase&logoColor=black)](https://supabase.com)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)](https://www.postgresql.org)
+[![Discord](https://img.shields.io/badge/Discord-5865F2?style=flat-square&logo=discord&logoColor=white)](https://discord.com/developers)
+[![PageSpeed Insights](https://img.shields.io/badge/PageSpeed%20Insights-4285F4?style=flat-square&logo=pagespeedinsights&logoColor=white)](https://developers.google.com/speed/docs/insights/v5/about)
+[![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white)](https://vercel.com)
+[![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)](https://github.com/features/actions)
+[![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=flat-square)](https://playwright.dev)
+[![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=flat-square&logo=eslint&logoColor=white)](https://eslint.org)
 
 Free website analytics you install with one script tag. Analytica records page views, visits, traffic sources,
 locations, devices and browsers, runs Google PageSpeed on your site, and DMs you on Discord when your backend
@@ -163,6 +172,31 @@ public/tracking-script.js
 supabase/migrations/  schema, RLS policies, demo-account protection
 e2e/                  Playwright tests
 ```
+
+## <img src="docs/icons/layers.svg" width="24" height="24" alt="" /> Tech stack
+
+**Frontend**<br/>
+[![Next.js 16](https://img.shields.io/badge/Next.js%2016-000000?style=flat-square&logo=nextdotjs&logoColor=white)](https://nextjs.org)
+[![React 18](https://img.shields.io/badge/React%2018-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
+[![TypeScript 5.9](https://img.shields.io/badge/TypeScript%205.9-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Tailwind CSS 3](https://img.shields.io/badge/Tailwind%20CSS%203-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Radix UI](https://img.shields.io/badge/Radix%20UI-161618?style=flat-square&logo=radixui&logoColor=white)](https://www.radix-ui.com)
+[![shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-000000?style=flat-square&logo=shadcnui&logoColor=white)](https://ui.shadcn.com)
+[![Framer Motion 11](https://img.shields.io/badge/Framer%20Motion%2011-0055FF?style=flat-square&logo=framer&logoColor=white)](https://motion.dev)
+[![Recharts 2](https://img.shields.io/badge/Recharts%202-1074B6?style=flat-square)](https://recharts.org)
+[![Lucide](https://img.shields.io/badge/Lucide-F56565?style=flat-square&logo=lucide&logoColor=white)](https://lucide.dev)
+
+**Backend & data**<br/>
+[![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?style=flat-square&logo=supabase&logoColor=black)](https://supabase.com)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)](https://www.postgresql.org)
+[![Discord](https://img.shields.io/badge/Discord-5865F2?style=flat-square&logo=discord&logoColor=white)](https://discord.com/developers)
+[![PageSpeed Insights](https://img.shields.io/badge/PageSpeed%20Insights-4285F4?style=flat-square&logo=pagespeedinsights&logoColor=white)](https://developers.google.com/speed/docs/insights/v5/about)
+
+**Infrastructure & testing**<br/>
+[![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white)](https://vercel.com)
+[![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)](https://github.com/features/actions)
+[![Playwright](https://img.shields.io/badge/Playwright-2EAD33?style=flat-square)](https://playwright.dev)
+[![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=flat-square&logo=eslint&logoColor=white)](https://eslint.org)
 
 ## <img src="docs/icons/square-terminal.svg" width="24" height="24" alt="" /> Run it locally
 
