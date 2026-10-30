@@ -1,4 +1,4 @@
-# Analytica
+<h1><img src="docs/wordmark.png" width="258" alt="Analytica" /></h1>
 
 [![E2E Tests](https://github.com/Troy2727/analytica/actions/workflows/e2e.yml/badge.svg)](https://github.com/Troy2727/analytica/actions/workflows/e2e.yml)
 [![Next.js 16](https://img.shields.io/badge/Next.js%2016-000000?style=flat-square&logo=nextdotjs&logoColor=white)](https://nextjs.org)
