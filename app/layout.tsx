@@ -1,10 +1,9 @@
-import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Geist } from "next/font/google";
-import Script from "next/script";
 import AnimatedBackground from "@/components/animated-background";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
+import SelfTracking from "@/components/self-tracking";
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
@@ -45,9 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <Footer />
         <Toaster />
-        <Analytics />
-        {/* Analytica tracks its own site with the same script customers install. */}
-        <Script defer data-domain="analytica-phi.vercel.app" src={`${SITE_URL}/tracking-script.js`} />
+        <SelfTracking />
       </body>
     </html>
   );

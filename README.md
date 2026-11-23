@@ -72,6 +72,17 @@ import Script from "next/script";
 The script sends a `session_start` when a visitor's session begins (sessions last 10 minutes), a `pageview` on
 load and on every client-side navigation, and keeps nothing in the browser except a random session ID.
 
+**Outbound links and file downloads** are tracked automatically: clicks on links to other sites and on links to
+files (PDF, ZIP, DMG and other common types) are recorded with the link's URL, without the query string or
+fragment. Navigation is never delayed. Optional attributes on the script tag:
+
+| Attribute | Effect |
+| --- | --- |
+| `data-outbound-links="false"` | Don't record outbound link clicks |
+| `data-file-downloads="false"` | Don't record file downloads |
+| `data-file-types="zip,dmg"` | Replace the list of file extensions that count as downloads |
+| `data-add-file-types="xyz"` | Add extensions to that list |
+
 <p align="center">
   <a href="https://github.com/Troy2727/analytica/blob/main/docs/diagrams/renders/tracking-flow.gif" title="Click to see full size">
     <img src="docs/diagrams/renders/tracking-flow.gif" alt="How a page view is tracked" width="100%" />

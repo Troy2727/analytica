@@ -46,7 +46,8 @@ export default function DeleteWebsiteButton({ domain, className }: { domain: str
         <AlertDialogHeader>
           <AlertDialogTitle className="text-neutral-100">Delete {domain}?</AlertDialogTitle>
           <AlertDialogDescription className="text-neutral-400">
-            This permanently deletes the website and all of its page views, visits and events. It can&apos;t be undone.
+            This permanently deletes the website and all of its page views, visits, events, goals and funnels. It
+            can&apos;t be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

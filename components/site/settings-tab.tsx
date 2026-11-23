@@ -7,6 +7,7 @@ import { CardContent, CardDescription, CardHeader, CardTitle } from "@/component
 import InstallSnippet from "@/components/install-snippet";
 import DeleteWebsiteButton from "@/components/site/delete-website-button";
 import { DocsLink, Panel } from "@/components/site/panel";
+import ShareLinkPanel from "@/components/site/share-link-panel";
 import { downloadCsv } from "@/lib/csv";
 import { supabase } from "@/lib/supabase";
 
@@ -122,6 +123,8 @@ export default function SettingsTab({ domain }: { domain: string }) {
           />
         </CardContent>
       </Panel>
+
+      <ShareLinkPanel domain={domain} />
 
       <Panel>
         <CardHeader className="pb-0">

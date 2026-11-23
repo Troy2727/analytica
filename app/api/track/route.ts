@@ -2,19 +2,30 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { CORS_HEADERS } from "@/lib/cors";
+import { normalizeLinkUrl } from "@/lib/link-url";
 import { supabase } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
 interface TrackRequest {
-  event: "session_start" | "pageview" | "session_end";
+  event: "session_start" | "pageview" | "session_end" | "engagement" | "outbound_click" | "file_download";
   domain: string;
   url: string;
+  sessionId?: string;
+  engagedMs?: unknown;
+  targetUrl?: unknown;
   source?: string;
   operatingSystem?: string;
   deviceType?: string;
   browserName?: string;
 }
+
+const SESSION_ID = /^session-[0-9a-f]{16}$/;
+const MAX_ENGAGED_MS = 30 * 60 * 1000;
+
+/** The script's session id, or null when it is missing or malformed (older cached scripts send none). */
+const sessionOf = (body: TrackRequest) =>
+  typeof body.sessionId === "string" && SESSION_ID.test(body.sessionId) ? body.sessionId : null;
 
 const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
 
@@ -47,6 +58,8 @@ export async function POST(request: NextRequest) {
       return reply({ error: "Domain mismatch" }, 400);
     }
 
+    const sessionId = sessionOf(body);
+
     if (body.event === "pageview") {
       const { error } = await supabase.from("page_views").insert({
         domain: body.domain,
@@ -55,6 +68,7 @@ export async function POST(request: NextRequest) {
         operating_system: body.operatingSystem || "Unknown",
         device_type: body.deviceType || "Unknown",
         browser_name: body.browserName || "Unknown",
+        client_session_id: sessionId,
       });
       if (error) throw error;
     } else if (body.event === "session_start") {
@@ -62,6 +76,31 @@ export async function POST(request: NextRequest) {
         website_id: body.domain,
         event: "session_start",
         source: body.source || "direct",
+        client_session_id: sessionId,
+      });
+      if (error) throw error;
+    } else if (body.event === "engagement") {
+      if (!sessionId) return reply({ error: "Invalid session" }, 400);
+      const ms = body.engagedMs;
+      if (typeof ms !== "number" || !Number.isFinite(ms) || ms <= 0) {
+        return reply({ error: "Invalid engagement" }, 400);
+      }
+      const { error } = await supabase.from("page_engagement").insert({
+        domain: body.domain,
+        page: body.url,
+        client_session_id: sessionId,
+        engaged_ms: Math.min(Math.max(1, Math.round(ms)), MAX_ENGAGED_MS), // the column requires 1..30 min
+      });
+      if (error) throw error;
+    } else if (body.event === "outbound_click" || body.event === "file_download") {
+      const url = normalizeLinkUrl(body.targetUrl);
+      if (!url) return reply({ error: "Invalid link URL" }, 400);
+      const { error } = await supabase.from("link_events").insert({
+        domain: body.domain,
+        kind: body.event === "outbound_click" ? "outbound" : "download",
+        url,
+        page: body.url.slice(0, 2048),
+        client_session_id: sessionId,
       });
       if (error) throw error;
     }
