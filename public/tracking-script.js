@@ -15,6 +15,10 @@
  *   data-file-downloads="false"   don't report downloads
  *   data-file-types="zip,dmg"     replace the default file extensions
  *   data-add-file-types="xyz"     add to them
+ *   data-errors="false"           don't report JavaScript errors
+ *
+ * Uncaught errors and unhandled promise rejections are reported as `js_error`
+ * with their name, message and stack (each distinct one once, at most 10 per page).
  * Custom calls:
  *   window.your_tracking("event_name", { callback: fn })
  * Calls made before this script loads can be queued in window.your_tracking.q.
@@ -268,6 +272,66 @@
   if (domain && (trackOutbound || trackDownloads)) {
     document.addEventListener("click", onLinkClick, true);
     document.addEventListener("auxclick", onLinkClick, true);
+  }
+
+  // JavaScript errors: uncaught errors and unhandled promise rejections, each
+  // distinct one once and at most MAX_ERRORS per page load. Errors from
+  // cross-origin scripts, which the browser reduces to "Script error.", are skipped.
+  var MAX_ERRORS = 10;
+  var errorsSent = 0;
+  var errorsSeen = {};
+
+  function isErrorLike(value) {
+    return value !== null && typeof value === "object" && typeof value.message === "string";
+  }
+  function describe(value) {
+    if (typeof value === "string") return value;
+    try {
+      return JSON.stringify(value) || String(value);
+    } catch {
+      return String(value);
+    }
+  }
+  function reportError(name, message, stack, file, line, col) {
+    var key = name + "\n" + message + "\n" + (stack || "");
+    if (errorsSent >= MAX_ERRORS || errorsSeen[key]) return;
+    errorsSeen[key] = true;
+    errorsSent++;
+    postKeepalive(
+      Object.assign(
+        {
+          event: "js_error",
+          url: window.location.href,
+          sessionId: sessionId,
+          name: String(name).slice(0, 100),
+          message: String(message).slice(0, 1000),
+          stack: stack ? String(stack).slice(0, 8000) : null,
+          file: file || null,
+          line: line || null,
+          col: col || null,
+        },
+        context
+      )
+    );
+  }
+  function onError(event) {
+    var error = event.error;
+    if (isErrorLike(error)) {
+      return reportError(error.name || "Error", error.message, error.stack, event.filename, event.lineno, event.colno);
+    }
+    if (!event.filename && /^Script error\.?$/.test(event.message || "")) return;
+    var message = error !== undefined && error !== null ? describe(error) : event.message || "";
+    reportError("Error", message, null, event.filename, event.lineno, event.colno);
+  }
+  function onRejection(event) {
+    var reason = event.reason;
+    if (isErrorLike(reason)) return reportError(reason.name || "Error", reason.message, reason.stack);
+    reportError("UnhandledRejection", describe(reason), null);
+  }
+
+  if (domain && attribute("data-errors") !== "false") {
+    window.addEventListener("error", onError);
+    window.addEventListener("unhandledrejection", onRejection);
   }
 
   // Replay calls queued before the script loaded (under a live session), then take over the global.

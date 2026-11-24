@@ -3,7 +3,7 @@
 
 import { supabase } from "@/lib/supabase";
 import { timeframeStart } from "@/lib/timeframe";
-import type { CustomEvent, Engagement, LinkEvent, PageView, Visit, Website } from "@/types";
+import type { CustomEvent, Engagement, JsError, LinkEvent, PageView, Visit, Website } from "@/types";
 
 export interface SiteData {
   pageViews: PageView[];
@@ -11,6 +11,7 @@ export interface SiteData {
   events: CustomEvent[];
   engagement: Engagement[];
   linkEvents: LinkEvent[];
+  jsErrors: JsError[];
   asOf: number; // the moment the timeframe was measured back from
 }
 
@@ -23,11 +24,13 @@ export async function getSiteData(domain: string, timeframe: string): Promise<Si
   let visits = supabase.from("visits").select("*").eq("website_id", domain);
   let engagement = supabase.from("page_engagement").select("*").eq("domain", domain);
   let links = supabase.from("link_events").select("*").eq("domain", domain).order("created_at", { ascending: false });
+  let errors = supabase.from("js_errors").select("*").eq("domain", domain).order("created_at", { ascending: false });
   if (since) {
     views = views.gte("created_at", since);
     visits = visits.gte("created_at", since);
     engagement = engagement.gte("created_at", since);
     links = links.gte("created_at", since);
+    errors = errors.gte("created_at", since);
   }
   const events = supabase
     .from("events")
@@ -35,12 +38,13 @@ export async function getSiteData(domain: string, timeframe: string): Promise<Si
     .eq("website_id", domain)
     .order("created_at", { ascending: false });
 
-  const [v, s, e, g, l] = await Promise.all([
+  const [v, s, e, g, l, j] = await Promise.all([
     views.returns<PageView[]>(),
     visits.returns<Visit[]>(),
     events.returns<CustomEvent[]>(),
     engagement.returns<Engagement[]>(),
     links.returns<LinkEvent[]>(),
+    errors.returns<JsError[]>(),
   ]);
   const error = v.error ?? s.error ?? e.error;
   if (error) throw new Error(error.message);
@@ -48,6 +52,7 @@ export async function getSiteData(domain: string, timeframe: string): Promise<Si
   // migrations 007/010) the dashboard still works.
   if (g.error) console.error("Engagement query failed:", g.error.message);
   if (l.error) console.error("Link events query failed:", l.error.message);
+  if (j.error) console.error("JavaScript errors query failed:", j.error.message); // before migration 014
 
   return {
     pageViews: v.data ?? [],
@@ -55,6 +60,7 @@ export async function getSiteData(domain: string, timeframe: string): Promise<Si
     events: e.data ?? [],
     engagement: g.data ?? [],
     linkEvents: l.data ?? [],
+    jsErrors: j.data ?? [],
     asOf,
   };
 }
