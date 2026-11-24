@@ -44,8 +44,18 @@ change its password, Discord ID or demo website.
 
 - **Traffic:** visits, page views, pages per session, people on the site in the last 10 minutes, and a chart by
   hour or day for any timeframe from the last hour to lifetime.
+- **Bounce rate and visit duration:** the share of sessions that viewed only one page and the average time
+  between a session's first and last page view, plus bounce rate and time on page for each top page.
+- **Compare to previous period:** change badges on every stat tile and a dashed line for the previous period on
+  the traffic chart.
 - **Breakdowns:** top pages, traffic sources (`?utm=` / `?ref=`), countries and cities, operating systems, device
   types and browsers.
+- **Outbound links and file downloads:** the links visitors click to leave your site and the files they
+  download, each in its own card.
+- **Goals and funnels:** a goal counts the sessions that reach a page or a set of pages (`/pricing`, `/blog*`);
+  a funnel shows how many sessions get through 2 to 8 pages in order, and where they drop off.
+- **Share link:** a public, read-only link to a site's General and Performance tabs. Anyone with the link can
+  view it without signing in; revoking it stops it working at once. Shared pages aren't indexed or tracked.
 - **Custom events:** send any event from your backend with one HTTP request and browse them per event name.
 - **Discord alerts:** each custom event can arrive as a Discord DM from Analytica Bot.
 - **Performance:** Lighthouse scores (performance, accessibility, best practices, SEO) and lab timings from the
@@ -70,7 +80,8 @@ import Script from "next/script";
 ```
 
 The script sends a `session_start` when a visitor's session begins (sessions last 10 minutes), a `pageview` on
-load and on every client-side navigation, and keeps nothing in the browser except a random session ID.
+load and on every client-side navigation, an `engagement` with the time each page was visible and focused, and
+keeps nothing in the browser except a random session ID.
 
 **Outbound links and file downloads** are tracked automatically: clicks on links to other sites and on links to
 files (PDF, ZIP, DMG and other common types) are recorded with the link's URL, without the query string or
@@ -154,12 +165,14 @@ The settings page has the same request as copy-ready JavaScript and Python.
   <p align="center"><sub>Click the diagram to see it full size.</sub></p>
 </p>
 
-- **Next.js 16 (App Router)** on Vercel serves the dashboard and three API routes:
-  `/api/track` (tracking script), `/api/events` (custom events) and `/api/keepalive` (a daily Vercel Cron that
-  keeps the free Supabase project awake).
-- **Supabase (Postgres + Auth)** stores `users`, `websites`, `page_views`, `visits` and `events`. Row-level
-  security limits every dashboard query to the signed-in user's own websites. Requests without a user session
-  (API-key events, PageSpeed server actions) use the service role and check ownership in code.
+- **Next.js 16 (App Router)** on Vercel serves the dashboard and four API routes:
+  `/api/track` (tracking script), `/api/events` (custom events), `/api/share` (data for share links, checked
+  against the token on every request) and `/api/keepalive` (a daily Vercel Cron that keeps the free Supabase
+  project awake).
+- **Supabase (Postgres + Auth)** stores `users`, `websites`, `page_views`, `visits`, `page_engagement`,
+  `link_events`, `events`, `goals`, `funnels` and `share_links`. Row-level security limits every dashboard query
+  to the signed-in user's own websites. Requests without a user session (API-key events, PageSpeed server
+  actions, share links) use the service role and check ownership or the share token in code.
 - Visitor location comes from Vercel's geo headers; no IP addresses are stored.
 
 Tracked rows are linked to a website by its domain, not by a foreign key:
@@ -175,7 +188,8 @@ Tracked rows are linked to a website by its domain, not by a foreign key:
 ```
 app/                  pages and API routes
   site/[website]/     analytics for one website (tabs live in components/site)
-  api/                track, events, keepalive
+  share/              public read-only dashboard for share links
+  api/                track, events, share, keepalive
 actions/pagespeed.ts  server actions: run and read PageSpeed results
 components/           UI; components/ui holds shadcn/ui and Magic UI primitives
 lib/                  Supabase clients, queries, analytics math, formatting, CSV
