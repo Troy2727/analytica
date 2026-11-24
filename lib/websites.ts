@@ -7,8 +7,9 @@ export async function deleteWebsite(domain: string): Promise<void> {
     supabase.from("visits").delete().eq("website_id", domain),
     supabase.from("events").delete().eq("domain", domain),
     supabase.from("link_events").delete().eq("domain", domain),
+    supabase.from("web_vitals").delete().eq("domain", domain),
   ]);
-  // link_events may not exist yet (migration 010 not applied); that mustn't block deleting a site.
+  // link_events and web_vitals may not exist yet (migrations 010/013 not applied); that mustn't block deleting a site.
   const failed = results.find((r) => r.error && !isMissingTable(r.error));
   if (failed?.error) throw failed.error;
 

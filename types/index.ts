@@ -108,6 +108,23 @@ export interface LinkEvent {
   created_at: string;
 }
 
+/** Core Web Vitals measured in a visitor's browser for one page load (`web_vitals`). Null = not measured. */
+export interface WebVital {
+  id: string;
+  domain: string;
+  page: string;
+  lcp_ms: number | null;
+  inp_ms: number | null;
+  cls: number | string | null; // NUMERIC: PostgREST may return it as a string
+  fcp_ms: number | null;
+  ttfb_ms: number | null;
+  country: string | null;
+  device_type: string | null;
+  browser_name: string | null;
+  client_session_id: string | null;
+  created_at: string;
+}
+
 /**
  * What a public share link returns (`/api/share/<domain>/<token>`): one website's
  * traffic with ids removed, URLs without query strings, and session ids replaced

@@ -4,16 +4,22 @@ import { NextRequest, NextResponse } from "next/server";
 import { CORS_HEADERS } from "@/lib/cors";
 import { normalizeLinkUrl } from "@/lib/link-url";
 import { supabase } from "@/lib/supabase";
+import { parseVitals } from "@/lib/web-vitals";
 
 export const dynamic = "force-dynamic";
 
 interface TrackRequest {
-  event: "session_start" | "pageview" | "session_end" | "engagement" | "outbound_click" | "file_download";
+  event: "session_start" | "pageview" | "session_end" | "engagement" | "outbound_click" | "file_download" | "web_vitals";
   domain: string;
   url: string;
   sessionId?: string;
   engagedMs?: unknown;
   targetUrl?: unknown;
+  lcp?: unknown;
+  inp?: unknown;
+  cls?: unknown;
+  fcp?: unknown;
+  ttfb?: unknown;
   source?: string;
   operatingSystem?: string;
   deviceType?: string;
@@ -100,6 +106,19 @@ export async function POST(request: NextRequest) {
         kind: body.event === "outbound_click" ? "outbound" : "download",
         url,
         page: body.url.slice(0, 2048),
+        client_session_id: sessionId,
+      });
+      if (error) throw error;
+    } else if (body.event === "web_vitals") {
+      const vitals = parseVitals(body);
+      if (!vitals) return reply({ error: "Invalid web vitals" }, 400);
+      const { error } = await supabase.from("web_vitals").insert({
+        domain: body.domain,
+        page: body.url.slice(0, 2048),
+        ...vitals,
+        country: locate(request).country,
+        device_type: (body.deviceType || "Unknown").slice(0, 50),
+        browser_name: (body.browserName || "Unknown").slice(0, 50),
         client_session_id: sessionId,
       });
       if (error) throw error;

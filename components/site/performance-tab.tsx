@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { getSavedMetrics, runPageSpeed } from "@/actions/pagespeed";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { WebVitalsPanel } from "@/components/site/web-vitals-panel";
 import {
   formatMetric,
   grade,
@@ -13,7 +14,7 @@ import {
   SCORE_METRICS,
   TIMING_METRICS,
 } from "@/lib/pagespeed";
-import type { PerformanceMetrics } from "@/types";
+import type { PerformanceMetrics, WebVital } from "@/types";
 
 const tile =
   "group relative rounded-xl border border-blue-400/20 bg-gradient-to-br from-blue-900/20 to-black backdrop-blur-sm transition-all duration-300 hover:border-navy-700 hover:bg-navy-800/50";
@@ -120,15 +121,18 @@ function Recommendations({ metrics }: { metrics: PerformanceMetrics }) {
 /**
  * Lighthouse scores for the site, saved from the last run; "Analyze" runs a fresh one.
  * `readOnly` (shared view) shows the given metrics with no way to re-run.
+ * With `webVitals` (owner view) real-user Core Web Vitals are shown above them.
  */
 export default function PerformanceTab({
   domain,
   readOnly = false,
   metrics: givenMetrics = null,
+  webVitals,
 }: {
   domain: string;
   readOnly?: boolean;
   metrics?: PerformanceMetrics | null;
+  webVitals?: WebVital[];
 }) {
   const [savedMetrics, setMetrics] = useState<PerformanceMetrics | null>(null);
   const [running, setRunning] = useState(false);
@@ -173,48 +177,51 @@ export default function PerformanceTab({
   );
 
   return (
-    <Card className="border border-blue-400/20 bg-gradient-to-br from-blue-900/20 to-black text-neutral-100">
-      {header}
-      {metrics ? (
-        <CardContent className="p-6 py-10">
-          <div className="mb-12 grid grid-cols-2 gap-8 lg:grid-cols-4">
-            {SCORE_METRICS.map(({ key, label }) => (
-              <ScoreRing key={key} value={metrics[key]} label={label} />
-            ))}
-          </div>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {TIMING_METRICS.map(({ key, label, unit }) => (
-              <div key={key} className={`${tile} p-6`}>
-                <p className="text-sm font-medium text-neutral-400">{label}</p>
-                <p className={`text-3xl tracking-tight ${gradientNumber}`}>{formatMetric(metrics[key], unit)}</p>
-                <HoverLine />
-              </div>
-            ))}
-          </div>
-          <div className="mt-6 grid gap-6 lg:grid-cols-3">
-            <OverallScore metrics={metrics} />
-            <div className="lg:col-span-2">
-              <Recommendations metrics={metrics} />
+    <div className="space-y-6">
+      {webVitals && <WebVitalsPanel rows={webVitals} />}
+      <Card className="border border-blue-400/20 bg-gradient-to-br from-blue-900/20 to-black text-neutral-100">
+        {header}
+        {metrics ? (
+          <CardContent className="p-6 py-10">
+            <div className="mb-12 grid grid-cols-2 gap-8 lg:grid-cols-4">
+              {SCORE_METRICS.map(({ key, label }) => (
+                <ScoreRing key={key} value={metrics[key]} label={label} />
+              ))}
             </div>
-          </div>
-          {error && <p className="mt-6 text-sm text-red-400">{error}</p>}
-        </CardContent>
-      ) : (
-        <CardContent className="flex flex-col items-center space-y-4 py-8">
-          <p className="text-lg text-neutral-300">No performance data available</p>
-          {!readOnly && <Button onClick={analyze} disabled={running} className="bg-blue-600 text-white hover:bg-blue-500">
-            {running ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Analyzing...
-              </>
-            ) : (
-              "Analyze Performance"
-            )}
-          </Button>}
-          {error && <p className="text-sm text-red-400">{error}</p>}
-        </CardContent>
-      )}
-    </Card>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {TIMING_METRICS.map(({ key, label, unit }) => (
+                <div key={key} className={`${tile} p-6`}>
+                  <p className="text-sm font-medium text-neutral-400">{label}</p>
+                  <p className={`text-3xl tracking-tight ${gradientNumber}`}>{formatMetric(metrics[key], unit)}</p>
+                  <HoverLine />
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 grid gap-6 lg:grid-cols-3">
+              <OverallScore metrics={metrics} />
+              <div className="lg:col-span-2">
+                <Recommendations metrics={metrics} />
+              </div>
+            </div>
+            {error && <p className="mt-6 text-sm text-red-400">{error}</p>}
+          </CardContent>
+        ) : (
+          <CardContent className="flex flex-col items-center space-y-4 py-8">
+            <p className="text-lg text-neutral-300">No performance data available</p>
+            {!readOnly && <Button onClick={analyze} disabled={running} className="bg-blue-600 text-white hover:bg-blue-500">
+              {running ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Analyzing...
+                </>
+              ) : (
+                "Analyze Performance"
+              )}
+            </Button>}
+            {error && <p className="text-sm text-red-400">{error}</p>}
+          </CardContent>
+        )}
+      </Card>
+    </div>
   );
 }
