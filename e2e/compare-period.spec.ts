@@ -6,7 +6,7 @@ import { formatRange } from "@/lib/format";
 import { comparisonWindows } from "@/lib/timeframe";
 import type { PageView, Visit } from "@/types";
 
-// Pure functions only. Run with TZ=America/New_York for the daylight-saving case.
+// Pure functions only. Run with TZ=America/New_York to also check the midnight-label contrast in the daylight-saving case.
 
 const HOUR = 60 * 60 * 1000;
 const DAY = 24 * HOUR;
@@ -122,7 +122,10 @@ test("a daily previous label keeps its calendar date across a daylight-saving ch
   const bucket = new Date(2026, 2, 11).getTime();
   const label = (ms: number) => new Date(ms).toLocaleDateString("en-US", { month: "long", day: "numeric" });
   expect(label(previousBucketMoment(bucket, 7 * DAY, false))).toBe("March 4");
-  expect(label(bucket - 7 * DAY)).toBe("March 3"); // what midnight-based labelling would wrongly show
+  // What midnight-based labelling would wrongly show; only differs where the clocks changed (not in UTC, as on CI).
+  if (new Date(bucket).getTimezoneOffset() !== new Date(bucket - 7 * DAY).getTimezoneOffset()) {
+    expect(label(bucket - 7 * DAY)).toBe("March 3");
+  }
 });
 
 test("legend ranges show times only for windows of a day or less", () => {
