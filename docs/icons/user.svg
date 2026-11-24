@@ -6,11 +6,18 @@
   height="24"
   viewBox="0 0 24 24"
   fill="none"
-  stroke="#3B82F6"
+  stroke="url(#analytica)"
   stroke-width="2"
   stroke-linecap="round"
   stroke-linejoin="round"
 >
+  <defs>
+    <linearGradient id="analytica" gradientUnits="userSpaceOnUse" x1="3" y1="3" x2="21" y2="21">
+      <stop offset="0" stop-color="#3B82F6" />
+      <stop offset="0.5" stop-color="#22D3EE" />
+      <stop offset="1" stop-color="#10B981" />
+    </linearGradient>
+  </defs>
   <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
   <circle cx="12" cy="7" r="4" />
 </svg>
