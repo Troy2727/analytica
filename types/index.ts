@@ -19,6 +19,7 @@ export interface PageView {
   operating_system?: string;
   device_type?: string;
   browser_name?: string;
+  client_session_id?: string | null; // the tracking script's session id; null on rows from before it was sent
 }
 
 /** One row per browser session (`visits`); `website_id` holds the domain. */
@@ -27,6 +28,17 @@ export interface Visit {
   event: "session_start" | "session_end" | "pageview";
   created_at: string;
   source: string | null;
+  client_session_id?: string | null;
+}
+
+/** Visible, focused time on one page view, sent in pieces (`page_engagement`). */
+export interface Engagement {
+  id: string;
+  domain: string;
+  page: string;
+  client_session_id: string;
+  engaged_ms: number;
+  created_at: string;
 }
 
 export interface EventField {
@@ -65,6 +77,50 @@ export interface PerformanceMetrics {
   totalBlockingTime: number;
   cumulativeLayoutShift: number;
   speedIndex: number;
+}
+
+/** A goal: tracked sessions that visit a page matching `pattern` (`goals`). */
+export interface Goal {
+  id: string;
+  website_id: string;
+  name: string;
+  pattern: string; // normalized path, `*` as wildcard
+  created_at: string;
+}
+
+/** A funnel: 2 to 8 page patterns visited in order within a session (`funnels`). */
+export interface Funnel {
+  id: string;
+  website_id: string;
+  name: string;
+  steps: string[];
+  created_at: string;
+}
+
+/** An outbound link click or file download, sent by the tracking script (`link_events`). */
+export interface LinkEvent {
+  id: string;
+  domain: string;
+  kind: "outbound" | "download";
+  url: string; // origin + path, no query or fragment
+  page: string | null;
+  client_session_id: string | null;
+  created_at: string;
+}
+
+/**
+ * What a public share link returns (`/api/share/<domain>/<token>`): one website's
+ * traffic with ids removed, URLs without query strings, and session ids replaced
+ * by labels that only mean something within one response.
+ */
+export interface SharedPayload {
+  domain: string;
+  timeframe: string;
+  pageViews: Omit<PageView, "id" | "domain">[];
+  visits: Pick<Visit, "created_at" | "source">[];
+  engagement: Omit<Engagement, "id" | "domain">[];
+  activeUsers: number;
+  metrics: PerformanceMetrics | null;
 }
 
 /** A label and how many times it occurred, for the "top N" lists. */

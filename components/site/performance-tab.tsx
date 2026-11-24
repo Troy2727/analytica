@@ -117,17 +117,30 @@ function Recommendations({ metrics }: { metrics: PerformanceMetrics }) {
   );
 }
 
-/** Lighthouse scores for the site, saved from the last run; "Analyze" runs a fresh one. */
-export default function PerformanceTab({ domain }: { domain: string }) {
-  const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null);
+/**
+ * Lighthouse scores for the site, saved from the last run; "Analyze" runs a fresh one.
+ * `readOnly` (shared view) shows the given metrics with no way to re-run.
+ */
+export default function PerformanceTab({
+  domain,
+  readOnly = false,
+  metrics: givenMetrics = null,
+}: {
+  domain: string;
+  readOnly?: boolean;
+  metrics?: PerformanceMetrics | null;
+}) {
+  const [savedMetrics, setMetrics] = useState<PerformanceMetrics | null>(null);
   const [running, setRunning] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const metrics = readOnly ? givenMetrics : savedMetrics;
 
   useEffect(() => {
+    if (readOnly) return;
     getSavedMetrics(domain)
       .then(setMetrics)
       .catch(() => setError("Could not load saved performance metrics."));
-  }, [domain]);
+  }, [domain, readOnly]);
 
   async function analyze() {
     setRunning(true);
@@ -144,7 +157,7 @@ export default function PerformanceTab({ domain }: { domain: string }) {
         <CardTitle className="text-xl font-bold text-white">Performance Metrics</CardTitle>
         <CardDescription className="text-neutral-400">Website performance analysis</CardDescription>
       </div>
-      {metrics && (
+      {metrics && !readOnly && (
         <Button
           onClick={analyze}
           disabled={running}
@@ -189,7 +202,7 @@ export default function PerformanceTab({ domain }: { domain: string }) {
       ) : (
         <CardContent className="flex flex-col items-center space-y-4 py-8">
           <p className="text-lg text-neutral-300">No performance data available</p>
-          <Button onClick={analyze} disabled={running} className="bg-blue-600 text-white hover:bg-blue-500">
+          {!readOnly && <Button onClick={analyze} disabled={running} className="bg-blue-600 text-white hover:bg-blue-500">
             {running ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -198,7 +211,7 @@ export default function PerformanceTab({ domain }: { domain: string }) {
             ) : (
               "Analyze Performance"
             )}
-          </Button>
+          </Button>}
           {error && <p className="text-sm text-red-400">{error}</p>}
         </CardContent>
       )}

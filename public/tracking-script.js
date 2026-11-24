@@ -2,9 +2,20 @@
  * Analytica tracking script. Add to a page with:
  *   <script defer data-domain="example.com" src="https://analytica-phi.vercel.app/tracking-script.js"></script>
  *
- * Sends a `session_start` when a visitor's session begins (sessions last 10 minutes),
- * a `pageview` for the first page and every client-side navigation, and a
- * `session_end` when an expired session is replaced. Custom calls:
+ * Sends a `session_start` when a visitor's session begins (a session ends after
+ * 10 minutes without a page view), a `pageview` for the first page and every
+ * client-side navigation, a `session_end` when an expired session is replaced, and
+ * `engagement` with the time a page was visible and focused. Every request carries
+ * the session id.
+ *
+ * Clicks on links to other sites (`outbound_click`) and to downloadable files
+ * (`file_download`) are reported with the link's URL minus query and fragment,
+ * without delaying navigation. Optional attributes on the script tag:
+ *   data-outbound-links="false"   don't report outbound links
+ *   data-file-downloads="false"   don't report downloads
+ *   data-file-types="zip,dmg"     replace the default file extensions
+ *   data-add-file-types="xyz"     add to them
+ * Custom calls:
  *   window.your_tracking("event_name", { callback: fn })
  * Calls made before this script loads can be queued in window.your_tracking.q.
  */
@@ -15,6 +26,7 @@
   var SESSION_MS = 10 * 60 * 1000;
   var KEY_ID = "session_id";
   var KEY_EXPIRES = "session_expiration_timestamp";
+  var MIN_ENGAGED_MS = 1000; // shorter stretches wait for the next send
 
   var script = document.currentScript;
   var domain = script && script.getAttribute("data-domain");
@@ -56,9 +68,31 @@
     browserName: browserName(),
   };
 
-  function send(event, options) {
+  // localStorage can be blocked (privacy settings, sandboxed frames); fall back to
+  // memory so this page still has a session id.
+  var memory = {};
+  function load(key) {
+    var value = null;
     try {
-      var payload = Object.assign({ event: event, url: window.location.href }, context);
+      value = localStorage.getItem(key);
+    } catch {
+      // blocked: memory has the value
+    }
+    return value !== null ? value : memory[key] || null;
+  }
+  function save(key, value) {
+    memory[key] = value;
+    try {
+      localStorage.setItem(key, value);
+    } catch {
+      // blocked: memory has the value
+    }
+  }
+
+  var sessionId = load(KEY_ID);
+
+  function post(payload, options) {
+    try {
       var request = new XMLHttpRequest();
       request.open("POST", ENDPOINT, true);
       request.setRequestHeader("Content-Type", "application/json");
@@ -66,6 +100,28 @@
         if (options && typeof options.callback === "function") options.callback();
       };
       request.send(JSON.stringify(payload));
+    } catch (error) {
+      console.error("Analytica: could not send event", error);
+    }
+  }
+
+  function send(event, options) {
+    post(Object.assign({ event: event, url: window.location.href, sessionId: sessionId }, context), options);
+  }
+
+  // For sends while the page may be unloading: keepalive outlives the page, and a
+  // text/plain body skips the CORS preflight.
+  function postKeepalive(payload) {
+    if (typeof fetch !== "function") return post(payload);
+    try {
+      fetch(ENDPOINT, {
+        method: "POST",
+        keepalive: true,
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify(payload),
+      }).catch(function (error) {
+        console.error("Analytica: could not send event", error);
+      });
     } catch (error) {
       console.error("Analytica: could not send event", error);
     }
@@ -79,35 +135,160 @@
     }).join("");
   }
 
-  function startSession() {
-    localStorage.setItem(KEY_ID, randomId());
-    localStorage.setItem(KEY_EXPIRES, String(Date.now() + SESSION_MS));
-    send("session_start");
+  // Called before every page view: replaces a missing or expired session, then
+  // pushes the expiry 10 minutes ahead.
+  function ensureSession() {
+    var id = load(KEY_ID);
+    var expires = Number(load(KEY_EXPIRES));
+    if (id && expires && Date.now() >= expires) {
+      post(Object.assign({ event: "session_end", url: window.location.href, sessionId: id }, context));
+      id = null;
+    }
+    if (!id || !expires) {
+      sessionId = randomId();
+      save(KEY_ID, sessionId);
+      send("session_start");
+    } else {
+      sessionId = id;
+    }
+    save(KEY_EXPIRES, String(Date.now() + SESSION_MS));
   }
 
-  function ensureSession() {
-    var expires = Number(localStorage.getItem(KEY_EXPIRES));
-    if (!localStorage.getItem(KEY_ID) || !expires) {
-      startSession();
-    } else if (Date.now() >= expires) {
-      send("session_end");
-      startSession();
+  // Engagement: time the current page view is visible and focused, sent in pieces.
+  var current = null; // { url, sessionId } of the page view being timed
+  var engagedMs = 0;
+  var runningSince = null;
+
+  function isActive() {
+    return document.visibilityState === "visible" && document.hasFocus();
+  }
+  function resume() {
+    if (current && runningSince === null && isActive()) runningSince = Date.now();
+  }
+  function pause() {
+    if (runningSince !== null) {
+      engagedMs += Date.now() - runningSince;
+      runningSince = null;
+    }
+  }
+  function flush() {
+    pause();
+    if (current && engagedMs >= MIN_ENGAGED_MS) {
+      postKeepalive(
+        Object.assign({}, context, {
+          event: "engagement",
+          url: current.url,
+          sessionId: current.sessionId,
+          engagedMs: Math.round(engagedMs),
+        })
+      );
+      engagedMs = 0;
+    }
+    resume();
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "hidden") flush();
+    else resume();
+  });
+  window.addEventListener("pagehide", flush);
+  window.addEventListener("blur", pause);
+  window.addEventListener("focus", resume);
+
+  // Outbound links and file downloads.
+  var DEFAULT_FILE_TYPES =
+    "pdf,doc,docx,xls,xlsx,ppt,pptx,csv,txt,rtf,zip,rar,7z,gz,tar,dmg,pkg,exe,msi,apk,mp3,wav,mp4,mov,avi,mkv";
+
+  function attribute(name) {
+    return script ? script.getAttribute(name) : null;
+  }
+  function extensionList(value) {
+    return value
+      .split(",")
+      .map(function (type) {
+        return type.trim().toLowerCase().replace(/^\./, "");
+      })
+      .filter(Boolean);
+  }
+
+  var trackOutbound = attribute("data-outbound-links") !== "false";
+  var trackDownloads = attribute("data-file-downloads") !== "false";
+  var fileTypes = extensionList(attribute("data-file-types") !== null ? attribute("data-file-types") : DEFAULT_FILE_TYPES).concat(
+    extensionList(attribute("data-add-file-types") || "")
+  );
+  var lastLink = { key: "", at: 0 };
+
+  // "www." doesn't make a different site; a subdomain or another port does.
+  function siteOf(location) {
+    return location.hostname.toLowerCase().replace(/^www\./, "") + ":" + location.port;
+  }
+  function closestLink(node) {
+    for (; node && node !== document; node = node.parentNode) {
+      if (node.tagName && /^(a|area)$/i.test(node.tagName) && node.getAttribute("href") !== null) return node;
+    }
+    return null;
+  }
+  function isFile(pathname) {
+    var name = pathname.slice(pathname.lastIndexOf("/") + 1);
+    var dot = name.lastIndexOf(".");
+    return dot !== -1 && fileTypes.indexOf(name.slice(dot + 1).toLowerCase()) !== -1;
+  }
+
+  function onLinkClick(event) {
+    try {
+      if (event.type === "auxclick" && event.button !== 1) return; // middle click only
+      var link = closestLink(event.target);
+      if (!link) return;
+      var target = new URL(link.getAttribute("href"), document.baseURI); // honors <base href>, like the browser
+      if (target.protocol !== "http:" && target.protocol !== "https:") return;
+      var targetUrl = target.protocol + "//" + target.host + target.pathname;
+      if (targetUrl.length > 2048) return;
+
+      var kind = null;
+      if (siteOf(target) !== siteOf(window.location)) {
+        if (trackOutbound) kind = "outbound_click";
+      } else if (trackDownloads && (link.hasAttribute("download") || isFile(target.pathname))) {
+        kind = "file_download";
+      }
+      if (!kind) return;
+
+      var key = kind + " " + targetUrl;
+      var now = Date.now();
+      if (key === lastLink.key && now - lastLink.at < 1000) return; // double click
+      lastLink = { key: key, at: now };
+      postKeepalive(
+        Object.assign({}, context, { event: kind, url: window.location.href, targetUrl: targetUrl, sessionId: sessionId })
+      );
+    } catch (error) {
+      console.error("Analytica: could not send event", error);
     }
   }
 
-  // Replay calls queued before the script loaded, then take over the global.
+  // Capture phase, so links whose own handlers stop propagation still count.
+  if (domain && (trackOutbound || trackDownloads)) {
+    document.addEventListener("click", onLinkClick, true);
+    document.addEventListener("auxclick", onLinkClick, true);
+  }
+
+  // Replay calls queued before the script loaded (under a live session), then take over the global.
+  ensureSession();
   var queued = (window.your_tracking && window.your_tracking.q) || [];
   window.your_tracking = send;
   queued.forEach(function (args) {
     send.apply(null, args);
   });
 
-  ensureSession();
-
   var lastUrl = window.location.href;
   function pageview() {
+    flush(); // the previous page's time, under its own URL and session
+    current = null;
+    engagedMs = 0;
+    runningSince = null;
+    ensureSession();
     lastUrl = window.location.href;
+    current = { url: lastUrl, sessionId: sessionId };
     send("pageview");
+    resume();
   }
   function onNavigate() {
     if (window.location.href !== lastUrl) pageview();

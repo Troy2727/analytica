@@ -3,23 +3,31 @@
 
 import { supabase } from "@/lib/supabase";
 import { timeframeStart } from "@/lib/timeframe";
-import type { CustomEvent, PageView, Visit, Website } from "@/types";
+import type { CustomEvent, Engagement, LinkEvent, PageView, Visit, Website } from "@/types";
 
 export interface SiteData {
   pageViews: PageView[];
   visits: Visit[];
   events: CustomEvent[];
+  engagement: Engagement[];
+  linkEvents: LinkEvent[];
+  asOf: number; // the moment the timeframe was measured back from
 }
 
 /** Page views and visits within the timeframe, plus every custom event, for one domain. */
 export async function getSiteData(domain: string, timeframe: string): Promise<SiteData> {
-  const since = timeframeStart(timeframe)?.toISOString();
+  const asOf = Date.now();
+  const since = timeframeStart(timeframe, asOf)?.toISOString();
 
   let views = supabase.from("page_views").select("*").eq("domain", domain);
   let visits = supabase.from("visits").select("*").eq("website_id", domain);
+  let engagement = supabase.from("page_engagement").select("*").eq("domain", domain);
+  let links = supabase.from("link_events").select("*").eq("domain", domain).order("created_at", { ascending: false });
   if (since) {
     views = views.gte("created_at", since);
     visits = visits.gte("created_at", since);
+    engagement = engagement.gte("created_at", since);
+    links = links.gte("created_at", since);
   }
   const events = supabase
     .from("events")
@@ -27,15 +35,46 @@ export async function getSiteData(domain: string, timeframe: string): Promise<Si
     .eq("website_id", domain)
     .order("created_at", { ascending: false });
 
-  const [v, s, e] = await Promise.all([
+  const [v, s, e, g, l] = await Promise.all([
     views.returns<PageView[]>(),
     visits.returns<Visit[]>(),
     events.returns<CustomEvent[]>(),
+    engagement.returns<Engagement[]>(),
+    links.returns<LinkEvent[]>(),
   ]);
   const error = v.error ?? s.error ?? e.error;
   if (error) throw new Error(error.message);
+  // Engagement and link events are extra detail: without them (e.g. before
+  // migrations 007/010) the dashboard still works.
+  if (g.error) console.error("Engagement query failed:", g.error.message);
+  if (l.error) console.error("Link events query failed:", l.error.message);
 
-  return { pageViews: v.data ?? [], visits: s.data ?? [], events: e.data ?? [] };
+  return {
+    pageViews: v.data ?? [],
+    visits: s.data ?? [],
+    events: e.data ?? [],
+    engagement: g.data ?? [],
+    linkEvents: l.data ?? [],
+    asOf,
+  };
+}
+
+export interface PeriodData {
+  pageViews: PageView[];
+  visits: Visit[];
+}
+
+/** Page views and visits in [start, end), for comparing with an earlier period. */
+export async function getPeriodData(domain: string, start: number, end: number): Promise<PeriodData> {
+  const from = new Date(start).toISOString();
+  const to = new Date(end).toISOString();
+  const [v, s] = await Promise.all([
+    supabase.from("page_views").select("*").eq("domain", domain).gte("created_at", from).lt("created_at", to).returns<PageView[]>(),
+    supabase.from("visits").select("*").eq("website_id", domain).gte("created_at", from).lt("created_at", to).returns<Visit[]>(),
+  ]);
+  const error = v.error ?? s.error;
+  if (error) throw new Error(error.message);
+  return { pageViews: v.data ?? [], visits: s.data ?? [] };
 }
 
 /** Page views in the last `minutes` minutes: a rough "people on the site now". */

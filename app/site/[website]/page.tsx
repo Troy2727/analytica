@@ -8,12 +8,14 @@ import Loading from "@/components/loading";
 import DaySummary from "@/components/site/day-summary";
 import EventsTab from "@/components/site/events-tab";
 import GeneralTab from "@/components/site/general-tab";
+import GoalsTab from "@/components/site/goals-tab";
 import PerformanceTab from "@/components/site/performance-tab";
 import SettingsTab from "@/components/site/settings-tab";
 import WaitingForData from "@/components/site/waiting-for-data";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import useComparison from "@/hooks/useComparison";
 import useUser from "@/hooks/useUser";
 import { getSiteData, type SiteData } from "@/lib/queries";
 import { supabase } from "@/lib/supabase";
@@ -21,6 +23,7 @@ import { TIMEFRAMES, withinTimeframe } from "@/lib/timeframe";
 
 const TABS = [
   { value: "general", label: "General" },
+  { value: "goals", label: "Goals" },
   { value: "performance", label: "Performance" },
   { value: "custom-events", label: "Events" },
   { value: "settings", label: "Settings" },
@@ -35,9 +38,11 @@ export default function SitePage() {
   const { user } = useUser({ required: true });
 
   const [owned, setOwned] = useState<boolean | null>(null);
+  const [websiteId, setWebsiteId] = useState<string | null>(null);
   const [timeframe, setTimeframe] = useState("0");
   const [data, setData] = useState<SiteData | null>(null);
   const [showDaySummary, setShowDaySummary] = useState(true);
+  const comparison = useComparison(domain, timeframe, data?.asOf);
 
   useEffect(() => {
     if (!user) return;
@@ -49,6 +54,7 @@ export default function SitePage() {
       .maybeSingle()
       .then(({ data: site, error }) => {
         setOwned(Boolean(site) && !error);
+        setWebsiteId(site?.id ?? null);
         if (!site || error) router.push("/dashboard");
       });
   }, [user, domain, router]);
@@ -61,7 +67,7 @@ export default function SitePage() {
         setTimeframe(range);
       } catch (error) {
         console.error("Loading site analytics failed:", error);
-        setData({ pageViews: [], visits: [], events: [] });
+        setData({ pageViews: [], visits: [], events: [], engagement: [], linkEvents: [], asOf: Date.now() });
       }
     },
     [domain]
@@ -123,14 +129,25 @@ export default function SitePage() {
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}
-                className="w-1/4 data-[state=active]:bg-navy-800 data-[state=active]:text-white"
+                className="w-1/5 px-1 data-[state=active]:bg-navy-800 data-[state=active]:text-white"
               >
                 {tab.label}
               </TabsTrigger>
             ))}
           </TabsList>
           <TabsContent value="general">
-            <GeneralTab domain={domain} pageViews={data.pageViews} visits={data.visits} timeframe={timeframe} />
+            <GeneralTab
+              domain={domain}
+              pageViews={data.pageViews}
+              visits={data.visits}
+              engagement={data.engagement}
+              linkEvents={data.linkEvents}
+              timeframe={timeframe}
+              comparison={comparison}
+            />
+          </TabsContent>
+          <TabsContent value="goals">
+            {websiteId && <GoalsTab websiteId={websiteId} domain={domain} pageViews={data.pageViews} />}
           </TabsContent>
           <TabsContent value="performance">
             <PerformanceTab domain={domain} />

@@ -33,6 +33,31 @@ export function withinTimeframe<T extends { created_at: string }>(
   return start ? rows.filter((row) => new Date(row.created_at) >= start) : rows;
 }
 
+export interface ComparisonWindows {
+  currentStart: number;
+  currentEnd: number;
+  previousStart: number; // inclusive
+  previousEnd: number; // exclusive; equals currentStart
+  windowMs: number;
+}
+
+/**
+ * The timeframe as of `asOf` and the same-length window just before it, or null
+ * when there is no previous period (Lifetime, unknown values).
+ */
+export function comparisonWindows(timeframe: string, asOf: number): ComparisonWindows | null {
+  const hours = hoursIn(timeframe);
+  if (!Number.isFinite(hours)) return null;
+  const windowMs = hours * HOUR_MS;
+  return {
+    currentStart: asOf - windowMs,
+    currentEnd: asOf,
+    previousStart: asOf - 2 * windowMs,
+    previousEnd: asOf - windowMs,
+    windowMs,
+  };
+}
+
 /** True for timeframes short enough to chart by hour instead of by day. */
 export function isHourly(timeframe: string): boolean {
   return hoursIn(timeframe) <= 24;
