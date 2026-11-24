@@ -2,7 +2,7 @@ import type { ChangeKind } from "@/lib/compare";
 import { compactNumber, formatDuration, formatPercent } from "@/lib/format";
 import type { Engagement, LinkEvent, LocationTally, PageView, Tally, Visit } from "@/types";
 
-const UNKNOWN = "Unknown";
+export const UNKNOWN = "Unknown";
 
 /** Count occurrences of each key, most frequent first. */
 export function tally<T>(rows: T[], keyOf: (row: T) => string): Tally[] {
@@ -32,8 +32,10 @@ export function withoutQuery(page: string): string {
 
 export const topPages = (views: PageView[]) => tally(views, (v) => pathOf(v.page));
 
-export const topSources = (visits: Visit[]) =>
-  tally(visits, (v) => (v.source && v.source !== "direct" ? v.source : "Direct Traffic"));
+/** A visit source as the Top Visit Sources card shows it. */
+export const sourceLabel = (source: string | null) => (source && source !== "direct" ? source : "Direct Traffic");
+
+export const topSources = (visits: Visit[]) => tally(visits, (v) => sourceLabel(v.source));
 
 export const topOperatingSystems = (views: PageView[]) =>
   tally(views, (v) => v.operating_system || UNKNOWN);
