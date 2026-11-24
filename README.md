@@ -42,25 +42,64 @@ change its password, Discord ID or demo website.
 
 ![Visitors, page views and pages per session](./public/product2.png)
 
-- **Traffic:** visits, page views, pages per session, people on the site in the last 10 minutes, and a chart by
-  hour or day for any timeframe from the last hour to lifetime.
-- **Bounce rate and visit duration:** the share of sessions that viewed only one page and the average time
-  between a session's first and last page view, plus bounce rate and time on page for each top page.
-- **Compare to previous period:** change badges on every stat tile and a dashed line for the previous period on
-  the traffic chart.
-- **Breakdowns:** top pages, traffic sources (`?utm=` / `?ref=`), countries and cities, operating systems, device
-  types and browsers.
-- **Outbound links and file downloads:** the links visitors click to leave your site and the files they
-  download, each in its own card.
-- **Goals and funnels:** a goal counts the sessions that reach a page or a set of pages (`/pricing`, `/blog*`);
-  a funnel shows how many sessions get through 2 to 8 pages in order, and where they drop off.
-- **Share link:** a public, read-only link to a site's General and Performance tabs. Anyone with the link can
-  view it without signing in; revoking it stops it working at once. Shared pages aren't indexed or tracked.
-- **Custom events:** send any event from your backend with one HTTP request and browse them per event name.
-- **Discord alerts:** each custom event can arrive as a Discord DM from Analytica Bot.
-- **Performance:** Lighthouse scores (performance, accessibility, best practices, SEO) and lab timings from the
-  PageSpeed API, with suggestions for anything below Google's thresholds.
-- **Export:** download page views, visits and events as CSV.
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/icons/timer.svg" width="20" height="20" alt="" /> <b>Bounce rate and visit duration</b> <img src="https://img.shields.io/badge/NEW-10B981?style=flat-square" height="18" alt="New" /><br />
+      The share of sessions that viewed only one page and the average time between a session's first and last page view, plus bounce rate and time on page for each top page.
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/icons/git-compare-arrows.svg" width="20" height="20" alt="" /> <b>Compare to previous period</b> <img src="https://img.shields.io/badge/NEW-10B981?style=flat-square" height="18" alt="New" /><br />
+      Change badges on every stat tile and a dashed line for the previous period on the traffic chart.
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/icons/target.svg" width="20" height="20" alt="" /> <b>Goals and funnels</b> <img src="https://img.shields.io/badge/NEW-10B981?style=flat-square" height="18" alt="New" /><br />
+      A goal counts the sessions that reach a page or a set of pages (<code>/pricing</code>, <code>/blog*</code>); a funnel shows how many sessions get through 2 to 8 pages in order, and where they drop off.
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/icons/external-link.svg" width="20" height="20" alt="" /> <b>Outbound links and file downloads</b> <img src="https://img.shields.io/badge/NEW-10B981?style=flat-square" height="18" alt="New" /><br />
+      The links visitors click to leave your site and the files they download, each in its own card.
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/icons/share-2.svg" width="20" height="20" alt="" /> <b>Share link</b> <img src="https://img.shields.io/badge/NEW-10B981?style=flat-square" height="18" alt="New" /><br />
+      A public, read-only link to a site's General and Performance tabs. Anyone with the link can view it without signing in; revoking it stops it working at once. Shared pages aren't indexed or tracked.
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/icons/chart-line.svg" width="20" height="20" alt="" /> <b>Traffic</b><br />
+      Visits, page views, pages per session, people on the site in the last 10 minutes, and a chart by hour or day for any timeframe from the last hour to lifetime.
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/icons/chart-pie.svg" width="20" height="20" alt="" /> <b>Breakdowns</b><br />
+      Top pages, traffic sources (<code>?utm=</code> / <code>?ref=</code>), countries and cities, operating systems, device types and browsers.
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/icons/zap.svg" width="20" height="20" alt="" /> <b>Custom events</b><br />
+      Send any event from your backend with one HTTP request and browse them per event name.
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/icons/message-circle.svg" width="20" height="20" alt="" /> <b>Discord alerts</b><br />
+      Each custom event can arrive as a Discord DM from Analytica Bot.
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/icons/gauge.svg" width="20" height="20" alt="" /> <b>Performance</b><br />
+      Lighthouse scores (performance, accessibility, best practices, SEO) and lab timings from the PageSpeed API, with suggestions for anything below Google's thresholds.
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" valign="top">
+      <img src="docs/icons/download.svg" width="20" height="20" alt="" /> <b>Export</b><br />
+      Download page views, visits and events as CSV.
+    </td>
+  </tr>
+</table>
 
 ## <img src="docs/icons/code-xml.svg" width="24" height="24" alt="" /> Install the tracking script
 
