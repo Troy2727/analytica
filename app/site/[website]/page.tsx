@@ -67,7 +67,7 @@ export default function SitePage() {
         setTimeframe(range);
       } catch (error) {
         console.error("Loading site analytics failed:", error);
-        setData({ pageViews: [], visits: [], events: [], engagement: [], linkEvents: [], asOf: Date.now() });
+        setData({ pageViews: [], visits: [], events: [], engagement: [], linkEvents: [], webVitals: [], asOf: Date.now() });
       }
     },
     [domain]
@@ -150,7 +150,7 @@ export default function SitePage() {
             {websiteId && <GoalsTab websiteId={websiteId} domain={domain} pageViews={data.pageViews} />}
           </TabsContent>
           <TabsContent value="performance">
-            <PerformanceTab domain={domain} />
+            <PerformanceTab domain={domain} webVitals={data.webVitals} />
           </TabsContent>
           <TabsContent value="custom-events">
             <EventsTab events={data.events} />

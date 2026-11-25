@@ -15,6 +15,10 @@
  *   data-file-downloads="false"   don't report downloads
  *   data-file-types="zip,dmg"     replace the default file extensions
  *   data-add-file-types="xyz"     add to them
+ *   data-web-vitals="false"       don't report Core Web Vitals
+ *
+ * Core Web Vitals (LCP, INP, CLS, FCP, TTFB) of the page load are sent once as
+ * `web_vitals` when the page is first hidden.
  * Custom calls:
  *   window.your_tracking("event_name", { callback: fn })
  * Calls made before this script loads can be queued in window.your_tracking.q.
@@ -268,6 +272,91 @@
   if (domain && (trackOutbound || trackDownloads)) {
     document.addEventListener("click", onLinkClick, true);
     document.addEventListener("auxclick", onLinkClick, true);
+  }
+
+  // Core Web Vitals for this page load, measured with the browser's Performance APIs
+  // and sent once, when the page is first hidden. Metrics a browser can't measure stay null.
+  var vitals = { lcp: null, inp: null, cls: null, fcp: null, ttfb: null };
+  var vitalsSent = false;
+  var vitalsUrl = window.location.href; // the full page load the numbers belong to
+  var interactions = {}; // interactionId -> longest event duration
+
+  // Returns whether the browser supports the entry type.
+  function observe(type, callback, options) {
+    try {
+      var types = PerformanceObserver.supportedEntryTypes || [];
+      if (types.indexOf(type) === -1) return false;
+      new PerformanceObserver(function (list) {
+        list.getEntries().forEach(callback);
+      }).observe(Object.assign({ type: type, buffered: true }, options));
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function trackVitals() {
+    var nav = performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
+    var activation = (nav && nav.activationStart) || 0; // prerendered pages count from activation
+    if (nav && nav.responseStart > 0) vitals.ttfb = Math.max(0, nav.responseStart - activation);
+    observe("paint", function (entry) {
+      if (entry.name === "first-contentful-paint") vitals.fcp = Math.max(0, entry.startTime - activation);
+    });
+    observe("largest-contentful-paint", function (entry) {
+      vitals.lcp = Math.max(0, entry.startTime - activation);
+    });
+    // CLS: the largest burst of unexpected shifts (under 1 s apart, at most 5 s long).
+    var burst = 0;
+    var burstStart = 0;
+    var burstLast = 0;
+    if (
+      observe("layout-shift", function (entry) {
+        if (entry.hadRecentInput) return;
+        if (burst && entry.startTime - burstLast < 1000 && entry.startTime - burstStart < 5000) {
+          burst += entry.value;
+        } else {
+          burst = entry.value;
+          burstStart = entry.startTime;
+        }
+        burstLast = entry.startTime;
+        vitals.cls = Math.max(vitals.cls, burst);
+      })
+    ) {
+      vitals.cls = vitals.cls || 0;
+    }
+    // INP: the slowest interaction, ignoring one in every 50 as an outlier.
+    function onInteraction(entry) {
+      if (!entry.interactionId) return;
+      interactions[entry.interactionId] = Math.max(interactions[entry.interactionId] || 0, entry.duration);
+      var durations = Object.keys(interactions)
+        .map(function (id) {
+          return interactions[id];
+        })
+        .sort(function (a, b) {
+          return b - a;
+        });
+      vitals.inp = durations[Math.min(durations.length - 1, Math.floor(durations.length / 50))];
+    }
+    observe("event", onInteraction, { durationThreshold: 40 });
+    observe("first-input", onInteraction);
+  }
+
+  function sendVitals() {
+    if (vitalsSent) return;
+    var measured = Object.keys(vitals).some(function (name) {
+      return vitals[name] !== null;
+    });
+    if (!measured) return;
+    vitalsSent = true;
+    postKeepalive(Object.assign({}, context, vitals, { event: "web_vitals", url: vitalsUrl, sessionId: sessionId }));
+  }
+
+  if (domain && attribute("data-web-vitals") !== "false" && typeof PerformanceObserver === "function") {
+    trackVitals();
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState === "hidden") sendVitals();
+    });
+    window.addEventListener("pagehide", sendVitals);
   }
 
   // Replay calls queued before the script loaded (under a live session), then take over the global.
