@@ -12,6 +12,8 @@ export interface RankedRow {
   details?: { label: string; value: string; suffix?: string }[];
   /** Row buttons (edit, delete), shown on hover or focus from `sm` up and always on phones. */
   actions?: React.ReactNode;
+  /** Makes the whole row a button, e.g. to filter the dashboard by this row. */
+  select?: { label: string; onSelect: () => void };
 }
 
 /**
@@ -71,8 +73,19 @@ export function RankedList({
               {rows.map((row) => (
                 <li
                   key={row.key}
-                  className="group relative flex items-center justify-between rounded-md bg-gradient-to-br from-blue-900/30 to-black/50 px-3 py-2"
+                  className={`group relative flex items-center justify-between rounded-md bg-gradient-to-br from-blue-900/30 to-black/50 px-3 py-2 ${
+                    row.select ? "transition-colors duration-150 hover:from-blue-800/40 hover:to-navy-900/60" : ""
+                  }`}
                 >
+                  {row.select && (
+                    <button
+                      type="button"
+                      onClick={row.select.onSelect}
+                      aria-label={row.select.label}
+                      title={row.select.label}
+                      className="absolute inset-0 z-20 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    />
+                  )}
                   <span
                     aria-hidden
                     className="absolute inset-y-0 left-0 rounded-md bg-navy-800/50"
