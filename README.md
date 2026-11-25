@@ -20,8 +20,8 @@
 [![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=flat-square&logo=eslint&logoColor=white)](https://eslint.org)
 
 Free website analytics you install with one script tag. Analytica records page views, visits, traffic sources,
-locations, devices and browsers, runs Google PageSpeed on your site, and DMs you on Discord when your backend
-sends a custom event.
+locations, devices and browsers, measures your real visitors' Core Web Vitals, catches JavaScript errors in their
+browsers, runs Google PageSpeed on your site, and DMs you on Discord when your backend sends a custom event.
 
 **Live:** [analytica-phi.vercel.app](https://analytica-phi.vercel.app)
 
@@ -69,32 +69,46 @@ change its password, Discord ID or demo website.
       A public, read-only link to a site's General and Performance tabs. Anyone with the link can view it without signing in; revoking it stops it working at once. Shared pages aren't indexed or tracked.
     </td>
     <td width="50%" valign="top">
-      <img src="docs/icons/chart-line.svg" width="20" height="20" alt="" /> <b>Traffic</b><br />
-      Visits, page views, pages per session, people on the site in the last 10 minutes, and a chart by hour or day for any timeframe from the last hour to lifetime.
+      <img src="docs/icons/list-filter.svg" width="20" height="20" alt="" /> <b>Click to filter</b> <img src="https://img.shields.io/badge/NEW-10B981?style=flat-square" height="18" alt="New" /><br />
+      Click any row on the General tab (a page, source, location, operating system, device or browser) to filter the whole dashboard to the sessions that match. Filters stack as removable chips and live in the URL, so a filtered view can be bookmarked or shared, and the back button undoes the last one.
     </td>
   </tr>
   <tr>
+    <td width="50%" valign="top">
+      <img src="docs/icons/activity.svg" width="20" height="20" alt="" /> <b>Real-user Web Vitals</b> <img src="https://img.shields.io/badge/NEW-10B981?style=flat-square" height="18" alt="New" /><br />
+      LCP, INP, CLS, FCP and TTFB measured in your visitors' browsers, rated against Google's good and poor thresholds at p50, p75, p90 or p99, with a daily trend and a breakdown by page, device, browser and country. On the Performance tab.
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/icons/bug.svg" width="20" height="20" alt="" /> <b>JavaScript errors</b> <img src="https://img.shields.io/badge/NEW-10B981?style=flat-square" height="18" alt="New" /><br />
+      Uncaught errors and unhandled promise rejections from your visitors' browsers, grouped by message, with how often each happens, how many sessions it hit and a trend, plus every occurrence's stack trace, page, browser, OS and country. On the Errors tab.
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/icons/chart-line.svg" width="20" height="20" alt="" /> <b>Traffic</b><br />
+      Visits, page views, pages per session, people on the site in the last 10 minutes, and a chart by hour or day for any timeframe from the last hour to lifetime.
+    </td>
     <td width="50%" valign="top">
       <img src="docs/icons/chart-pie.svg" width="20" height="20" alt="" /> <b>Breakdowns</b><br />
       Top pages, traffic sources (<code>?utm=</code> / <code>?ref=</code>), countries and cities, operating systems, device types and browsers.
     </td>
+  </tr>
+  <tr>
     <td width="50%" valign="top">
       <img src="docs/icons/zap.svg" width="20" height="20" alt="" /> <b>Custom events</b><br />
       Send any event from your backend with one HTTP request and browse them per event name.
     </td>
-  </tr>
-  <tr>
     <td width="50%" valign="top">
       <img src="docs/icons/message-circle.svg" width="20" height="20" alt="" /> <b>Discord alerts</b><br />
       Each custom event can arrive as a Discord DM from Analytica Bot.
     </td>
+  </tr>
+  <tr>
     <td width="50%" valign="top">
       <img src="docs/icons/gauge.svg" width="20" height="20" alt="" /> <b>Performance</b><br />
       Lighthouse scores (performance, accessibility, best practices, SEO) and lab timings from the PageSpeed API, with suggestions for anything below Google's thresholds.
     </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
+    <td width="50%" valign="top">
       <img src="docs/icons/download.svg" width="20" height="20" alt="" /> <b>Export</b><br />
       Download page views, visits and events as CSV.
     </td>
@@ -124,7 +138,13 @@ keeps nothing in the browser except a random session ID.
 
 **Outbound links and file downloads** are tracked automatically: clicks on links to other sites and on links to
 files (PDF, ZIP, DMG and other common types) are recorded with the link's URL, without the query string or
-fragment. Navigation is never delayed. Optional attributes on the script tag:
+fragment. Navigation is never delayed.
+
+**Core Web Vitals and JavaScript errors** are recorded automatically too: the page load's LCP, INP, CLS, FCP and
+TTFB are sent once when the page is first hidden, and each distinct uncaught error or unhandled promise rejection
+is sent once with its stack trace (at most 10 per page load).
+
+Optional attributes on the script tag:
 
 | Attribute | Effect |
 | --- | --- |
@@ -132,6 +152,8 @@ fragment. Navigation is never delayed. Optional attributes on the script tag:
 | `data-file-downloads="false"` | Don't record file downloads |
 | `data-file-types="zip,dmg"` | Replace the list of file extensions that count as downloads |
 | `data-add-file-types="xyz"` | Add extensions to that list |
+| `data-web-vitals="false"` | Don't record Core Web Vitals |
+| `data-errors="false"` | Don't record JavaScript errors |
 
 <p align="center">
   <a href="https://github.com/Troy2727/analytica/blob/main/docs/diagrams/renders/tracking-flow.gif" title="Click to see full size">
@@ -209,7 +231,7 @@ The settings page has the same request as copy-ready JavaScript and Python.
   against the token on every request) and `/api/keepalive` (a daily Vercel Cron that keeps the free Supabase
   project awake).
 - **Supabase (Postgres + Auth)** stores `users`, `websites`, `page_views`, `visits`, `page_engagement`,
-  `link_events`, `events`, `goals`, `funnels` and `share_links`. Row-level security limits every dashboard query
+  `link_events`, `web_vitals`, `js_errors`, `events`, `goals`, `funnels` and `share_links`. Row-level security limits every dashboard query
   to the signed-in user's own websites. Requests without a user session (API-key events, PageSpeed server
   actions, share links) use the service role and check ownership or the share token in code.
 - Visitor location comes from Vercel's geo headers; no IP addresses are stored.
