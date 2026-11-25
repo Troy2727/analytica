@@ -26,8 +26,10 @@ import { RankedList, type RankedRow } from "@/components/site/ranked-list";
 import { StatTile } from "@/components/site/stat-tile";
 import { ChangeBadge } from "@/components/site/change-badge";
 import { CompareToggle } from "@/components/site/compare-toggle";
+import { FilterBar } from "@/components/site/filter-bar";
 import TrafficChart, { type ChartComparison, type Series } from "@/components/site/traffic-chart";
 import type { Comparison } from "@/hooks/useComparison";
+import useUrlFilters from "@/hooks/useUrlFilters";
 import {
   buildSessions,
   METRICS,
@@ -46,6 +48,15 @@ import {
 } from "@/lib/analytics";
 import { flagUrl } from "@/lib/countries";
 import { type ChangeKind, changeOf } from "@/lib/compare";
+import {
+  applyFilters,
+  DIMENSION_LABELS,
+  type Dimension,
+  filterValueLabel,
+  inSessionsOf,
+  removeFilter,
+  setFilter,
+} from "@/lib/filters";
 import { capitalize, compactNumber, formatDuration, formatPercent } from "@/lib/format";
 import { getActiveUsers } from "@/lib/queries";
 import { withinTimeframe } from "@/lib/timeframe";
@@ -130,13 +141,13 @@ const PAGES_PER_SESSION = {
  */
 export default function GeneralTab({
   domain,
-  pageViews,
-  visits,
-  engagement,
+  pageViews: allPageViews,
+  visits: allVisits,
+  engagement: allEngagement,
   timeframe,
   comparison,
   activeUsers: fixedActiveUsers,
-  linkEvents,
+  linkEvents: allLinkEvents,
 }: {
   domain: string;
   pageViews: PageView[];
@@ -149,7 +160,16 @@ export default function GeneralTab({
   /** A known count (shared view); without it the owner view polls for one. */
   activeUsers?: number;
 }) {
-  const previous = comparison?.status === "ready" ? comparison.previous : null;
+  const [filters, setFilters] = useUrlFilters();
+  // Filters narrow every number, chart and card to the matching sessions, in both periods.
+  const { pageViews, visits } = useMemo(() => applyFilters(allPageViews, allVisits, filters), [allPageViews, allVisits, filters]);
+  const engagement = filters.length ? inSessionsOf(allEngagement, pageViews) : allEngagement;
+  const linkEvents = allLinkEvents && filters.length ? inSessionsOf(allLinkEvents, pageViews) : allLinkEvents;
+  const unfilteredPrevious = comparison?.status === "ready" ? comparison.previous : null;
+  const previous = useMemo(
+    () => (unfilteredPrevious ? applyFilters(unfilteredPrevious.pageViews, unfilteredPrevious.visits, filters) : null),
+    [unfilteredPrevious, filters]
+  );
   const windows = comparison?.windows;
   const chartComparison: ChartComparison | null = useMemo(
     () => (previous && windows ? { previous, windowMs: windows.windowMs, asOf: windows.currentEnd } : null),
@@ -167,7 +187,7 @@ export default function GeneralTab({
     return () => clearInterval(timer);
   }, [domain, fixedActiveUsers]);
 
-  if (withinTimeframe(pageViews, timeframe).length === 0 && withinTimeframe(visits, timeframe).length === 0) {
+  if (withinTimeframe(allPageViews, timeframe).length === 0 && withinTimeframe(allVisits, timeframe).length === 0) {
     return (
       <>
         {comparison && <CompareToggle comparison={comparison} />}
@@ -191,6 +211,17 @@ export default function GeneralTab({
       { label: "Time on page", value: formatDuration(perPage.get(label)?.timeOnPage ?? null) },
     ],
   }));
+  /** Rows that filter the dashboard by `dimension` when clicked. */
+  const filterable = (dimension: Dimension, rows: RankedRow[]): RankedRow[] =>
+    rows.map((row) => ({
+      ...row,
+      select: {
+        label: `Filter by ${DIMENSION_LABELS[dimension]}: ${filterValueLabel({ dimension, value: row.key })}`,
+        onSelect: () => setFilters(setFilter(filters, { dimension, value: row.key })),
+      },
+    }));
+  // A source filter needs visits linked to page views by session id (shared links leave those out).
+  const sourcesFilterable = allVisits.some((visit) => visit.client_session_id);
   const selectable = (key: Series) => ({ selected: series === key, onSelect: () => setSeries(key) });
 
   /** A tile's comparison: loading, or the change badge and previous value. */
@@ -237,6 +268,11 @@ export default function GeneralTab({
   return (
     <>
       {comparison && <CompareToggle comparison={comparison} />}
+      <FilterBar
+        filters={filters}
+        onRemove={(dimension) => setFilters(removeFilter(filters, dimension))}
+        onClear={() => setFilters([])}
+      />
 
       <div className="grid grid-cols-2 gap-6 lg:grid-cols-3 xl:grid-cols-6">
         <StatTile icon={Users} label="Total Visits" value={compactNumber(visits.length)} {...selectable("visits")} compare={compareTile(METRICS.visits)} />
@@ -277,21 +313,25 @@ export default function GeneralTab({
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <RankedList title="Top Pages" icon={BarChart2} rows={pageRows} />
-        <RankedList title="Top Visit Sources" icon={ArrowBigUpDash} rows={sourceRows} />
+        <RankedList title="Top Pages" icon={BarChart2} rows={filterable("page", pageRows)} />
+        <RankedList
+          title="Top Visit Sources"
+          icon={ArrowBigUpDash}
+          rows={sourcesFilterable ? filterable("source", sourceRows) : sourceRows}
+        />
         <RankedList
           title="Visitor Locations"
           icon={MapPin}
-          rows={locationRows}
+          rows={filterable(countriesOnly ? "country" : "city", locationRows)}
           action={
             <Button variant="secondary" size="sm" className="h-6 text-xs" onClick={() => setCountriesOnly(!countriesOnly)}>
               {countriesOnly ? "Show All Info" : "Show Countries Only"}
             </Button>
           }
         />
-        <RankedList title="Operating Systems" icon={Monitor} rows={withIcon(topOperatingSystems(pageViews), osIcon)} />
-        <RankedList title="Device Types" icon={Smartphone} rows={withIcon(topDevices(pageViews), deviceIcon, capitalize)} />
-        <RankedList title="Browsers" icon={Globe} rows={withIcon(topBrowsers(pageViews), browserIcon)} />
+        <RankedList title="Operating Systems" icon={Monitor} rows={filterable("os", withIcon(topOperatingSystems(pageViews), osIcon))} />
+        <RankedList title="Device Types" icon={Smartphone} rows={filterable("device", withIcon(topDevices(pageViews), deviceIcon, capitalize))} />
+        <RankedList title="Browsers" icon={Globe} rows={filterable("browser", withIcon(topBrowsers(pageViews), browserIcon))} />
         {linkEvents && (
           <>
             <RankedList
