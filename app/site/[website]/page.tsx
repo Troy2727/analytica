@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import Loading from "@/components/loading";
 import DaySummary from "@/components/site/day-summary";
+import ErrorsTab from "@/components/site/errors-tab";
 import EventsTab from "@/components/site/events-tab";
 import GeneralTab from "@/components/site/general-tab";
 import GoalsTab from "@/components/site/goals-tab";
@@ -25,6 +26,7 @@ const TABS = [
   { value: "general", label: "General" },
   { value: "goals", label: "Goals" },
   { value: "performance", label: "Performance" },
+  { value: "errors", label: "Errors" },
   { value: "custom-events", label: "Events" },
   { value: "settings", label: "Settings" },
 ];
@@ -67,7 +69,7 @@ export default function SitePage() {
         setTimeframe(range);
       } catch (error) {
         console.error("Loading site analytics failed:", error);
-        setData({ pageViews: [], visits: [], events: [], engagement: [], linkEvents: [], webVitals: [], asOf: Date.now() });
+        setData({ pageViews: [], visits: [], events: [], engagement: [], linkEvents: [], webVitals: [], jsErrors: [], asOf: Date.now() });
       }
     },
     [domain]
@@ -124,12 +126,12 @@ export default function SitePage() {
         </header>
 
         <Tabs defaultValue="general" className="w-full">
-          <TabsList className="mb-2 w-full border border-navy-900 bg-navy-900/30 p-1 backdrop-blur-sm">
+          <TabsList className="mb-2 w-full justify-start overflow-x-auto border border-navy-900 bg-navy-900/30 p-1 backdrop-blur-sm">
             {TABS.map((tab) => (
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}
-                className="w-1/5 px-1 data-[state=active]:bg-navy-800 data-[state=active]:text-white"
+                className="min-w-fit flex-1 px-1.5 data-[state=active]:bg-navy-800 data-[state=active]:text-white"
               >
                 {tab.label}
               </TabsTrigger>
@@ -151,6 +153,9 @@ export default function SitePage() {
           </TabsContent>
           <TabsContent value="performance">
             <PerformanceTab domain={domain} webVitals={data.webVitals} />
+          </TabsContent>
+          <TabsContent value="errors">
+            <ErrorsTab errors={data.jsErrors} asOf={data.asOf} />
           </TabsContent>
           <TabsContent value="custom-events">
             <EventsTab events={data.events} />

@@ -125,6 +125,25 @@ export interface WebVital {
   created_at: string;
 }
 
+/** An uncaught error or unhandled promise rejection in a visitor's browser (`js_errors`). */
+export interface JsError {
+  id: string;
+  domain: string;
+  page: string;
+  name: string; // "TypeError", "UnhandledRejection"...
+  message: string;
+  stack: string | null;
+  file: string | null;
+  line: number | null;
+  col: number | null;
+  country: string | null;
+  operating_system: string | null;
+  device_type: string | null;
+  browser_name: string | null;
+  client_session_id: string | null;
+  created_at: string;
+}
+
 /**
  * What a public share link returns (`/api/share/<domain>/<token>`): one website's
  * traffic with ids removed, URLs without query strings, and session ids replaced
