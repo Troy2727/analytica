@@ -1,4 +1,4 @@
-import type { LucideIcon } from "lucide-react";
+import { ListFilter, type LucideIcon } from "lucide-react";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Panel } from "@/components/site/panel";
@@ -62,6 +62,7 @@ export function RankedList({
               </span>
             ))}
             {rows.some((row) => row.actions) && <span className="ml-2 w-[60px]" />}
+            {rows.some((row) => row.select) && <span className="ml-2 w-3.5" />}
           </div>
         )}
         {rows.length === 0 && empty ? (
@@ -74,7 +75,9 @@ export function RankedList({
                 <li
                   key={row.key}
                   className={`group relative flex items-center justify-between rounded-md bg-gradient-to-br from-blue-900/30 to-black/50 px-3 py-2 ${
-                    row.select ? "transition-colors duration-150 hover:from-blue-800/40 hover:to-navy-900/60" : ""
+                    row.select
+                      ? "transition-colors duration-150 hover:from-blue-800/40 hover:to-navy-900/60 hover:ring-1 hover:ring-blue-400/40"
+                      : ""
                   }`}
                 >
                   {row.select && (
@@ -115,6 +118,13 @@ export function RankedList({
                     <span className="relative z-10 ml-2 flex gap-1 transition-opacity [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:focus-within:opacity-100 [@media(hover:hover)]:group-hover:opacity-100">
                       {row.actions}
                     </span>
+                  )}
+                  {row.select && (
+                    // Same visibility rule as the actions: on hover/focus where hovering is possible, always on touch screens.
+                    <ListFilter
+                      aria-hidden
+                      className="relative z-10 ml-2 size-3.5 shrink-0 text-blue-300 transition-opacity [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-focus-within:opacity-100 [@media(hover:hover)]:group-hover:opacity-100"
+                    />
                   )}
                 </li>
               ))}
