@@ -4,7 +4,10 @@ import { cn } from "@/lib/utils";
 
 const focusRing = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
-/** The active General-tab filters as removable chips, plus "Clear all" when there are several. */
+/**
+ * The active General-tab filters as removable chips, plus "Clear all" when there are several.
+ * With no filters it shows a hint that the rows below can be clicked to add one.
+ */
 export function FilterBar({
   filters,
   onRemove,
@@ -14,7 +17,14 @@ export function FilterBar({
   onRemove: (dimension: Dimension) => void;
   onClear: () => void;
 }) {
-  if (!filters.length) return null;
+  if (!filters.length) {
+    return (
+      <p className="mb-4 flex h-8 items-center gap-1.5 text-xs text-neutral-500">
+        <ListFilter aria-hidden className="size-4" strokeWidth={1.5} />
+        Click any row in the lists below to filter the dashboard by it.
+      </p>
+    );
+  }
 
   return (
     <div className="mb-4 flex flex-wrap items-center gap-2" aria-label="Active filters" role="region">
